@@ -13,6 +13,18 @@
                 </div>
             </div>
         @endif
+        @if ($errors->any())
+        <div id="alert" class="flex items-center p-4 mb-4 bg-red-500 text-red-50 rounded-2xl" role="alert">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <div class="ml-3 text-sm font-reguler">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        @endif
         @if (session('error'))
             <div id="alert" class="flex items-center p-4 mb-4 bg-red-500 text-red-50 rounded-2xl" role="alert">
                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -68,8 +80,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="inline-block bg-red-500 hover:bg-red-600 px-4 py-1 rounded-lg text-sm text-red-50"
-                                            onsubmit="return confirmDelete()">
+                                            class="inline-block bg-red-500 hover:bg-red-600 px-4 py-1 rounded-lg text-sm text-red-50">
                                             <i class="fa-solid fa-trash-alt"></i>
                                         </button>
                                     </form>
@@ -263,7 +274,7 @@
                                 <div class="space-y-2">
                                     <div>
                                         <form action="{{ route('database.is_schoolarship', $user->id) }}"
-                                            method="get">
+                                            method="GET" onsubmit="return confirmAction()">
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" value="{{ $user->schoolarship }}"
                                                     class="sr-only peer"
@@ -278,8 +289,7 @@
                                     @if ($user->identity_user !== '6281313608558')
                                         <div class="flex justify-between items-center gap-2">
                                             @if ($user->is_applicant)
-                                                <form action="{{ route('statusdatabaseaplikan.destroy', $user->id) }}"
-                                                    method="POST">
+                                                <form action="{{ route('statusdatabaseaplikan.destroy', $user->id) }}" method="POST" onsubmit="return confirmAction()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <label class="relative inline-flex items-center cursor-pointer">
@@ -292,8 +302,7 @@
                                                     </label>
                                                 </form>
                                             @else
-                                                <form action="{{ route('database.is_applicant', $user->id) }}"
-                                                    method="GET">
+                                                <form action="{{ route('database.is_applicant', $user->id) }}" method="GET" onsubmit="return confirmAction()">
                                                     <input type="hidden" name="change_pmb"
                                                         value="{{ $user->pmb }}">
                                                     <input type="hidden" id="session_aplikan" maxlength="1"
@@ -324,8 +333,7 @@
                                     @if ($user->is_applicant == 1)
                                         <div class="flex justify-between items-center gap-2">
                                             @if ($user->is_daftar && $enrollment)
-                                                <form action="{{ route('statusdatabasedaftar.destroy', $user->id) }}"
-                                                    method="POST">
+                                                <form action="{{ route('statusdatabasedaftar.destroy', $user->id) }}" method="POST" onsubmit="return confirmAction()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <label class="relative inline-flex items-center cursor-pointer">
@@ -377,8 +385,7 @@
                                         <div class="flex justify-between items-center gap-2">
                                             @if ($user->is_register && $registration)
                                                 <form
-                                                    action="{{ route('statusdatabaseregistrasi.destroy', $user->id) }}"
-                                                    method="POST">
+                                                    action="{{ route('statusdatabaseregistrasi.destroy', $user->id) }}" method="POST" onsubmit="return confirmAction()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <label class="relative inline-flex items-center cursor-pointer">
@@ -685,6 +692,9 @@
             function confirmDelete() {
                 return confirm('Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.');
             }
+            function confirmAction() {
+                return confirm('Apakah Anda yakin akan melakukan tindakan ini?');
+            }
         </script>
 
         @if (!$user->is_applicant && !$status_applicant)
@@ -869,16 +879,18 @@
                             const addressRtRw = addressParts[1].split(' ');
                             if (!program) {
                                 alert(
-                                    'Program studi tidak ditemukan. Silakan perbarui jurusan di bagian Edit Profil melalui akun Presenter.');
+                                    'Program studi tidak ditemukan. Silakan perbarui jurusan di bagian Edit Profil melalui akun Presenter.'
+                                    );
                                 window.location.href = `/database/${database.data.user.id}/edit`;
                                 loadingMisil.classList.toggle('hidden');
                                 return;
                             } else {
                                 const confirmed = confirm(
                                     `Program studi yang dipilih adalah ${program.title} dengan kode jurusan ${program.code}. Apakah data sudah benar?`
-                                    );
+                                );
                                 if (!confirmed) {
-                                    alert('Jika ini salah, maka silakan perbarui jurusan di bagian Edit Profil melalui akun Presenter.');
+                                    alert(
+                                        'Jika ini salah, maka silakan perbarui jurusan di bagian Edit Profil melalui akun Presenter.');
                                     window.location.href = `/database/${database.data.user.id}/edit`;
                                     loadingMisil.classList.toggle('hidden');
                                     return;

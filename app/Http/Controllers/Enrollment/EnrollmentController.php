@@ -199,7 +199,7 @@ class EnrollmentController extends Controller {
         // );
         return back()->with(
             'message',
-            'Data daftar berhasil ditambahkan, notifikasi email sudah terkirim!'
+            'Data daftar berhasil ditambahkan!'
         );
     }
 

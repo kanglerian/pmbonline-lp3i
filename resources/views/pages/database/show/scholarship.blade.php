@@ -23,8 +23,8 @@
 
         <section id="content" class="w-full mx-auto">
             <div class="grid grid-cols-2 mx-auto text-center gap-3" id="score_container">
-                <span id="total_true" class="p-6 bg-sky-500 text-sm text-white rounded-lg"></span>
-                <span id="average_score" class="p-6 bg-emerald-500 text-sm text-white rounded-lg"></span>
+                <span id="total_true" class="hidden p-6 bg-sky-500 text-sm text-white rounded-lg"></span>
+                <span id="average_score" class="hidden p-6 bg-emerald-500 text-sm text-white rounded-lg"></span>
             </div>
 
             <div class="w-full mx-auto space-y-5 px-5" id="result"></div>
@@ -133,6 +133,8 @@
                     `;
                         document.getElementById('total_true').innerText = `Total Benar: ${totalTrue}`;
                         document.getElementById('average_score').innerText = `Nilai Akhir: ${averageScore}`;
+                        document.getElementById('total_true').style.display = `block`;
+                        document.getElementById('average_score').style.display = `block`;
                     } else {
                         document.getElementById('score_container').style.display = 'none';
                         document.getElementById('result').innerHTML =

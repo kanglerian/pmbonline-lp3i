@@ -28,7 +28,10 @@ use Illuminate\Database\QueryException;
 
 use App\Exports\ApplicantsExport;
 use App\Models\Integration;
+use App\Models\Recommendation;
 use App\Models\StatusApplicantsApplicant;
+use App\Models\Organization;
+use App\Models\Achievement;
 
 class ApplicantController extends Controller
 {
@@ -1062,10 +1065,22 @@ class ApplicantController extends Controller
         $applicant = Applicant::findOrFail($id);
         if (Auth::user()->identity == $applicant->identity_user || Auth::user()->role == 'A') {
             $family = ApplicantFamily::where('identity_user', $applicant->identity);
+            $status_applicant_applicant = StatusApplicantsApplicant::where('identity_user', $applicant->identity);
+            $user_upload = UserUpload::where('identity_user', $applicant->identity);
+            $organization = Organization::where('identity_user', $applicant->identity);
+            $achievement = Achievement::where('identity_user', $applicant->identity);
+            $integration = Integration::where('identity_user', $applicant->identity);
+            $recommendation = Recommendation::where('identity_user', $applicant->identity);
             $user = User::where('identity', $applicant->identity);
+            $user->delete();
             $family->delete();
             $applicant->delete();
-            $user->delete();
+            $user_upload->delete();
+            $organization->delete();
+            $achievement->delete();
+            $integration->delete();
+            $recommendation->delete();
+            $status_applicant_applicant->delete();
             return redirect()->route('database.index')->with('message', 'Data aplikan berhasil dihapus!');
         } else {
             return back()->with('error', 'Tidak diizinkan.');

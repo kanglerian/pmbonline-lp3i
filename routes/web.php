@@ -50,9 +50,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::prefix('recommendation-data')->group(function(){
-    Route::get('/kkn', [DataController::class,'kkn'])->name('recommendation-data.input-kkn');
-    Route::post('/kkn', [DataController::class,'kkn_store'])->name('recommendation-data.store-kkn');
+Route::prefix('recommendation-data')->group(function () {
+    Route::get('/kkn', [DataController::class, 'kkn'])->name('recommendation-data.input-kkn');
+    Route::post('/kkn', [DataController::class, 'kkn_store'])->name('recommendation-data.store-kkn');
 });
 
 /* Route Dashboard */
@@ -143,7 +143,7 @@ Route::middleware(['auth', 'status:1', 'role:A'])->group(function () {
 
 /* Route Profile */
 Route::middleware(['auth', 'status:1'])->group(function () {
-Route::resource('profile', ProfileController::class);
+    Route::resource('profile', ProfileController::class);
     Route::patch('profile/update_account/{id}', [ProfileController::class, 'update_account'])->name('profile.update_account');
     Route::patch('profile/change_password/{id}', [ProfileController::class, 'change_password'])->name('profile.change_password');
 });
@@ -189,14 +189,16 @@ Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
 });
 
 /* Route Setting */
-Route::middleware(['auth', 'status:1', 'role:A'])->prefix('setting')->group(function () {
-    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
-    Route::resource('programtype', ProgramTypeController::class);
-    Route::resource('source', SourceController::class);
-    Route::resource('fileupload', FileUploadController::class);
-    Route::resource('applicantstatus', ApplicantStatusController::class);
-    Route::resource('followup', FollowUpController::class);
-});
+Route::middleware(['auth', 'status:1', 'role:A'])
+    ->prefix('setting')
+    ->group(function () {
+        Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+        Route::resource('programtype', ProgramTypeController::class);
+        Route::resource('source', SourceController::class);
+        Route::resource('fileupload', FileUploadController::class);
+        Route::resource('applicantstatus', ApplicantStatusController::class);
+        Route::resource('followup', FollowUpController::class);
+    });
 
 /* Route Scholarship */
 Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {

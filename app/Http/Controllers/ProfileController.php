@@ -17,7 +17,7 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function index()
     {
@@ -27,7 +27,7 @@ class ProfileController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function create()
     {
@@ -42,34 +42,39 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'gender' => ['required', 'not_in:Pilih gender'],
-            'email' => ['required', 'email', 'unique:users', 'max:255'],
-            'phone' => ['required', 'string', 'unique:users', 'max:15'],
-        ]);
+        try {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'gender' => ['required', 'not_in:Pilih gender'],
+                'email' => ['required', 'email', 'unique:users', 'max:255'],
+                'phone' => ['required', 'string', 'unique:users', 'max:15'],
+            ]);
 
-        $data = [
-            'identity' => $request->input('identity'),
-            'name' => ucwords(strtolower($request->input('name'))),
-            'gender' => $request->input('gender'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('phone')),
-            'phone' => $request->input('phone'),
-            'role' => 'S',
-            'status' => 1,
-        ];
+            $data = [
+                'identity' => $request->input('identity'),
+                'name' => ucwords(strtolower($request->input('name'))),
+                'gender' => $request->input('gender'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('phone')),
+                'phone' => $request->input('phone'),
+                'role' => 'S',
+                'status' => 1,
+            ];
 
-        $data_applicant = [
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'gender' => $request->input('gender'),
-        ];
-
-        $applicant = Applicant::where('identity', $request->input('identity'))->first();
-        User::create($data);
-        $applicant->update($data_applicant);
-        return back()->with('message', 'Akun berhasil ditambahkan!');
+            $data_applicant = [
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+                'gender' => $request->input('gender'),
+            ];
+            $applicant = Applicant::where('identity', $request->input('identity'))->first();
+            User::create($data);
+            $applicant->update($data_applicant);
+            return back()->with('message', 'Akun berhasil ditambahkan!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Terjadi kesalahan, silakan coba lagi!')->withInput();
+        }
     }
 
     /**
@@ -94,7 +99,7 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
 
         if ($user->id == Auth::user()->id || Auth::user()->role == 'A') {
-//            $response = Http::get('https://dashboard.politekniklp3i-tasikmalaya.ac.id/api/programs');
+            //            $response = Http::get('https://dashboard.politekniklp3i-tasikmalaya.ac.id/api/programs');
             $applicant = Applicant::where('identity', $user->identity)->first();
 
             if ($user->role == 'S') {
@@ -105,21 +110,21 @@ class ProfileController extends Controller
             $presenters = User::where(['status' => '1', 'role' => 'P'])->get();
             $schools = School::all();
 
-//            if ($response->successful()) {
-//                $programs = $response->json();
-//            } else {
-//                $programs = null;
-//            }
+            //            if ($response->successful()) {
+            //                $programs = $response->json();
+            //            } else {
+            //                $programs = null;
+            //            }
 
             if ($user->role == 'S') {
                 $data = [
                     'user' => $user,
                     'applicant' => $applicant,
                     'presenters' => $presenters,
-//                    'programs' => $programs,
+                    //                    'programs' => $programs,
                     'father' => $father,
                     'mother' => $mother,
-                    'schools' => $schools
+                    'schools' => $schools,
                 ];
             } else {
                 $data = [
@@ -130,7 +135,6 @@ class ProfileController extends Controller
         } else {
             return back();
         }
-
     }
 
     /**
@@ -149,68 +153,56 @@ class ProfileController extends Controller
         $father = ApplicantFamily::where(['identity_user' => $applicant->identity, 'gender' => 1])->first();
         $mother = ApplicantFamily::where(['identity_user' => $applicant->identity, 'gender' => 0])->first();
 
-        $request->validate([
-            'nik' => [
-                'required',
-                'min:16',
-                'max:16',
-                Rule::unique('applicants')->ignore($user->identity, 'identity'),
+        $request->validate(
+            [
+                'nik' => ['required', 'min:16', 'max:16', Rule::unique('applicants')->ignore($user->identity, 'identity')],
+                'nisn' => ['required', 'min:10', 'max:10', Rule::unique('applicants')->ignore($user->identity, 'identity')],
+                'kip' => ['nullable', 'min:16', 'max:16', Rule::unique('applicants')->ignore($id, 'id')],
+                'name' => ['required', 'string', 'max:255'],
+                'gender' => ['required', 'string', 'not_in:null'],
+                'religion' => ['required', 'string'],
+                'major' => ['required'],
+                'year' => ['required', 'min:4', 'max:4'],
+                'school' => ['required', 'max:100', 'not_in:Pilih Sekolah'],
+
+                'father_phone' => ['nullable', 'min:10', 'max:15'],
+                'mother_phone' => ['nullable', 'min:10', 'max:15'],
             ],
-            'nisn' => [
-                'required',
-                'min:10',
-                'max:10',
-                Rule::unique('applicants')->ignore($user->identity, 'identity'),
+            [
+                'nik.required' => 'Ups, sepertinya NIK belum diisi ya!',
+                'nik.unique' => 'Oops, Nomor Induk Kependudukan (NIK) sudah terdaftar nih, coba yang lain!',
+                'nik.min' => 'Format NIK nggak bener, harus :min digit ya!',
+                'nik.max' => 'Format NIK nggak bener, maksimal :max digit ya!',
+
+                'nisn.required' => 'Ups, sepertinya NISN belum diisi ya!',
+                'nisn.unique' => 'Waduh, NISN sudah terdaftar nih, cari yang lain ya!',
+                'nisn.min' => 'Format NISN nggak bener, harus :min digit ya!',
+                'nisn.max' => 'Format NISN nggak bener, maksimal :max digit ya!',
+
+                'kip.unique' => 'Waduh, Nomor Kartu Indonesia Pintar (KIP) sudah terdaftar nih, cari yang lain ya!',
+                'kip.min' => 'Format KIP nggak bener, harus :min digit ya!',
+                'kip.max' => 'Format KIP nggak bener, maksimal :max digit ya!',
+
+                'name.required' => 'Nama Lengkap wajib diisi, nih!',
+                'gender.required' => 'Jenis Kelamin wajib diisi, jangan terlewat!',
+                'religion.required' => 'Agama wajib diisi, pastikan benar ya!',
+                'education.required' => 'Pendidikan wajib diisi, jangan sampai terlewatkan!',
+                'major.required' => 'Jurusan wajib diisi, pastikan benar ya!',
+                'year.required' => 'Tahun lulus wajib diisi, nih!',
+                'year.min' => 'Tahun harus memiliki setidaknya 4 digit, pastikan benar ya!',
+                'year.max' => 'Tahun harus memiliki setidaknya 4 digit, pastikan benar ya!',
+
+                'school.required' => 'Pilih Sekolah wajib diisi, jangan sampai terlewat!',
+                'school.max' => 'Sekolah tidak boleh lebih dari 100 karakter, pastikan benar ya!',
+
+                'father_phone.string' => 'Nomor Telepon harus berupa string, nih!',
+                'father_phone.min' => 'Nomor Telepon harus memiliki setidaknya 10 digit, pastikan benar ya!',
+                'father_phone.max' => 'Nomor Telepon tidak boleh lebih dari 15 digit, pastikan benar ya!',
+                'mother_phone.string' => 'Nomor Telepon harus berupa string, nih!',
+                'mother_phone.min' => 'Nomor Telepon harus memiliki setidaknya 10 digit, pastikan benar ya!',
+                'mother_phone.max' => 'Nomor Telepon tidak boleh lebih dari 15 digit, pastikan benar ya!',
             ],
-            'kip' => [
-                'nullable',
-                'min:16',
-                'max:16',
-                Rule::unique('applicants')->ignore($id, 'id'),
-            ],
-            'name' => ['required', 'string', 'max:255'],
-            'gender' => ['required', 'string', 'not_in:null'],
-            'religion' => ['required', 'string'],
-            'major' => ['required'],
-            'year' => ['required', 'min:4', 'max:4'],
-            'school' => ['required', 'max:100', 'not_in:Pilih Sekolah'],
-
-            'father_phone' => ['nullable', 'min:10', 'max:15'],
-            'mother_phone' => ['nullable', 'min:10', 'max:15'],
-        ], [
-            'nik.required' => 'Ups, sepertinya NIK belum diisi ya!',
-            'nik.unique' => 'Oops, Nomor Induk Kependudukan (NIK) sudah terdaftar nih, coba yang lain!',
-            'nik.min' => 'Format NIK nggak bener, harus :min digit ya!',
-            'nik.max' => 'Format NIK nggak bener, maksimal :max digit ya!',
-
-            'nisn.required' => 'Ups, sepertinya NISN belum diisi ya!',
-            'nisn.unique' => 'Waduh, NISN sudah terdaftar nih, cari yang lain ya!',
-            'nisn.min' => 'Format NISN nggak bener, harus :min digit ya!',
-            'nisn.max' => 'Format NISN nggak bener, maksimal :max digit ya!',
-
-            'kip.unique' => 'Waduh, Nomor Kartu Indonesia Pintar (KIP) sudah terdaftar nih, cari yang lain ya!',
-            'kip.min' => 'Format KIP nggak bener, harus :min digit ya!',
-            'kip.max' => 'Format KIP nggak bener, maksimal :max digit ya!',
-
-            'name.required' => 'Nama Lengkap wajib diisi, nih!',
-            'gender.required' => 'Jenis Kelamin wajib diisi, jangan terlewat!',
-            'religion.required' => 'Agama wajib diisi, pastikan benar ya!',
-            'education.required' => 'Pendidikan wajib diisi, jangan sampai terlewatkan!',
-            'major.required' => 'Jurusan wajib diisi, pastikan benar ya!',
-            'year.required' => 'Tahun lulus wajib diisi, nih!',
-            'year.min' => 'Tahun harus memiliki setidaknya 4 digit, pastikan benar ya!',
-            'year.max' => 'Tahun harus memiliki setidaknya 4 digit, pastikan benar ya!',
-
-            'school.required' => 'Pilih Sekolah wajib diisi, jangan sampai terlewat!',
-            'school.max' => 'Sekolah tidak boleh lebih dari 100 karakter, pastikan benar ya!',
-
-            'father_phone.string' => 'Nomor Telepon harus berupa string, nih!',
-            'father_phone.min' => 'Nomor Telepon harus memiliki setidaknya 10 digit, pastikan benar ya!',
-            'father_phone.max' => 'Nomor Telepon tidak boleh lebih dari 15 digit, pastikan benar ya!',
-            'mother_phone.string' => 'Nomor Telepon harus berupa string, nih!',
-            'mother_phone.min' => 'Nomor Telepon harus memiliki setidaknya 10 digit, pastikan benar ya!',
-            'mother_phone.max' => 'Nomor Telepon tidak boleh lebih dari 15 digit, pastikan benar ya!',
-        ]);
+        );
 
         $rt = $request->input('rt') !== null ? 'RT. ' . $request->input('rt') . ' ' : null;
         $rw = $request->input('rw') !== null ? 'RW. ' . $request->input('rw') . ' ' : null;
@@ -365,5 +357,4 @@ class ProfileController extends Controller
         $account->update($data);
         return back()->with('message', 'Password berhasil diubah!');
     }
-
 }

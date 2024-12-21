@@ -190,7 +190,7 @@ class RegistrationController extends Controller
         // );
         return back()->with(
             "message",
-            "Data registrasi berhasil ditambahkan, notifikasi email sudah terkirim!"
+            "Data registrasi berhasil ditambahkan!"
         );
     }
 
