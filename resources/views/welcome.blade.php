@@ -173,6 +173,12 @@
                 Tasikmalaya</p>
         </footer>
     </div>
+    <div class="fixed right-0 bottom-0">
+        <a href="https://politekniklp3i-tasikmalaya.ac.id/penerimaan-mahasiswa" target="_blank" class="flex items-center justify-center">
+            <lottie-player src="{{ asset('animations/whatsapp.json') }}" background="Transparent" speed="1"
+                style="width: 100px; height: 100px" direction="1" mode="normal" loop autoplay></lottie-player>
+        </a>
+    </div>
     <script src="{{ asset('js/all.min.js') }}"></script>
     <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
     <script src="{{ asset('js/lottie.js') }}"></script>
