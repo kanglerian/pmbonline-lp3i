@@ -848,8 +848,7 @@
                             phone: data.no_hp,
                             pmb: data.pmb,
                         });
-                    // location.reload();
-                    console.log(responseSiakad);
+                    location.reload();
                 } catch (error) {
                     console.log(error);
                 }
