@@ -839,6 +839,7 @@
                     const responseSiakad = await axios.post(
                         "https://sie.politekniklp3i-tasikmalaya.ac.id/api/integration/pmb", {
                             identity_user: data.identity_user,
+                            nik: data.nik,
                             name: data.nama_lengkap,
                             major: data.kode_jurusan,
                             place_of_birth: data.tempat_lahir,
