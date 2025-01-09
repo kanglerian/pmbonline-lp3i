@@ -1158,7 +1158,7 @@ class ApplicantController extends Controller
             'religion' => !empty($applicants[$i][14]) ? $applicants[$i][14] : null,
             'source_id' => 7,
             'status_id' => !empty($applicants[$i][17]) ? ApplicantStatus::whereRaw('LOWER(name) = ?', [strtolower($applicants[$i][17])])->value('id') ?? 1 : 1,
-            'followup_id' => $followup
+            'followup_id' => $followup,
             'come' => $come,
             'achievement' => !empty($applicants[$i][20]) ? $applicants[$i][20] : null,
             'kip' => $kip,
@@ -1294,7 +1294,7 @@ class ApplicantController extends Controller
             'identity_user' => $identityUser,
             'source_id' => 7,
             'status_id' => !empty($applicants[$i][17]) ? ApplicantStatus::whereRaw('LOWER(name) = ?', [strtolower($applicants[$i][17])])->value('id') ?? 1 : 1,
-            'followup_id' => $followup
+            'followup_id' => $followup,
             'come' => $come,
             'achievement' => !empty($applicants[$i][20]) ? $applicants[$i][20] : null,
             'kip' => $kip,
