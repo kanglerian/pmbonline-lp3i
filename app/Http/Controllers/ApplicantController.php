@@ -1137,6 +1137,9 @@ class ApplicantController extends Controller
             }
         }
 
+        $nameFollowUp = strtolower(trim($applicants[$i][18]));
+        $followUpId = FollowUp::whereRaw('LOWER(name) = ?', [$nameFollowUp])->value('id');
+
         $data_applicant = [
             'pmb' => $applicants[$i][2],
             'name' => !empty($applicants[$i][3]) ? ucwords(strtolower($applicants[$i][3])) : null,
@@ -1152,7 +1155,7 @@ class ApplicantController extends Controller
             'religion' => !empty($applicants[$i][14]) ? $applicants[$i][14] : null,
             'source_id' => 7,
             'status_id' => !empty($applicants[$i][17]) ? ApplicantStatus::whereRaw('LOWER(name) = ?', [strtolower($applicants[$i][17])])->value('id') ?? 1 : 1,
-            'followup_id' => $applicants[$i][18] ? FollowUp::whereRaw('LOWER(name) = ?', [strtolower($applicants[$i][18])])->value('id') ?? 1 : 1,
+            'followup_id' => $followUpId ?? 1,
             'come' => $come,
             'achievement' => !empty($applicants[$i][20]) ? $applicants[$i][20] : null,
             'kip' => $kip,
@@ -1220,6 +1223,9 @@ class ApplicantController extends Controller
             }
         }
 
+        $nameFollowUp = strtolower(trim($applicants[$i][18]));
+        $followUpId = FollowUp::whereRaw('LOWER(name) = ?', [$nameFollowUp])->value('id');
+
         $data_applicant = [
             'pmb' => $applicants[$i][2],
             'email' => $student->phone . "@lp3i.ac.id",
@@ -1228,6 +1234,7 @@ class ApplicantController extends Controller
             'is_applicant' => $scholarship == 1 ? 1 : 0,
             'scholarship_date' => Carbon::now()->setTimezone('Asia/Jakarta'),
             'note' => 'Duplicate entry detected (Error Code: 10621)',
+            'followup_id' => $followUpId ?? 1,
         ];
 
         $student->update($data_applicant);
@@ -1258,6 +1265,9 @@ class ApplicantController extends Controller
             }
         }
 
+        $nameFollowUp = strtolower(trim($applicants[$i][18]));
+        $followUpId = FollowUp::whereRaw('LOWER(name) = ?', [$nameFollowUp])->value('id');
+
         $data_applicant = [
             'identity' => $applicants[$i][1],
             'pmb' => $applicants[$i][2],
@@ -1275,7 +1285,7 @@ class ApplicantController extends Controller
             'identity_user' => $identityUser,
             'source_id' => 7,
             'status_id' => !empty($applicants[$i][17]) ? ApplicantStatus::whereRaw('LOWER(name) = ?', [strtolower($applicants[$i][17])])->value('id') ?? 1 : 1,
-            'followup_id' => $applicants[$i][18] ? FollowUp::whereRaw('LOWER(name) = ?', [strtolower($applicants[$i][18])])->value('id') ?? 1 : 1,
+            'followup_id' => $followUpId ?? 1,
             'come' => $come,
             'achievement' => !empty($applicants[$i][20]) ? $applicants[$i][20] : null,
             'kip' => $kip,
@@ -1333,6 +1343,7 @@ class ApplicantController extends Controller
             }
 
             $come = 0;
+
             if (strcasecmp($applicants[$i][19], 'SUDAH') === 0) {
                 $come = 1;
             } elseif (strcasecmp($applicants[$i][19], 'BELUM') === 0) {
@@ -1366,7 +1377,7 @@ class ApplicantController extends Controller
             } else {
                 $schoolCheck = School::where('id', $schoolName)->first();
                 $schoolNameCheck = School::where('name', $schoolName)->first();
-            
+
                 if ($schoolCheck) {
                     $school = $schoolCheck->id;
                 } else {
