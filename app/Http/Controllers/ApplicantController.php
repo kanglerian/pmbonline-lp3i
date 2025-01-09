@@ -1155,7 +1155,7 @@ class ApplicantController extends Controller
             'religion' => !empty($applicants[$i][14]) ? $applicants[$i][14] : null,
             'source_id' => 7,
             'status_id' => !empty($applicants[$i][17]) ? ApplicantStatus::whereRaw('LOWER(name) = ?', [strtolower($applicants[$i][17])])->value('id') ?? 1 : 1,
-            'followup_id' => $followUpId ?? 1,
+            'followup_id' => $followUpId ?? 10,
             'come' => $come,
             'achievement' => !empty($applicants[$i][20]) ? $applicants[$i][20] : null,
             'kip' => $kip,
@@ -1234,7 +1234,7 @@ class ApplicantController extends Controller
             'is_applicant' => $scholarship == 1 ? 1 : 0,
             'scholarship_date' => Carbon::now()->setTimezone('Asia/Jakarta'),
             'note' => 'Duplicate entry detected (Error Code: 10621)',
-            'followup_id' => $followUpId ?? 1,
+            'followup_id' => $followUpId ?? 10,
         ];
 
         $student->update($data_applicant);
@@ -1285,7 +1285,7 @@ class ApplicantController extends Controller
             'identity_user' => $identityUser,
             'source_id' => 7,
             'status_id' => !empty($applicants[$i][17]) ? ApplicantStatus::whereRaw('LOWER(name) = ?', [strtolower($applicants[$i][17])])->value('id') ?? 1 : 1,
-            'followup_id' => $followUpId ?? 1,
+            'followup_id' => $followUpId ?? 10,
             'come' => $come,
             'achievement' => !empty($applicants[$i][20]) ? $applicants[$i][20] : null,
             'kip' => $kip,
