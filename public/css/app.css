@@ -1517,10 +1517,6 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 }
-.bg-gray-900 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-}
 .bg-green-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(34 197 94 / var(--tw-bg-opacity));
@@ -1600,8 +1596,8 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(202 138 4 / var(--tw-bg-opacity));
 }
-.bg-opacity-80 {
-  --tw-bg-opacity: 0.8;
+.bg-opacity-90 {
+  --tw-bg-opacity: 0.9;
 }
 .fill-blue-600 {
   fill: #2563eb;
