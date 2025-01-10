@@ -32,22 +32,22 @@
             <p class="text-sm text-white">Tanya-Tanya, Daftar, Registrasi Ulang. Klik Kontak & Link yang tertera.</p>
         </div>
         <div class="w-full text-center space-y-3 text-sm">
-            <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out">
+            <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Website Pendaftaran
             </a>
-            <a href="https://politekniklp3i-tasikmalaya.ac.id/penerimaan-mahasiswa" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out">
+            <a href="https://politekniklp3i-tasikmalaya.ac.id/penerimaan-mahasiswa" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Info PMB
             </a>
-            <a href="https://sbpmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out">
+            <a href="https://sbpmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Beasiswa Kuliah di Politeknik LP3I
             </a>
-            <a href="#" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out">
+            <a href="#" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Brosur Digital
             </a>
-            <a href="https://politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out">
+            <a href="https://politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Website Kampus
             </a>
-            <a href="https://virtualkampus.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out">
+            <a href="https://virtualkampus.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Virtual Tour
             </a>
         </div>
