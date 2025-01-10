@@ -38,7 +38,7 @@
             <a href="https://politekniklp3i-tasikmalaya.ac.id/penerimaan-mahasiswa" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Info PMB
             </a>
-            <a href="https://sbpmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
+            <a href="https://forms.gle/UqLyNAdcafMQF4PB8" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Beasiswa Kuliah di Politeknik LP3I
             </a>
             <a href="#" target="_blank" class="block bg-white hover:bg-gray-100 py-2.5 px-4 transition-all ease-in-out rounded-xl">
