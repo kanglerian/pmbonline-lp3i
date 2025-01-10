@@ -1240,7 +1240,7 @@ class ApplicantController extends Controller
             'is_applicant' => $scholarship == 1 ? 1 : 0,
             'scholarship_date' => Carbon::now()->setTimezone('Asia/Jakarta'),
             'note' => 'Duplicate entry detected (Error Code: 10621)',
-            'followup_id' => $followup
+            'followup_id' => 1
         ];
 
         $student->update($data_applicant);
