@@ -50,6 +50,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+Route::get('/link', function () {
+    return view('link');
+})->name('link');
+
 Route::prefix('recommendation-data')->group(function () {
     Route::get('/kkn', [DataController::class, 'kkn'])->name('recommendation-data.input-kkn');
     Route::post('/kkn', [DataController::class, 'kkn_store'])->name('recommendation-data.store-kkn');
