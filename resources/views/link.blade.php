@@ -28,7 +28,7 @@
 <body style="background-image: url('{{ asset('img/background-campus.jpg') }}')" class="bg-center bg-cover bg-white/80 bg-blend-overlay flex flex-col justify-center items-center py-10">
     <div class="container max-w-lg mx-auto flex flex-col items-center justify-center gap-5 px-5 md:px-0">
         <div class="profile-card bg-white rounded-2xl shadow-lg p-3 space-y-4">
-            <div class="flex flex-col justify-center items-center gap-4 bg-gray-100 p-5 rounded-2xl">
+            <div class="flex flex-col justify-center items-center gap-4 bg-[#F5F8FC] p-5 rounded-2xl">
                 <div class="flex items-center gap-3">
                     <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="h-16 logo-one">
                     <img src="{{ asset('img/akreditasi.png') }}" alt="" class="h-16 logo-two">
