@@ -30,29 +30,29 @@
         <div class="profile-card bg-white rounded-2xl shadow-lg p-3 space-y-4">
             <div class="flex flex-col justify-center items-center gap-4 bg-gray-100 p-5 rounded-2xl">
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="h-16">
-                    <img src="{{ asset('img/akreditasi.png') }}" alt="" class="h-16">
+                    <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="h-16 logo-one">
+                    <img src="{{ asset('img/akreditasi.png') }}" alt="" class="h-16 logo-two">
                 </div>
                 <div class="text-center space-y-1">
-                    <h3 class="font-bold text-base text-gray-900">PMB Politeknik LP3I Kampus Tasikmalaya</h3>
-                    <p class="text-sm text-gray-700">Tanya-Tanya, Daftar, Registrasi Ulang. Klik Kontak
+                    <h3 class="font-bold text-base text-gray-900 title">PMB Politeknik LP3I Kampus Tasikmalaya</h3>
+                    <p class="text-sm text-gray-700 desc">Tanya-Tanya, Daftar, Registrasi Ulang. Klik Kontak
                         & Link yang tertera.</p>
                 </div>
             </div>
             <div class="flex items-center justify-center gap-3">
-                <a href="https://www.instagram.com/lp3i.tasik" target="_blank" class="text-gray-700 hover:text-gray-800">
+                <a href="https://www.instagram.com/lp3i.tasik" target="_blank" class="text-gray-700 hover:text-gray-800 sosmed-1">
                     <i class="fa-brands fa-instagram text-2xl"></i>
                 </a>
-                <a href="https://www.facebook.com/lp3i.tasik" target="_blank" class="text-gray-700 hover:text-gray-800">
+                <a href="https://www.facebook.com/lp3i.tasik" target="_blank" class="text-gray-700 hover:text-gray-800 sosmed-2">
                     <i class="fa-brands fa-facebook text-2xl"></i>
                 </a>
-                <a href="https://www.threads.net/@lp3i.tasik" target="_blank" class="text-gray-700 hover:text-gray-800">
+                <a href="https://www.threads.net/@lp3i.tasik" target="_blank" class="text-gray-700 hover:text-gray-800 sosmed-3">
                     <i class="fa-brands fa-threads text-2xl"></i>
                 </a>
-                <a href="https://www.tiktok.com/@lp3i.tasik" target="_blank" class="text-gray-700 hover:text-gray-800">
+                <a href="https://www.tiktok.com/@lp3i.tasik" target="_blank" class="text-gray-700 hover:text-gray-800 sosmed-4">
                     <i class="fa-brands fa-tiktok text-2xl"></i>
                 </a>
-                <a href="https://www.youtube.com/lp3itasik" target="_blank" class="text-gray-700 hover:text-gray-800">
+                <a href="https://www.youtube.com/lp3itasik" target="_blank" class="text-gray-700 hover:text-gray-800 sosmed-5">
                     <i class="fa-brands fa-youtube text-2xl"></i>
                 </a>
             </div>
@@ -101,7 +101,7 @@
     </div>
     <div class="fixed right-0 bottom-0">
         <a href="https://politekniklp3i-tasikmalaya.ac.id/penerimaan-mahasiswa" target="_blank"
-            class="flex items-center justify-center">
+            class="flex items-center justify-center profile-card">
             <lottie-player src="{{ asset('animations/whatsapp.json') }}" background="Transparent" speed="1"
                 style="width: 100px; height: 100px" direction="1" mode="normal" loop autoplay></lottie-player>
         </a>
@@ -118,44 +118,65 @@
             rotation: -30,
             ease: "elastic.out(1,0.3)"
         });
-        gsap.from(".profile-photo", {
+        gsap.from(".logo-one", {
             duration: 2.5,
             y: -200,
             rotation: -30,
             delay: 0.4,
             ease: "elastic.out(1,0.3)"
         });
-        gsap.from(".profile-name", {
+        gsap.from(".logo-two", {
+            duration: 2.5,
+            y: -200,
+            rotation: -30,
+            delay: 0.5,
+            ease: "elastic.out(1,0.3)"
+        });
+        gsap.from(".title", {
             duration: 0.7,
             opacity: 0,
             delay: 0.7,
             y: 100
         });
-        gsap.from(".profile-title", {
+        gsap.from(".desc", {
             duration: 0.7,
             opacity: 0,
             delay: 0.8,
             y: 100
         });
-        gsap.from(".youtube", {
+        gsap.from(".sosmed-1", {
             duration: 2.5,
-            y: -500,
+            y: -200,
+            rotation: -30,
+            delay: 0.4,
+            ease: "elastic.out(1,0.3)"
+        });
+        gsap.from(".sosmed-2", {
+            duration: 2.5,
+            y: -200,
             rotation: -30,
             delay: 0.5,
             ease: "elastic.out(1,0.3)"
         });
-        gsap.from(".facebook", {
+        gsap.from(".sosmed-3", {
             duration: 2.5,
-            y: -500,
+            y: -200,
             rotation: -30,
             delay: 0.6,
             ease: "elastic.out(1,0.3)"
         });
-        gsap.from(".email", {
+        gsap.from(".sosmed-4", {
             duration: 2.5,
-            y: -500,
+            y: -200,
             rotation: -30,
             delay: 0.7,
+            ease: "elastic.out(1,0.3)"
+        });
+        gsap.from(".sosmed-5", {
+            duration: 2.5,
+            y: -200,
+            rotation: -30,
+            delay: 0.8,
             ease: "elastic.out(1,0.3)"
         });
         gsap.from("#links", {
@@ -182,13 +203,6 @@
             duration: 2.5,
             opacity: 0,
             delay: 2,
-            y: 100,
-            ease: "elastic.out(1,0.5)"
-        });
-        gsap.from("#footer", {
-            duration: 2.5,
-            opacity: 0,
-            delay: 2.5,
             y: 100,
             ease: "elastic.out(1,0.5)"
         });
