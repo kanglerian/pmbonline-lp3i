@@ -58,17 +58,11 @@
             </div>
         </div>
         <div id="links" class="w-full text-center space-y-3 text-sm">
-            <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-lp3i-100 hover:bg-lp3i-200 text-white font-medium drop-shadow py-2.5 px-4 transition-all ease-in-out rounded-xl">
-                Website Pendaftaran
-            </a>
             <a href="https://politekniklp3i-tasikmalaya.ac.id/penerimaan-mahasiswa" target="_blank" class="block bg-lp3i-100 hover:bg-lp3i-200 text-white font-medium drop-shadow py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Info PMB
             </a>
-            <a href="https://forms.gle/UqLyNAdcafMQF4PB8" target="_blank" class="block bg-lp3i-100 hover:bg-lp3i-200 text-white font-medium drop-shadow py-2.5 px-4 transition-all ease-in-out rounded-xl">
-                Beasiswa Kuliah di Politeknik LP3I
-            </a>
-            <a href="#" target="_blank" class="block bg-lp3i-100 hover:bg-lp3i-200 text-white font-medium drop-shadow py-2.5 px-4 transition-all ease-in-out rounded-xl">
-                Brosur Digital
+            <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-lp3i-100 hover:bg-lp3i-200 text-white font-medium drop-shadow py-2.5 px-4 transition-all ease-in-out rounded-xl">
+                Website Pendaftaran
             </a>
             <a href="https://politekniklp3i-tasikmalaya.ac.id" target="_blank" class="block bg-lp3i-100 hover:bg-lp3i-200 text-white font-medium drop-shadow py-2.5 px-4 transition-all ease-in-out rounded-xl">
                 Website Kampus
@@ -105,6 +99,12 @@
             <lottie-player src="{{ asset('animations/whatsapp.json') }}" background="Transparent" speed="1"
                 style="width: 100px; height: 100px" direction="1" mode="normal" loop autoplay></lottie-player>
         </a>
+    </div>
+    <div class="absolute" style="z-index: -9;left: 0">
+        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_snisb0ad.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+    </div>
+    <div class="absolute" style="z-index: -9;right: 0">
+        <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_vubims6l.json" background="transparent" speed="1" style="width: 700px; height: 700px;" loop autoplay></lottie-player>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js" integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
