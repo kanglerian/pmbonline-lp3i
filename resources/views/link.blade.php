@@ -73,15 +73,15 @@
         </div>
         <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-3">
             <a id="link-one" href="https://forms.gle/UqLyNAdcafMQF4PB8" target="_blank" class="bg-lp3i-100 hover:bg-lp3i-200 transition-all ease-in-out p-4 rounded-xl space-y-2 drop-shadow-lg">
-                <img src="{{ asset('ads/ads-1.jpg') }}" alt="" class="w-full rounded-lg">
+                <img src="{{ asset('ads/ads-1.jpeg') }}" alt="" class="w-full rounded-lg">
                 <h4 class="text-white text-center font-bold text-sm">Beasiswa Kuliah</h4>
             </a>
             <a id="link-two" href="https://politekniklp3i-tasikmalaya.ac.id/reguler-sore" target="_blank" class="bg-lp3i-100 hover:bg-lp3i-200 transition-all ease-in-out p-4 rounded-xl space-y-2 drop-shadow-lg">
-                <img src="{{ asset('ads/ads-2.jpg') }}" alt="" class="w-full rounded-lg">
+                <img src="{{ asset('ads/ads-2.jpeg') }}" alt="" class="w-full rounded-lg">
                 <h4 class="text-white text-center font-bold text-sm">Kelas Karyawan</h4>
             </a>
             <a id="link-three" href="https://www.figma.com/proto/dqHywQMvS5boF2V5t02P4V/POLITEKNIK-LP3I-KAMPUS-TASIKMALAYA-2024?node-id=201-2&node-type=canvas&t=ykbl6KPhOf6ZTikl-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=387%3A16589" target="_blank" class="bg-lp3i-100 hover:bg-lp3i-200 transition-all ease-in-out p-4 rounded-xl space-y-2 drop-shadow-lg">
-                <img src="{{ asset('ads/ads-3.jpg') }}" alt="" class="w-full rounded-lg">
+                <img src="{{ asset('ads/ads-3.jpeg') }}" alt="" class="w-full rounded-lg">
                 <h4 class="text-white text-center font-bold text-sm">Brosur Digital</h4>
             </a>
         </div>
