@@ -364,8 +364,7 @@
                                                 `{{ $applicant->schoolapplicant ? $applicant->schoolapplicant->name : 'Tidak diketahui' }}`,
                                                 `{{ $applicant->year ?? 'Tidak diketahui' }}`,
                                                 `{{ $applicant->program ?? 'Tidak diketahui' }}`,
-                                                `{{ $applicant->source ?? 'Tidak diketahui' }}`,
-                                                `{{ $applicant->sourcesetting->name }}`,
+                                                `{{ $applicant->source_id ? $applicant->sourcesetting->name : 'Tidak diketahui' }}`,
                                                 `{{ $applicant->programtype ? $applicant->programtype->name : 'Tidak diketahui' }}`,
                                                 `{{ $applicant->applicantstatus ? $applicant->applicantstatus->name : 'Tidak diketahui' }}`,
                                                 );">
