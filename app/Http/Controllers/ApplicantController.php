@@ -1455,6 +1455,7 @@ class ApplicantController extends Controller
                         if ($studentData) {
                             if ($studentData->is_applicant == 0) {
                                 $studentPhone = Applicant::where('phone', $phone)->first();
+                                dd($studentPhone);
                                 if ($studentPhone) {
                                     if ($studentPhone->is_applicant == 0 && $studentPhone->is_daftar == 0 && $studentPhone->is_register == 0 && $studentPhone->schoolarship == 0) {
                                         $samePhone = true;
@@ -1510,9 +1511,9 @@ class ApplicantController extends Controller
                 $macro = request('macro');
                 $this->studentsHandle(Auth::user()->sheet, Auth::user()->identity, $start, $end, $macro);
 
-                return response()->json([
-                    'message' => 'Data ' . Auth::user()->name . ' berhasil disinkronisasi dari Spreadsheet',
-                ]);
+                // return response()->json([
+                //     'message' => 'Data ' . Auth::user()->name . ' berhasil disinkronisasi dari Spreadsheet',
+                // ]);
             } else {
                 return response()->json([
                     'message' => 'Presenter / Sheet tidak ditemukan.',
