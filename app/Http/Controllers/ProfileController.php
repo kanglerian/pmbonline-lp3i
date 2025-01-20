@@ -73,7 +73,7 @@ class ProfileController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
-            return back()->with('error', 'Terjadi kesalahan, silakan coba lagi!')->withInput();
+            return back()->with('error', $th->getMessage())->withInput();
         }
     }
 
