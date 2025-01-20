@@ -1169,7 +1169,7 @@ class ApplicantController extends Controller
             'other_campus' => !empty($applicants[$i][31]) ? $applicants[$i][31] : null,
             'income_parent' => !empty($applicants[$i][26]) ? $applicants[$i][26] : null,
             'social_media' => !empty($applicants[$i][32]) ? $applicants[$i][32] : null,
-            'note' => 'Data berhasil diimport dari file excels',
+            'note' => 'Data berhasil diimport dari file excel',
 
             /* Scholarship */
             'schoolarship' => $scholarship,
@@ -1468,7 +1468,8 @@ class ApplicantController extends Controller
                             $studentPhoneDup = Applicant::where('phone', $phone)->first();
                             if ($studentPhoneDup) {
                                 $samePhone = true;
-                                $this->update_data_duplicate($studentPhoneDup, $applicants, $i);
+                                dd($studentPhoneDup->name)
+                                // $this->update_data_duplicate($studentPhoneDup, $applicants, $i);
                             } else {
                                 $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $known, $program, $create_father, $create_mother);
                             }
