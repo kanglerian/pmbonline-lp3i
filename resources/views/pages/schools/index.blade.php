@@ -9,7 +9,7 @@
             <div class="flex flex-wrap justify-center gap-1 px-2 text-gray-600">
                 <div class="flex bg-gray-200 px-4 py-2 text-sm rounded-xl items-center gap-2">
                     <i class="fa-solid fa-database"></i>
-                    <h2 id="count_filter">0</h2>
+                    <h2>{{ $total }}</h2>
                 </div>
                 <a href="{{ route('schools.setting') }}"
                     class="flex bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 text-sm rounded-xl items-center gap-2">

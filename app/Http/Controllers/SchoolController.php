@@ -52,8 +52,7 @@ class SchoolController extends Controller
             $schoolsQuery->where("wilayah", "TIDAK DIKETAHUI");
             $appends["problem"] = $problem;
         }
-
-        if ($pmb !== "all" && $problem === false) {
+        if ($pmb !== "all" && !$problem) {
             $schoolsQuery->where("pmb", $pmb);
             $appends["pmb"] = $pmb;
         }
@@ -66,13 +65,15 @@ class SchoolController extends Controller
         $schools = $schoolsQuery->paginate(5);
         $schools->appends($appends);
 
-        return view("pages.schools.index")->with([
+        $data = [
             "total" => $total,
             "schools_by_region" => $schools_by_region,
             "slepets" => $slepets,
             "useless" => $useless,
             "schools" => $schools,
-        ]);
+        ];
+
+        return view("pages.schools.index")->with($data);
     }
 
     /**

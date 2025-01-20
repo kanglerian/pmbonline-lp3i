@@ -1169,7 +1169,7 @@ class ApplicantController extends Controller
             'other_campus' => !empty($applicants[$i][31]) ? $applicants[$i][31] : null,
             'income_parent' => !empty($applicants[$i][26]) ? $applicants[$i][26] : null,
             'social_media' => !empty($applicants[$i][32]) ? $applicants[$i][32] : null,
-            'note' => 'Data berhasil diimport dari file excel',
+            'note' => 'Data berhasil diimport dari file excels',
 
             /* Scholarship */
             'schoolarship' => $scholarship,
