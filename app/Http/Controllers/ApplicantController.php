@@ -1468,7 +1468,7 @@ class ApplicantController extends Controller
                             $studentPhoneDup = Applicant::where('phone', $phone)->first();
                             if ($studentPhoneDup) {
                                 $samePhone = true;
-                                dd($studentPhoneDup->name)
+                                dd($studentPhoneDup->name);
                                 // $this->update_data_duplicate($studentPhoneDup, $applicants, $i);
                             } else {
                                 $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $known, $program, $create_father, $create_mother);
