@@ -1455,7 +1455,6 @@ class ApplicantController extends Controller
                         if ($studentData) {
                             if ($studentData->is_applicant == 0) {
                                 $studentPhone = Applicant::where('phone', $phone)->first();
-                                return response()->json($studentPhone);
                                 if ($studentPhone) {
                                     if ($studentPhone->is_applicant == 0 && $studentPhone->is_daftar == 0 && $studentPhone->is_register == 0 && $studentPhone->schoolarship == 0) {
                                         $samePhone = true;
