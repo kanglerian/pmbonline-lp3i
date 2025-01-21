@@ -86,7 +86,7 @@
                 <div class="flex items-center gap-2">
                     @if (Auth::user()->role == 'P' && Auth::user()->sheet)
                     {{-- @if(Auth::user()->identity == '6282211780631' || Auth::user()->role == 'A') --}}
-                        <button type="button" onclick="syncSpreadsheet(`{{ Auth::user()->sheet }}`)"
+                        <button type="button" onclick="syncSpreadsheet('{{ Auth::user()->sheet }}')"
                             class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-xs space-x-1">
                             <i class="fa-solid fa-rotate"></i>
                         </button>
@@ -429,9 +429,9 @@
         </section>
     </main>
 
-    @if (Auth::user()->role == 'P' && Auth::user()->sheet)
+    {{-- @if (Auth::user()->role == 'P' && Auth::user()->sheet) --}}
         @include('pages.database.modal.sync')
-    @endif
+    {{-- @endif --}}
 
     @push('scripts')
         <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>

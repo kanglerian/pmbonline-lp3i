@@ -107,7 +107,7 @@ Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
     Route::delete('status/database/daftar/{id}', [StatusDaftarController::class, 'destroy'])->name('statusdatabasedaftar.destroy');
     Route::delete('status/database/registrasi/{id}', [StatusRegistrasiController::class, 'destroy'])->name('statusdatabaseregistrasi.destroy');
     /* Import from Spreadsheet */
-    Route::get('import/applicants', [ApplicantController::class, 'import'])->name('applicant.import');
+    Route::get('import/applicants/{start}/{end}/{macro}', [ApplicantController::class, 'import'])->name('applicant.import');
     Route::get('import/check-spreadsheet/{sheet}/{macro}', [ApplicantController::class, 'check_spreadsheet'])->name('applicant.check-spreadsheet');
     /* Export to Excel */
     Route::get('applicants/export/{dateStart?}/{dateEnd?}/{yearGrad?}/{schoolVal?}/{birthdayVal?}/{pmbVal?}/{sourceVal?}/{statusVal?}', [ApplicantController::class, 'export'])->name('applicants.export');

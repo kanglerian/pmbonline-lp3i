@@ -15,10 +15,10 @@
                     <p class="text-sm text-gray-600">Berikut ini adalah menu untuk sinkronisasi spreadsheet.</p>
                 </div>
                 <hr class="mb-3">
-                <div class="space-y-3">
-                    <div class="grid grid-cols-1 md:grid-cols-2 md:gap-3">
+                <form method="GET" onsubmit="syncNow()" id="form-sync" class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
-                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Dari</label>
+                            <label for="start" class="block mb-2 text-sm font-medium text-gray-900">Dari</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
                                     <i class="fa-solid fa-table-columns text-gray-500"></i>
@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div>
-                            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">Sampai</label>
+                            <label for="end" class="block mb-2 text-sm font-medium text-gray-900">Sampai</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
                                     <i class="fa-solid fa-table-columns text-gray-500"></i>
@@ -46,40 +46,49 @@
                             id="count-sync"></span>.</p>
                     <p class="text-xs text-center text-gray-700">Jika bingung, tak perlu ragu untuk langsung klik tombol
                         sinkronisasi.</p>
-                    <button type="button" onclick="syncNow()" id="button-sync"
+                    <button type="submit" id="button-sync"
                         class="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center">Sinkronisasi
                         Sekarang!</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    let total;
-    let standart;
+    let total = 0;
+    let standart = 0;
+    let routeTemplate =
+        '{{ route('applicant.import', ['start' => '__START__', 'end' => '__END__', 'macro' => 'AKfycbx0TyUKAqB7ckgyLX_l-cfXQJD8JhxnopnD3GUjFc8Rp_5SN7N_FRXnyzBTU7uP8mE5']) }}';
+
     const syncSpreadsheet = async (sheet) => {
         showLoadingAnimation();
-        try {
-            /* Macro untuk mengambil database dari Spreadsheet*/
-            const macro = 'AKfycbx0TyUKAqB7ckgyLX_l-cfXQJD8JhxnopnD3GUjFc8Rp_5SN7N_FRXnyzBTU7uP8mE5';
-            /* End Macro */
-            const response = await axios.get(`/import/check-spreadsheet/${sheet}/${macro}`);
-            const maxCount = 1000;
-            total = response.data.applicants;
-            standart = total > maxCount ? maxCount : 1;
-            document.getElementById('start').value = total - standart;
-            document.getElementById('count-sync').innerText = `${standart} data`;
-            document.getElementById('end').value = total;
-            document.getElementById('max-count').innerText = maxCount;
-            total = total - 1;
-            let modalElement = document.getElementById('modal-sync');
-            modalElement.classList.toggle('hidden');
-            hideLoadingAnimation();
-        } catch (error) {
-            console.log(error);
-            hideLoadingAnimation();
-        }
+        const macro = 'AKfycbx0TyUKAqB7ckgyLX_l-cfXQJD8JhxnopnD3GUjFc8Rp_5SN7N_FRXnyzBTU7uP8mE5';
+        await axios.get(`/import/check-spreadsheet/${sheet}/${macro}`)
+            .then((response) => {
+                const maxCount = 1000;
+                total = response.data.applicants;
+                standart = total > maxCount ? maxCount : 1;
+                document.getElementById('start').value = total - standart;
+                document.getElementById('count-sync').innerText = `${standart} data`;
+                document.getElementById('end').value = total;
+                document.getElementById('max-count').innerText = maxCount;
+
+                let start = total - standart;
+                let end = total;
+                let route = routeTemplate.replace('__START__', start).replace('__END__', end);
+
+                document.getElementById('form-sync').setAttribute('action', route);
+
+                total = total - 1;
+                let modalElement = document.getElementById('modal-sync');
+                modalElement.classList.toggle('hidden');
+                hideLoadingAnimation();
+            })
+            .catch((error) => {
+                console.log(error);
+                hideLoadingAnimation();
+            });
     }
 
     const validateInput = () => {
@@ -97,6 +106,11 @@
         }
         let result = end - start;
         document.getElementById('count-sync').innerText = result;
+        
+        let route = routeTemplate.replace('__START__', start).replace('__END__', end);
+
+        document.getElementById('form-sync').setAttribute('action', route);
+
         if (result > 2000 || result < 10) {
             buttonElement.style.display = 'none';
         } else {
@@ -104,28 +118,8 @@
         }
     }
 
-    const syncNow = async () => {
+    const syncNow = () => {
         showLoadingAnimation();
-        /* Macro untuk mengambil database dari Spreadsheet*/
-        const macro = 'AKfycbx0TyUKAqB7ckgyLX_l-cfXQJD8JhxnopnD3GUjFc8Rp_5SN7N_FRXnyzBTU7uP8mE5';
-        /* End Macro */
-        let start = document.getElementById('start').value;
-        let end = document.getElementById('end').value;
-        await axios.get(`/import/applicants?start=${start}&end=${end}&macro=${macro}`)
-            .then((response) => {
-                console.log(response);
-                hideLoadingAnimation();
-            })
-            .catch((error) => {
-                if (error.response) {
-                    console.log('Error response data:', error.response.data);
-                    console.log('Error response status:', error.response.status);
-                } else {
-                    console.log('Error message:', error.message);
-                }
-                hideLoadingAnimation();
-            });
-        document.getElementById('modal-sync').classList.toggle('hidden');
     }
 
     const hideSync = () => {

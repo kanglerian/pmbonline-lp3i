@@ -174,20 +174,6 @@ class RegistrationController extends Controller
         $user->update($reset_password);
 
         StatusApplicantsRegistration::create($data);
-        $data = [
-            "name" => $applicant->name,
-            "program" => $applicant->program,
-            "school" => $applicant->schoolapplicant->name,
-            "major" => $applicant->major,
-            "year" => $applicant->year,
-            "phone" => $applicant->phone,
-            "email" => $applicant->email,
-            "password" => $applicant->phone,
-            "presenter" => $applicant->presenter->name,
-        ];
-        // Mail::to($applicant->email)->send(
-        //     new RegistrationConfirmationMail($data)
-        // );
         return back()->with(
             "message",
             "Data registrasi berhasil ditambahkan!"

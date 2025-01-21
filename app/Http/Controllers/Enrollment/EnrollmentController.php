@@ -177,6 +177,7 @@ class EnrollmentController extends Controller {
             'identity',
             $request->input( 'identity_user' )
         )->first();
+
         $data_applicant = [
             'is_daftar' => 1,
         ];
@@ -184,19 +185,6 @@ class EnrollmentController extends Controller {
         $applicant->update( $data_applicant );
 
         StatusApplicantsEnrollment::create( $data_enrollment );
-        $data = [
-            'receipt' => $request->input( 'receipt' ),
-            'name' => $applicant->name,
-            'school' => $applicant->schoolapplicant->name,
-            'major' => $applicant->major,
-            'year' => $applicant->year,
-            'phone' => $applicant->phone,
-            'email' => $applicant->email,
-            'presenter' => $applicant->presenter->name,
-        ];
-        // Mail::to( $applicant->email )->send(
-        //     new EnrollmentConfirmationMail( $data )
-        // );
         return back()->with(
             'message',
             'Data daftar berhasil ditambahkan!'

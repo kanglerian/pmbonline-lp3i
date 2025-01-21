@@ -254,7 +254,7 @@ class ApplicantController extends Controller
             'users' => $users,
             'nopresenter' => $nopresenter,
             'nophone' => $nophone,
-            'applicants' => $applicants
+            'applicants' => $applicants,
         ]);
     }
 
@@ -584,8 +584,9 @@ class ApplicantController extends Controller
             ApplicantFamily::create($data_father);
             ApplicantFamily::create($data_mother);
 
-            return redirect()->route('database.show', $applicant->identity)->with('message', 'Berhasil menambahkan data ' . $applicant->name);
-
+            return redirect()
+                ->route('database.show', $applicant->identity)
+                ->with('message', 'Berhasil menambahkan data ' . $applicant->name);
         } catch (QueryException $exception) {
             if ($exception->getCode() == 23000) {
                 return back()->with('error', $exception->getMessage());
@@ -763,9 +764,7 @@ class ApplicantController extends Controller
             ->where('identity', $identity)
             ->firstOrFail();
         if (Auth::user()->identity == $user->identity_user || Auth::user()->role == 'A' || Auth::user()->role == 'P') {
-            $userupload = UserUpload::with('fileupload')
-                ->where('identity_user', $identity)
-                ->get();
+            $userupload = UserUpload::with('fileupload')->where('identity_user', $identity)->get();
             $data = [];
             foreach ($userupload as $upload) {
                 $data[] = $upload->fileupload_id;
@@ -814,10 +813,10 @@ class ApplicantController extends Controller
             $mother = ApplicantFamily::where(['identity_user' => $applicant->identity, 'gender' => 0])->first();
 
             //            if ($response->successful()) {
-//                $programs = $response->json();
-//            } else {
-//                $programs = null;
-//            }
+            //                $programs = $response->json();
+            //            } else {
+            //                $programs = null;
+            //            }
 
             $applicant = Applicant::with(['SchoolApplicant', 'SourceSetting', 'sourceDaftarSetting'])->findOrFail($id);
             return view('pages.database.edit')->with([
@@ -847,7 +846,6 @@ class ApplicantController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $request->validate(
             [
                 'pmb' => ['required', 'integer'],
@@ -1127,26 +1125,13 @@ class ApplicantController extends Controller
         return (new ApplicantsExport($dateStart, $dateEnd, $yearGrad, $schoolVal, $birthdayVal, $pmbVal, $sourceVal, $statusVal))->download('applicants.xlsx');
     }
 
-    public function update_data($student, $applicants, $i, $phone, $school, $gender, $come, $kip, $known, $program, $samePhone = null)
+    public function update_data($student, $applicants, $i, $phone, $school, $gender, $come, $kip, $scholarship, $known, $followup, $program)
     {
-        $scholarship = 0;
-        if (!empty($applicants[$i][33])) {
-            if ($applicants[$i][33] == 'YA') {
-                $scholarship = 1;
-            }
-        }
-
-        $followup = null;
-        if (!empty($applicants[$i][18])) {
-            $followupRecord = FollowUp::where('name', $applicants[$i][18])->first();
-            $followup = $followupRecord ? $followupRecord->id : null;
-        }
-
         $data_applicant = [
             'pmb' => $applicants[$i][2],
             'name' => !empty($applicants[$i][3]) ? ucwords(strtolower($applicants[$i][3])) : null,
-            'phone' => $samePhone == null ? $phone : null,
-            'email' => $samePhone == null ? $phone . "@lp3i.ac.id" : null,
+            'phone' => $phone,
+            'email' => $phone . '@lp3i.ac.id',
             'education' => !empty($applicants[$i][6]) ? $applicants[$i][6] : null,
             'school' => $school,
             'major' => !empty($applicants[$i][8]) ? $applicants[$i][8] : null,
@@ -1172,8 +1157,8 @@ class ApplicantController extends Controller
 
             /* Scholarship */
             'schoolarship' => $scholarship,
-            'is_applicant' => $scholarship == 1 ? 1 : 0,
-            'scholarship_date' => Carbon::now()->setTimezone('Asia/Jakarta'),
+            'is_applicant' => $scholarship,
+            'scholarship_date' => $scholarship ?: Carbon::now()->setTimezone('Asia/Jakarta'),
         ];
 
         $data_father = [
@@ -1196,92 +1181,69 @@ class ApplicantController extends Controller
         if ($applicantMother) {
             $applicantMother->update($data_mother);
         }
-        $student->update($data_applicant);
-
-        if ($scholarship == 1) {
-            $account = User::where(['identity' => $student->identity, 'phone' => $student->phone])->count();
-            if ($account == 0) {
-                User::create([
-                    'identity' => $student->identity,
-                    'name' => ucwords(strtolower($student->name)),
-                    'gender' => $student->gender ? 1 : 0,
-                    'email' => $student->phone . "@lp3i.ac.id",
-                    'password' => Hash::make($student->phone),
-                    'phone' => $student->phone,
-                    'role' => 'S',
-                    'status' => 1,
-                ]);
-            }
-        }
-
-    }
-
-    public function update_data_duplicate($student, $applicants, $i)
-    {
-        $scholarship = 0;
-        if (!empty($applicants[$i][33])) {
-            if ($applicants[$i][33] == 'YA') {
-                $scholarship = 1;
-            }
-        }
-
-        $followup = null;
-        if (!empty($applicants[$i][18])) {
-            $followupRecord = FollowUp::where('name', $applicants[$i][18])->first();
-            $followup = $followupRecord ? $followupRecord->id : null;
-        }
-
-        $data_applicant = [
-            'pmb' => $applicants[$i][2],
-            'email' => $student->phone . "@lp3i.ac.id",
-            'year' => !empty($applicants[$i][10]) ? $applicants[$i][10] : null,
-            'schoolarship' => $scholarship,
-            'is_applicant' => $scholarship == 1 ? 1 : 0,
-            'scholarship_date' => Carbon::now()->setTimezone('Asia/Jakarta'),
-            'note' => 'Duplicate entry detected (Error Code: 10621)s',
-            'followup_id' => $followup,
-        ];
 
         $student->update($data_applicant);
 
-        if ($scholarship == 1) {
-            $account = User::where(['identity' => $student->identity, 'phone' => $student->phone])->count();
-            if ($account == 0) {
-                User::create([
-                    'identity' => $student->identity,
-                    'name' => ucwords(strtolower($student->name)),
-                    'gender' => $student->gender ? 1 : 0,
-                    'email' => $student->phone . "@lp3i.ac.id",
-                    'password' => Hash::make($student->phone),
-                    'phone' => $student->phone,
-                    'role' => 'S',
-                    'status' => 1,
-                ]);
+        $currentDate = Carbon::now()->setTimezone('Asia/Jakarta');
+        $currentMonth = (int) $currentDate->format('m');
+
+        $session = 6;
+
+        if ($currentMonth >= 1 && $currentMonth <= 3) {
+            $session = 2;
+        } elseif ($currentMonth >= 4 && $currentMonth <= 6) {
+            $session = 3;
+        } elseif ($currentMonth >= 7 && $currentMonth <= 9) {
+            $session = 4;
+        } elseif ($currentMonth >= 10 && $currentMonth <= 12) {
+            $session = 1;
+        }
+
+        if ($scholarship) {
+            $status_applicants_applicant = StatusApplicantsApplicant::where('identity_user', $student->identity)->first();
+            
+            $data = [
+                'pmb' => $applicants[$i][2],
+                'identity_user' => $student->identity,
+                'date' => $currentDate,
+                'session' => $session,
+            ];
+
+            if($status_applicants_applicant){
+                $status_applicants_applicant->update($data);
+            } else {
+                StatusApplicantsApplicant::create($data);
+            }
+
+            $account = User::where('phone', $student->phone)->first();
+
+            $data_account = [
+                'identity' => $student->identity,
+                'name' => ucwords(strtolower($student->name)),
+                'gender' => $student->gender,
+                'email' => $student->phone . '@lp3i.ac.id',
+                'password' => Hash::make($student->phone),
+                'phone' => $student->phone,
+                'role' => 'S',
+                'status' => 1,
+            ];
+
+            if ($account) {
+                $account->update($data_account);
+            } else {
+                User::create($data_account);
             }
         }
     }
 
-    public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $known, $program, $create_father, $create_mother, $samePhone = null)
+    public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother)
     {
-        $scholarship = 0;
-        if (!empty($applicants[$i][33])) {
-            if ($applicants[$i][33] == 'YA') {
-                $scholarship = 1;
-            }
-        }
-
-        $followup = null;
-        if (!empty($applicants[$i][18])) {
-            $followupRecord = FollowUp::where('name', $applicants[$i][18])->first();
-            $followup = $followupRecord ? $followupRecord->id : null;
-        }
-
         $data_applicant = [
             'identity' => $applicants[$i][1],
             'pmb' => $applicants[$i][2],
             'name' => !empty($applicants[$i][3]) ? ucwords(strtolower($applicants[$i][3])) : null,
-            'phone' => $samePhone == null ? $phone : null,
-            'email' => $samePhone == null ? $phone . "@lp3i.ac.id" : null,
+            'phone' => $phone,
+            'email' => $phone . '@lp3i.ac.id',
             'education' => !empty($applicants[$i][6]) ? $applicants[$i][6] : null,
             'school' => $school,
             'major' => !empty($applicants[$i][8]) ? $applicants[$i][8] : null,
@@ -1307,34 +1269,69 @@ class ApplicantController extends Controller
 
             /* Scholarship */
             'schoolarship' => $scholarship,
-            'is_applicant' => $scholarship == 1 ? 1 : 0,
-            'scholarship_date' => Carbon::now()->setTimezone('Asia/Jakarta'),
+            'is_applicant' => $scholarship,
+            'scholarship_date' => $scholarship ?: Carbon::now()->setTimezone('Asia/Jakarta'),
         ];
+
+        $currentDate = Carbon::now()->setTimezone('Asia/Jakarta');
+        $currentMonth = (int) $currentDate->format('m');
+
+        $session = 6;
+
+        if ($currentMonth >= 1 && $currentMonth <= 3) {
+            $session = 2;
+        } elseif ($currentMonth >= 4 && $currentMonth <= 6) {
+            $session = 3;
+        } elseif ($currentMonth >= 7 && $currentMonth <= 9) {
+            $session = 4;
+        } elseif ($currentMonth >= 10 && $currentMonth <= 12) {
+            $session = 1;
+        }
 
         ApplicantFamily::create($create_father);
         ApplicantFamily::create($create_mother);
+
         $student = Applicant::create($data_applicant);
 
-        if ($scholarship == 1) {
-            $account = User::where(['identity' => $student->identity, 'phone' => $student->phone])->count();
-            if ($account == 0) {
-                User::create([
-                    'identity' => $student->identity,
-                    'name' => ucwords(strtolower($student->name)),
-                    'gender' => $student->gender ? 1 : 0,
-                    'email' => $student->phone . '@lp3i.ac.id',
-                    'password' => Hash::make($student->phone),
-                    'phone' => $student->phone,
-                    'role' => 'S',
-                    'status' => 1,
-                ]);
+        if ($scholarship) {
+            $status_applicants_applicant = StatusApplicantsApplicant::where('identity_user', $student->identity)->first();
+            
+            $data = [
+                'pmb' => $applicants[$i][2],
+                'identity_user' => $student->identity,
+                'date' => $currentDate,
+                'session' => $session,
+            ];
+
+            if($status_applicants_applicant){
+                $status_applicants_applicant->update($data);
+            } else {
+                StatusApplicantsApplicant::create($data);
+            }
+
+            $account = User::where('phone', $student->phone)->first();
+
+            $data_account = [
+                'identity' => $student->identity,
+                'name' => ucwords(strtolower($student->name)),
+                'gender' => $student->gender,
+                'email' => $student->phone . '@lp3i.ac.id',
+                'password' => Hash::make($student->phone),
+                'phone' => $student->phone,
+                'role' => 'S',
+                'status' => 1,
+            ];
+
+            if ($account) {
+                $account->update($data_account);
+            } else {
+                User::create($data_account);
             }
         }
     }
 
     public function studentsHandle($person, $identityUser, $start, $end, $macro)
     {
-
         $response = Http::get('https://script.google.com/macros/s/' . $macro . '/exec?person=' . $person);
 
         $applicants = $response->json();
@@ -1359,6 +1356,19 @@ class ApplicantController extends Controller
             }
 
             $kip = null;
+
+            $scholarship = false;
+            if (!empty($applicants[$i][33])) {
+                if ($applicants[$i][33] == 'YA') {
+                    $scholarship = true;
+                }
+            }
+
+            $followup = null;
+            if (!empty($applicants[$i][18])) {
+                $followupRecord = FollowUp::where('name', $applicants[$i][18])->first();
+                $followup = $followupRecord ? $followupRecord->id : null;
+            }
 
             $known = null;
 
@@ -1442,38 +1452,17 @@ class ApplicantController extends Controller
 
             if (!empty($applicants[$i][0]) && !empty($applicants[$i][1]) && !empty($applicants[$i][2]) && !empty($applicants[$i][3])) {
                 if ($phone) {
-                    $studentDataPhone = Applicant::where(['identity' => $applicants[$i][1], 'phone' => $phone])->first();
+                    $studentDataPhone = Applicant::where(['phone' => $phone])->first();
                     if ($studentDataPhone) {
-                        if ($studentDataPhone->is_applicant == 0) {
-                            $this->update_data($studentDataPhone, $applicants, $i, $phone, $school, $gender, $come, $kip, $known, $program);
-                        } else if ($studentDataPhone->is_applicant == 1 && $studentDataPhone->schoolarship == 1) {
-                            $this->update_data($studentDataPhone, $applicants, $i, $phone, $school, $gender, $come, $kip, $known, $program);
+                        if (!$studentDataPhone->is_daftar && !$studentDataPhone->is_register) {
+                            $this->update_data($studentDataPhone, $applicants, $i, $phone, $school, $gender, $come, $kip, $scholarship, $known, $followup, $program);
                         }
                     } else {
-                        $studentData = Applicant::where('identity', $applicants[$i][1])->first();
-                        if ($studentData) {
-                            if ($studentData->is_applicant == 0) {
-                                $studentPhone = Applicant::where('phone', $phone)->first();
-                                if ($studentPhone) {
-                                    if ($studentPhone->is_applicant == 0 && $studentPhone->is_daftar == 0 && $studentPhone->is_register == 0 && $studentPhone->schoolarship == 0) {
-                                        $samePhone = true;
-                                        $this->update_data($studentData, $applicants, $i, $phone, $school, $gender, $come, $kip, $known, $program, $samePhone);
-                                    }
-                                } else {
-                                    $this->update_data($studentData, $applicants, $i, $phone, $school, $gender, $come, $kip, $known, $program, );
-                                }
-                            }
-                        } else {
-                            $studentPhoneDup = Applicant::where('phone', $phone)->first();
-                            if ($studentPhoneDup) {
-                                $samePhone = true;
-                                $this->update_data_duplicate($studentPhoneDup, $applicants, $i);
-                            } else {
-                                $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $known, $program, $create_father, $create_mother);
-                            }
-                        }
+                        $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother);
                     }
-                } else {
+                }
+                /* data berdasarkan identity kalau tidak ada phone
+                else {
                     $studentData = Applicant::where('identity', $applicants[$i][1])->first();
                     if ($studentData) {
                         $samePhone = true;
@@ -1483,6 +1472,7 @@ class ApplicantController extends Controller
                         $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $known, $program, $create_father, $create_mother, $samePhone);
                     }
                 }
+                */
             }
         }
     }
@@ -1490,39 +1480,31 @@ class ApplicantController extends Controller
     public function check_spreadsheet($sheet, $macro)
     {
         try {
-            $response = Http::get('https://script.google.com/macros/s/' . $macro . '/exec?person=' . $sheet);
-            $applicants = $response->json();
-            return response()->json([
-                'applicants' => count($applicants)
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json($th);
-        }
-    }
-
-    public function import()
-    {
-        try {
-            if (Auth::user()->role == 'P' && Auth::user()->sheet) {
-                $start = request('start', 'all');
-                $end = request('end', 'all');
-                $macro = request('macro');
-                $this->studentsHandle(Auth::user()->sheet, Auth::user()->identity, $start, $end, $macro);
-
-                // return response()->json([
-                //     'message' => 'Data ' . Auth::user()->name . ' berhasil disinkronisasi dari Spreadsheet',
-                // ]);
-            } else {
-                return response()->json([
-                    'message' => 'Presenter / Sheet tidak ditemukan.',
-                ]);
-            }
+        $response = Http::get('https://script.google.com/macros/s/' . $macro . '/exec?person=' . $sheet);
+        $applicants = $response->json();
+        return response()->json([
+            'applicants' => count($applicants),
+        ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Terjadi error saat sinkronisasi',
                 'error' => $th->getMessage(), // Ini akan memberikan pesan error yang lebih deskriptif
                 'trace' => $th->getTraceAsString(), // Ini akan menampilkan jejak stack trace dari error
-            ], 500);
+            ]);
+        }
+    }
+
+    public function import($start, $end, $macro)
+    {
+        try {
+            if (Auth::user()->role == 'P' && Auth::user()->sheet) {
+                $this->studentsHandle(Auth::user()->sheet, Auth::user()->identity, $start, $end, $macro);
+                return back()->with('message', 'Data aplikan berhasil diimport!');
+            } else {
+                return back()->with('error', 'Tidak diizinkan.');
+            }
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
         }
     }
 
@@ -1535,13 +1517,11 @@ class ApplicantController extends Controller
      */
     public function is_applicant(Request $request, $id)
     {
-
         $request->validate([
             'change_pmb' => ['required'],
             'identity_user' => ['required'],
             'session' => ['required'],
         ]);
-
 
         $applicant = Applicant::findOrFail($id);
         $data_applicant = [
