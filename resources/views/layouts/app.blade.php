@@ -30,7 +30,7 @@
         body {
             scroll-behavior: smooth;
         }
-        #map { height: 500px; }
+        #map, #map-school { height: 500px; }
         body {
             font-family: 'Roboto Mono', monospace;
             font-family: 'Source Code Pro', monospace;
@@ -130,6 +130,7 @@
     </script>
     @stack('utilities')
     @stack('scripts')
+    @stack('script2')
 </body>
 
 </html>

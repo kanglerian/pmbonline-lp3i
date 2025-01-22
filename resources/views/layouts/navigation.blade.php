@@ -44,7 +44,7 @@
                             'recommendation.index',
                             'recommendation.edit',
                         ])">
-                            {{ __('Database') }}
+                            {{ __('Databases') }}
                         </x-nav-link>
                     @endif
                     @if (Auth::check() && Auth::user()->status == '1' && Auth::user()->role == 'A')
@@ -112,7 +112,7 @@
                             'fileupload.create',
                             'fileupload.edit',
                         ])">
-                            {{ __('Setting') }}
+                            {{ __('Settings') }}
                         </x-nav-link>
                     @endif
                     @if (Auth::check() && Auth::user()->status == '1' && Auth::user()->role == 'S')

@@ -277,6 +277,10 @@
             @include('pages.dashboard.search.search')
 
             @include('pages.dashboard.harta.database')
+
+
+            @include('pages.dashboard.dashboard.dashboard-school')
+
             @include('pages.dashboard.dashboard.dashboard-register-school-year')
             @include('pages.dashboard.dashboard.dashboard-register-program')
             @include('pages.dashboard.dashboard.dashboard-rekap-perolehan-pmb')

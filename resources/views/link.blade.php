@@ -72,7 +72,7 @@
             </a>
         </div>
         <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-3">
-            <a id="link-one" href="https://forms.gle/UqLyNAdcafMQF4PB8" target="_blank" class="bg-lp3i-100 hover:bg-lp3i-200 transition-all ease-in-out p-4 rounded-xl space-y-2 drop-shadow-lg">
+            <a id="link-one" href="https://politekniklp3i-tasikmalaya.ac.id/beasiswakuliahlp3itasik" target="_blank" class="bg-lp3i-100 hover:bg-lp3i-200 transition-all ease-in-out p-4 rounded-xl space-y-2 drop-shadow-lg">
                 <img src="{{ asset('ads/ads-1.jpeg') }}" alt="" class="w-full rounded-lg">
                 <h4 class="text-white text-center font-bold text-sm">Beasiswa Kuliah</h4>
             </a>

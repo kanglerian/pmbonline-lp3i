@@ -16,8 +16,8 @@
                     <i class="fa-solid fa-gear"></i>
                 </a>
                 <button type="button" onclick="getSchools()"
-                    class="flex bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 text-sm rounded-xl items-center gap-2">
-                    <i class="fa-solid fa-download"></i>
+                    class="flex bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 text-sm rounded-xl items-center gap-2">
+                    <i class="fa-solid fa-file-excel"></i>
                 </button>
             </div>
         </div>
@@ -293,13 +293,14 @@
                 const responseSchools = await axios.get('api/school/getall');
                 const workbook = new ExcelJS.Workbook();
                 const worksheet = workbook.addWorksheet('Data');
-                let header = ['Nama Sekolah', 'Wilayah'];
+                let header = ['No', 'Nama Sekolah', 'Wilayah'];
                 let dataExcel = [
                     header,
                 ];
                 responseSchools.data.schools.forEach((school, index) => {
                     let schoolBucket = [];
                     schoolBucket.push(
+                        `${index + 1}`,
                         `${school.name ? school.name : 'Tidak diketahui'}`,
                         `${school.region ? school.region : 'Tidak diketahui'}`,
                     );
