@@ -357,8 +357,8 @@ class ComposerStaticInit692ec4c2059b0f48aa42536e0cd77d79
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -491,9 +491,9 @@ class ComposerStaticInit692ec4c2059b0f48aa42536e0cd77d79
         ),
         'Fruitcake\\Cors\\' => 
         array (
-            0 => __DIR__ . '/..' . '/fruitcake/php-cors/src',
-            1 => __DIR__ . '/..' . '/barryvdh/laravel-cors/src',
-            2 => __DIR__ . '/..' . '/fruitcake/laravel-cors/src',
+            0 => __DIR__ . '/..' . '/barryvdh/laravel-cors/src',
+            1 => __DIR__ . '/..' . '/fruitcake/laravel-cors/src',
+            2 => __DIR__ . '/..' . '/fruitcake/php-cors/src',
         ),
         'Firebase\\JWT\\' => 
         array (
@@ -643,6 +643,7 @@ class ComposerStaticInit692ec4c2059b0f48aa42536e0cd77d79
         'App\\Http\\Controllers\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/DashboardController.php',
         'App\\Http\\Controllers\\DataController' => __DIR__ . '/../..' . '/app/Http/Controllers/DataController.php',
         'App\\Http\\Controllers\\Enrollment\\EnrollmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Enrollment/EnrollmentController.php',
+        'App\\Http\\Controllers\\EventController' => __DIR__ . '/../..' . '/app/Http/Controllers/EventController.php',
         'App\\Http\\Controllers\\FileUploadController' => __DIR__ . '/../..' . '/app/Http/Controllers/FileUploadController.php',
         'App\\Http\\Controllers\\FollowUpController' => __DIR__ . '/../..' . '/app/Http/Controllers/FollowUpController.php',
         'App\\Http\\Controllers\\IntegrationController' => __DIR__ . '/../..' . '/app/Http/Controllers/IntegrationController.php',
@@ -696,6 +697,8 @@ class ComposerStaticInit692ec4c2059b0f48aa42536e0cd77d79
         'App\\Models\\Dashboard\\RekapitulasiPerolehanPMB' => __DIR__ . '/../..' . '/app/Models/Dashboard/RekapitulasiPerolehanPMB.php',
         'App\\Models\\Dashboard\\SalesRevenue' => __DIR__ . '/../..' . '/app/Models/Dashboard/SalesRevenue.php',
         'App\\Models\\Dashboard\\SalesVolume' => __DIR__ . '/../..' . '/app/Models/Dashboard/SalesVolume.php',
+        'App\\Models\\Event' => __DIR__ . '/../..' . '/app/Models/Event.php',
+        'App\\Models\\EventDetail' => __DIR__ . '/../..' . '/app/Models/EventDetail.php',
         'App\\Models\\FileUpload' => __DIR__ . '/../..' . '/app/Models/FileUpload.php',
         'App\\Models\\FollowUp' => __DIR__ . '/../..' . '/app/Models/FollowUp.php',
         'App\\Models\\Integration' => __DIR__ . '/../..' . '/app/Models/Integration.php',

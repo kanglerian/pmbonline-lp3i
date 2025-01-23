@@ -348,7 +348,7 @@
                 <div class="grid grid-cols-1">
                     <div class="relative z-0 w-full group">
                         <x-label for="note" :value="__('Catatan')" />
-                        <x-textarea id="note" type="note" name="note" value="{{ $applicant->note }}"
+                        <x-textarea id="note" name="note" value="{{ $applicant->note }}"
                             placeholder="Catatan">
                             {{ $applicant->note }}
                         </x-textarea>

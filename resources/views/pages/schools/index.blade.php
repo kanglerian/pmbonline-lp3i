@@ -87,7 +87,7 @@
                         </div>
                         <div class="mt-2 mb-4 text-sm">
                             Dalam daftar ini, terdapat sekitar <span class="font-bold">{{ $useless }}</span> entri
-                            sekolah memiliki data 0. Supaya tetap menampilkan data yang up to date maka silahkan hapus
+                            sekolah memiliki data <span class="font-bold">0</span>. Supaya tetap menampilkan data yang up to date maka silahkan hapus
                             data sekolah.
                         </div>
                     </div>

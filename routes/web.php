@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Applicant\Status\StatusDaftarController;
 use App\Http\Controllers\Applicant\Status\StatusRegistrasiController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Question\HomeController;
 use App\Http\Controllers\Question\Scholarship\QuestionController;
 use App\Http\Controllers\Question\Scholarship\ResultController;
@@ -53,6 +54,9 @@ Route::get('/', function () {
 Route::get('/link', function () {
     return view('link');
 })->name('link');
+
+Route::get('/events/{code}', [EventController::class, 'show'])->name('events.index');
+Route::post('/eventstore', [EventController::class, 'store_event'])->name('events.store_event');
 
 Route::prefix('recommendation-data')->group(function () {
     Route::get('/kkn', [DataController::class, 'kkn'])->name('recommendation-data.input-kkn');
@@ -194,14 +198,19 @@ Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
 
 /* Route Setting */
 Route::middleware(['auth', 'status:1', 'role:A'])
-    ->prefix('setting')
+    ->prefix('others')
     ->group(function () {
-        Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+        Route::get('/menu', [SettingController::class, 'index'])->name('menu.index');
         Route::resource('programtype', ProgramTypeController::class);
         Route::resource('source', SourceController::class);
         Route::resource('fileupload', FileUploadController::class);
         Route::resource('applicantstatus', ApplicantStatusController::class);
         Route::resource('followup', FollowUpController::class);
+        Route::resource('event', EventController::class);
+
+        Route::get('event/{id}/status', [EventController::class, 'status'])->name('event.status');
+        Route::get('event/{id}/scholarship', [EventController::class, 'scholarship'])->name('event.scholarship');
+        Route::get('event/{id}/files', [EventController::class, 'files'])->name('event.files');  
     });
 
 /* Route Scholarship */

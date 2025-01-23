@@ -94,8 +94,8 @@
                         </x-nav-link>
                     @endif
                     @if (Auth::check() && Auth::user()->status == '1' && Auth::user()->role == 'A')
-                        <x-nav-link :href="route('setting.index')" :active="request()->routeIs([
-                            'setting.index',
+                        <x-nav-link :href="route('menu.index')" :active="request()->routeIs([
+                            'menu.index',
                             'applicantstatus.index',
                             'applicantstatus.create',
                             'applicantstatus.edit',
@@ -111,8 +111,11 @@
                             'fileupload.index',
                             'fileupload.create',
                             'fileupload.edit',
+                            'event.index',
+                            'event.show',
+                            'event.edit',
                         ])">
-                            {{ __('Settings') }}
+                            {{ __('Others') }}
                         </x-nav-link>
                     @endif
                     @if (Auth::check() && Auth::user()->status == '1' && Auth::user()->role == 'S')
@@ -239,7 +242,7 @@
                     'database.achievement',
                     'database.organization',
                 ])">
-                    {{ __('Database') }}
+                    {{ __('Databases') }}
                 </x-responsive-nav-link>
             @endif
             @if (Auth::check() && Auth::user()->status == '1' && Auth::user()->role == 'A')
@@ -284,8 +287,8 @@
                 </x-responsive-nav-link>
             @endif
             @if (Auth::check() && Auth::user()->status == '1' && Auth::user()->role == 'A')
-                <x-responsive-nav-link :href="route('setting.index')" :active="request()->routeIs(['setting.index', 'setting.create', 'setting.edit', 'setting.show'])">
-                    {{ __('Setting') }}
+                <x-responsive-nav-link :href="route('menu.index')" :active="request()->routeIs(['menu.index', 'setting.create', 'setting.edit', 'setting.show'])">
+                    {{ __('Settings') }}
                 </x-responsive-nav-link>
             @endif
             @if (Auth::check() && Auth::user()->status == '1' && Auth::user()->role == 'S')

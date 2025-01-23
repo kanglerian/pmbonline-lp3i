@@ -11,6 +11,6 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return view('pages.setting.index');
+        return view('pages.menu.index');
     }
 }

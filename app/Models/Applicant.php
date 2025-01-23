@@ -38,8 +38,10 @@ class Applicant extends Model
         'achievement',
         'kip',
         'nisn',
+
         'schoolarship',
         'scholarship_date',
+        'scholarship_type',
 
         'note',
         'relation',
