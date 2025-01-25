@@ -284,7 +284,7 @@
                                                 </button>
                                                 <span class="ml-3 text-sm font-medium text-gray-900">Beasiswa</span>
                                             </label>
-                                            @if ($user->schoolarship)
+                                            @if ($user->schoolarship && $user->scholarship_type)
                                                 <p class="text-xs font-medium bg-sky-500 text-white px-5 py-1.5 rounded-lg">{{ $user->scholarship_type }}</p>
                                             @endif
                                         </form>
