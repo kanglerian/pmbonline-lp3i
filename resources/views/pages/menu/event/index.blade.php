@@ -45,12 +45,20 @@
                     class="fa-solid fa-circle-plus"></i> Tambah Data</a>
             <div class="bg-white">
                 <label for="table-search" class="sr-only">Search</label>
-                <form method="GET" action="{{ route('event.index') }}" class="relative mt-1">
-                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <i class="fa-solid fa-search text-gray-400"></i>
+                <form method="GET" action="{{ route('event.index') }}" class="relative flex items-center gap-3 mt-1">
+                    <input type="text" name="pmb" id="pmb" value="{{ request()->input('pmb') }}"
+                        class="block text-sm text-gray-900 border border-gray-300 rounded-xl w-32 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Tahun PMB" autofocus>
+                    <div class="relative">
+                        <div
+                            class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <i class="fa-solid fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" name="title" id="title" value="{{ request()->input('title') }}"
+                            class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-xl w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Cari judul disini..." autofocus>
                     </div>
-                    <input type="text" name="title"  class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-xl w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Cari judul disini..." autofocus>
+                    <button type="submit" class="hidden">Cari</button>
                 </form>
             </div>
         </section>
@@ -90,7 +98,7 @@
                                     {{ $event->pmb }}
                                 </td>
                                 <td class="px-6 py-4 font-medium text-gray-700 bg-gray-50">
-                                    {{ $event->code }}
+                                    <span class="underline underline-offset-4 font-medium">{{ $event->code }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $event->title }}
@@ -101,7 +109,9 @@
                                         @csrf
                                         <button type="submit"
                                             class="{{ $event->is_scholarship ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
-                                            {!! $event->is_scholarship ? '<i class="fa-solid fa-graduation-cap"></i>' : '<i class="fa-solid fa-graduation-cap"></i>' !!}
+                                            {!! $event->is_scholarship
+                                                ? '<i class="fa-solid fa-graduation-cap"></i>'
+                                                : '<i class="fa-solid fa-graduation-cap"></i>' !!}
                                         </button>
                                     </form>
                                     <form action="{{ route('event.files', $event->id) }}" method="GET"
@@ -122,7 +132,12 @@
                                             {!! $event->is_status ? '<i class="fa-solid fa-toggle-on"></i>' : '<i class="fa-solid fa-toggle-off"></i>' !!}
                                         </button>
                                     </form>
-                                    <a href="{{ route('event.show', $event->id) }}"
+                                    <button type="button"
+                                        onclick="copyToClipboard('{{ $event->code }}', '{{ config('app.url') }}')"
+                                        class="inline-block bg-sky-500 hover:bg-sky-600 px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                        <i class="fa-solid fa-link"></i>
+                                    </button>
+                                    <a target="_blank" href="{{ route('event.show', $event->code) }}"
                                         class="inline-block bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-xl text-white transition-all ease-in-out">
                                         <i class="fa-regular fa-eye"></i>
                                     </a>
@@ -153,15 +168,35 @@
                 </div>
             </div>
         </section>
-
+        <script>
+            const getYearPMB = () => {
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear();
+                const currentMonth = currentDate.getMonth() + 1;
+                const startYear = currentMonth >= 10 ? currentYear + 1 : currentYear;
+                document.getElementById('pmb').value = startYear;
+            }
+            getYearPMB();
+        </script>
         <script>
             function getUrlParams() {
                 const urlParams = new URLSearchParams(window.location.search);
-                const name = urlParams.get('name');
-                document.getElementById('quick_name').value = name;
-                console.log(name);
+                const pmb = urlParams.get('pmb');
+                const title = urlParams.get('title');
+                if (pmb) {
+                    document.getElementById('pmb').value = pmb;
+                } else {
+                    getYearPMB();
+                }
+                document.getElementById('title').value = title;
             }
             getUrlParams();
+
+            function copyToClipboard(code, url) {
+                const clipboard = `${url}/events/${code}`;
+                navigator.clipboard.writeText(clipboard);
+                alert('Link kegiatan berhasil disalin!');
+            }
 
             function confirmDelete() {
                 return confirm('Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.');

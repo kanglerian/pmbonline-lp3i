@@ -30,6 +30,10 @@
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        html {
+            scroll-behavior: smooth !important;
+        }
+
         .js-example-input-single {
             width: 100%;
         }
@@ -48,7 +52,7 @@
 
 <body class="bg-gray-200 flex flex-col justify-center items-center py-10">
     <div class="container max-w-2xl mx-auto flex flex-col items-center justify-center gap-5 px-5 md:px-0">
-        <div class="bg-white border-b-8 border-lp3i-200 py-8 px-5 rounded-3xl shadow-lg space-y-4">
+        <div class="w-full bg-white border-b-8 border-lp3i-200 py-8 px-5 rounded-3xl shadow-lg space-y-4">
             <div class="flex justify-center">
                 <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="h-14">
             </div>
@@ -61,39 +65,43 @@
         <form id="event-form" method="POST" class="w-full space-y-5">
             @csrf
             <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
+                <input type="hidden" name="event_id" value="{{ $event->id }}">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nama lengkap <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" name="name" id="name" value="{{ old('name') }}"
+                        <input type="text" name="name" id="name" value=""
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your full name..." required />
+                            placeholder="Your full name..." />
+                        <li id="error-name" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                     </div>
                     <div>
                         <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">No. Whatsapp <span
                                 class="text-red-500">*</span></label>
-                        <input type="number" name="phone" id="phone" value="{{ old('phone') }}"
+                        <input type="number" name="phone" id="phone" value=""
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your phone..." required />
+                            placeholder="Your phone..." />
+                        <li id="error-phone" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                     </div>
                     <div>
                         <label for="school" class="block text-sm font-medium text-gray-900">Sekolah <span
                                 class="text-red-500">*</span></label>
                         <select name="school" id="school"
-                            class="js-example-input-single bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            required>
+                            class="js-example-input-single bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
                             <option>Pilih Sekolah</option>
                             @foreach ($schools as $school)
                                 <option value="{{ $school->id }}">{{ $school->name }}</option>
                             @endforeach
                         </select>
+                        <li id="error-school" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                     </div>
                     <div>
                         <label for="major" class="block mb-2 text-sm font-medium text-gray-900">Jurusan
                             SMA/K/MA <span class="text-red-500">*</span></label>
-                        <input type="text" name="major" id="major" value="{{ old('major') }}"
+                        <input type="text" name="major" id="major" value="Teknik Kendaraan Ringan"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your major..." required />
+                            placeholder="Your major..." />
+                        <li id="error-major" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                     </div>
                 </div>
             </div>
@@ -102,28 +110,28 @@
                     <div>
                         <label for="place" class="block mb-2 text-sm font-medium text-gray-900">Jl/Kp/Perum <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" name="place" id="place" value="{{ old('place') }}"
+                        <input type="text" name="place" id="place" value="Jl. Cibungkul"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                             placeholder="Your place..." required />
                     </div>
                     <div>
                         <label for="postal_code" class="block mb-2 text-sm font-medium text-gray-900">Kode Pos <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code') }}" maxlength="7"
+                        <input type="text" name="postal_code" id="postal_code" value="46151" maxlength="7"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                             placeholder="00000" required />
                     </div>
                     <div>
                         <label for="rt" class="block mb-2 text-sm font-medium text-gray-900">RT <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" name="rt" id="rt" value="{{ old('rt') }}" maxlength="2"
+                        <input type="text" name="rt" id="rt" value="05" maxlength="2"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                             placeholder="00" required />
                     </div>
                     <div>
                         <label for="rw" class="block mb-2 text-sm font-medium text-gray-900">RW <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" name="rw" id="rw" value="{{ old('rw') }}" maxlength="2"
+                        <input type="text" name="rw" id="rw" value="13" maxlength="2"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                             placeholder="00" required />
                     </div>
@@ -132,7 +140,7 @@
                                 class="text-red-500">*</span></label>
                         <select name="provinces" id="provinces"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            required>
+                            disabled required>
                             <option value="0">Pilih Provinsi</option>
                         </select>
                     </div>
@@ -141,8 +149,8 @@
                             <span class="text-red-500">*</span></label>
                         <select name="regencies" id="regencies"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            required>
-                            <option value="0">Pilih Kota/Kabupaten</option>
+                            disabled required>
+                            <option>Pilih Kota / Kabupaten</option>
                         </select>
                     </div>
                     <div>
@@ -150,8 +158,8 @@
                                 class="text-red-500">*</span></label>
                         <select name="districts" id="districts"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            required>
-                            <option value="0">Pilih Kecamatan</option>
+                            disabled required>
+                            <option>Pilih Kecamatan</option>
                         </select>
                     </div>
                     <div>
@@ -159,8 +167,8 @@
                             <span class="text-red-500">*</span></label>
                         <select name="villages" id="villages"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            required>
-                            <option value="0">Pilih Kelurahan</option>
+                            disabled required>
+                            <option>Pilih Desa / Kelurahan</option>
                         </select>
                     </div>
                 </div>
@@ -196,7 +204,7 @@
                     <div>
                         <label for="parent_name" class="block mb-2 text-sm font-medium text-gray-900">Nama
                             Orangtua <span class="text-red-500">*</span></label>
-                        <input type="text" id="parent_name" name="parent_name" value="{{ old('parent_name') }}"
+                        <input type="text" id="parent_name" name="parent_name" value="Nani"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                             placeholder="Your full parent name..." required />
                         <div class="flex items-center gap-3 mt-3 ml-2">
@@ -217,7 +225,7 @@
                     <div>
                         <label for="parent_phone" class="block mb-2 text-sm font-medium text-gray-900">No.
                             Handphone <span class="text-red-500">*</span></label>
-                        <input type="number" name="parent_phone" value="{{ old('parent_phone') }}" id="parent_phone"
+                        <input type="number" name="parent_phone" value="6281286505051" id="parent_phone"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                             placeholder="Your parent phone..." required />
                     </div>
@@ -253,8 +261,10 @@
         integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
+    <script src="{{ asset('js/axios.min.js') }}"></script>
     <script src="{{ asset('js/lottie.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/indonesia.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('.js-example-input-single').select2({
@@ -262,30 +272,106 @@
             });
         });
 
-        document.getElementById("event-form").addEventListener("submit", function(e) {
+        let phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function() {
+            let phone = phoneInput.value;
+
+            if (phone.startsWith("62")) {
+                if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
+                    phoneInput.value = '62';
+                } else {
+                    phoneInput.value = phone;
+                }
+            } else if (phone.startsWith("0")) {
+                phoneInput.value = '62' + phone.substring(1);
+            } else {
+                phoneInput.value = '62';
+            }
+        });
+
+        let parentPhoneInput = document.getElementById('parent_phone');
+        parentPhoneInput.addEventListener('input', function() {
+            let phone = parentPhoneInput.value;
+
+            if (phone.startsWith("62")) {
+                if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
+                    parentPhoneInput.value = '62';
+                } else {
+                    parentPhoneInput.value = phone;
+                }
+            } else if (phone.startsWith("0")) {
+                parentPhoneInput.value = '62' + phone.substring(1);
+            } else {
+                parentPhoneInput.value = '62';
+            }
+        });
+
+        document.getElementById("event-form").addEventListener("submit", async function(e) {
             e.preventDefault(); // Mencegah submit default form
 
             const form = e.target; // Ambil form
             const formData = new FormData(form);
 
-            fetch('/eventstore', {
-                    method: 'POST',
+            await axios.post(`/eventstore`, formData, {
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: formData
+                    }
                 })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data); // Debug response dari server
+                    console.log(response.data);
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.log(error);
+                    if (error.response.status === 422) {
+                        let errors = error.response.data;
+                        for (const key in errors) {
+                            if (Object.hasOwnProperty.call(errors, key)) {
+                                const elements = errors[key];
+                                const newErrors = {
+                                    name: elements.name || [],
+                                    phone: elements.phone || [],
+                                    school: elements.school || [],
+                                    major: elements.major || []
+                                }
+                                if (newErrors.name.length > 0) {
+                                    let errorElement = '';
+                                    newErrors.name.forEach(error => {
+                                        errorElement += `<li>${error}</li>`;
+                                    });
+                                    document.getElementById('error-name').style.display = 'block';
+                                    document.getElementById('error-name').innerHTML = errorElement;
+                                    window.scrollTo(0, 0);
+                                }
+                                if (newErrors.phone.length > 0) {
+                                    let errorElement = '';
+                                    newErrors.phone.forEach(error => {
+                                        errorElement += `<li>${error}</li>`;
+                                    });
+                                    document.getElementById('error-phone').style.display = 'block';
+                                    document.getElementById('error-phone').innerHTML = errorElement;
+                                    window.scrollTo(0, 0);
+                                }
+                                if (newErrors.school.length > 0) {
+                                    let errorElement = '';
+                                    newErrors.school.forEach(error => {
+                                        errorElement += `<li>${error}</li>`;
+                                    });
+                                    document.getElementById('error-school').style.display = 'block';
+                                    document.getElementById('error-school').innerHTML = errorElement;
+                                    window.scrollTo(0, 0);
+                                }
+                                if (newErrors.major.length > 0) {
+                                    let errorElement = '';
+                                    newErrors.major.forEach(error => {
+                                        errorElement += `<li>${error}</li>`;
+                                    });
+                                    document.getElementById('error-major').style.display = 'block';
+                                    document.getElementById('error-major').innerHTML = errorElement;
+                                    window.scrollTo(0, 0);
+                                }
+                            }
+                        }
+                    }
                 });
         });
     </script>

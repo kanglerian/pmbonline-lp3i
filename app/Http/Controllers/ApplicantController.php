@@ -1157,7 +1157,7 @@ class ApplicantController extends Controller
             /* Scholarship */
             'schoolarship' => $scholarship,
             'is_applicant' => $scholarship,
-            'scholarship_date' => $scholarship ?: Carbon::now()->setTimezone('Asia/Jakarta'),
+            'scholarship_date' => $scholarship ? Carbon::now()->setTimezone('Asia/Jakarta') : null,
         ];
 
         $data_father = [
@@ -1269,7 +1269,7 @@ class ApplicantController extends Controller
             /* Scholarship */
             'schoolarship' => $scholarship,
             'is_applicant' => $scholarship,
-            'scholarship_date' => $scholarship ?: Carbon::now()->setTimezone('Asia/Jakarta'),
+            'scholarship_date' => $scholarship ? Carbon::now()->setTimezone('Asia/Jakarta') : null,
         ];
 
         $currentDate = Carbon::now()->setTimezone('Asia/Jakarta');

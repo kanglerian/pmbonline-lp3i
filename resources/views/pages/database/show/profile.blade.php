@@ -274,7 +274,7 @@
                                 <div class="space-y-2">
                                     <div>
                                         <form action="{{ route('database.is_schoolarship', $user->id) }}"
-                                            method="GET" onsubmit="return confirmAction()">
+                                            method="GET" onsubmit="return confirmAction()" class="flex items-center justify-between">
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" value="{{ $user->schoolarship }}"
                                                     class="sr-only peer"
@@ -284,6 +284,9 @@
                                                 </button>
                                                 <span class="ml-3 text-sm font-medium text-gray-900">Beasiswa</span>
                                             </label>
+                                            @if ($user->schoolarship)
+                                                <p class="text-xs font-medium bg-sky-500 text-white px-5 py-1.5 rounded-lg">{{ $user->scholarship_type }}</p>
+                                            @endif
                                         </form>
                                     </div>
                                     @if ($user->identity_user !== '6281313608558')
