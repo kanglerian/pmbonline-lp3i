@@ -1235,11 +1235,8 @@ class ApplicantController extends Controller
         }
     }
 
-    public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother)
+    public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother, $identity_val)
     {
-
-        $identity_val = Str::uuid();
-
         $data_applicant = [
             'identity' => $identity_val,
             'pmb' => $applicants[$i][2],
@@ -1438,6 +1435,8 @@ class ApplicantController extends Controller
                 }
             }
 
+            $identity_val = Str::uuid();
+
             $create_father = [
                 'identity_user' => $identity_val,
                 'name' => $applicants[$i][21] ?? null,
@@ -1452,7 +1451,7 @@ class ApplicantController extends Controller
                 'job' => $applicants[$i][25] ?? null,
             ];
 
-            if (!empty($applicants[$i][0]) && !empty($identity_val) && !empty($applicants[$i][2]) && !empty($applicants[$i][3])) {
+            if (!empty($applicants[$i][0]) && !empty($applicants[$i][1]) && !empty($applicants[$i][2]) && !empty($applicants[$i][3])) {
                 if ($phone) {
                     $studentDataPhone = Applicant::where(['phone' => $phone])->first();
                     if ($studentDataPhone) {
@@ -1460,7 +1459,7 @@ class ApplicantController extends Controller
                             $this->update_data($studentDataPhone, $applicants, $i, $phone, $school, $gender, $come, $kip, $scholarship, $known, $followup, $program);
                         }
                     } else {
-                        $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother);
+                        $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother, $identity_val);
                     }
                 }
                 /* data berdasarkan identity kalau tidak ada phone
