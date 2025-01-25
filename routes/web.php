@@ -122,6 +122,7 @@ Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
     Route::delete('isapplicant/{identity?}', [ApplicantController::class, 'delete_is_applicant'])->name('database.delete_is_applicant');
     Route::get('isschoolarship/{identity?}', [ApplicantController::class, 'is_schoolarship'])->name('database.is_schoolarship');
     Route::get('chat/{identity?}', [ApplicantController::class, 'chats'])->name('database.chat');
+    Route::get('eventdetail/{identity?}', [ApplicantController::class, 'events'])->name('database.events');
     Route::get('file/{identity?}', [ApplicantController::class, 'files'])->name('database.file');
     Route::get('achievement/{identity?}', [ApplicantController::class, 'achievements'])->name('database.achievement');
     Route::get('organization/{identity?}', [ApplicantController::class, 'organizations'])->name('database.organization');

@@ -249,8 +249,8 @@
                             @if ($account == 0 && $user->is_applicant == 1)
                                 <div class="w-full space-y-2">
                                     <button type="button" onclick="modalAccount()"
-                                        class="w-full bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl text-white text-sm">
-                                        <i class="fa-solid fa-user-plus mr-1"></i>
+                                        class="w-full bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl text-white text-sm space-x-1">
+                                        <i class="fa-solid fa-user-plus"></i>
                                         <span>Buat Akun</span>
                                     </button>
                                     <p class="text-xs text-center text-gray-700">
@@ -260,8 +260,8 @@
                             @elseif($account > 0)
                                 <div class="w-full space-y-2">
                                     <button type="button"
-                                        class="w-full bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-xl text-white text-sm">
-                                        <i class="fa-solid fa-circle-check mr-1"></i>
+                                        class="w-full bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-xl text-white text-sm space-x-1">
+                                        <i class="fa-solid fa-circle-check"></i>
                                         <span>Sudah memiliki akun</span>
                                     </button>
                                 </div>
@@ -274,7 +274,8 @@
                                 <div class="space-y-2">
                                     <div>
                                         <form action="{{ route('database.is_schoolarship', $user->id) }}"
-                                            method="GET" onsubmit="return confirmAction()" class="flex items-center justify-between">
+                                            method="GET" onsubmit="return confirmAction()"
+                                            class="flex items-center justify-between">
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" value="{{ $user->schoolarship }}"
                                                     class="sr-only peer"
@@ -285,7 +286,11 @@
                                                 <span class="ml-3 text-sm font-medium text-gray-900">Beasiswa</span>
                                             </label>
                                             @if ($user->schoolarship && $user->scholarship_type)
-                                                <p class="text-xs font-medium bg-sky-500 text-white px-5 py-1.5 rounded-lg">{{ $user->scholarship_type }}</p>
+                                                <p
+                                                    class="text-xs font-medium bg-sky-500 text-white px-3 py-2 rounded-lg space-x-1">
+                                                    <i class="fa-solid fa-graduation-cap"></i>
+                                                    <span>{{ $user->scholarship_type }}</span>
+                                                </p>
                                             @endif
                                         </form>
                                     </div>
@@ -375,9 +380,9 @@
                                                     </label>
                                                 </div>
                                                 <button type="button" onclick="modalDaftar()"
-                                                    class="text-white bg-red-500 hover:bg-red-600 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center mr-2"><i
-                                                        class="fa-solid fa-receipt mr-1"></i>
-                                                    Masukan nominal
+                                                    class="text-white bg-red-500 hover:bg-red-600 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center gap-1">
+                                                    <i class="fa-solid fa-receipt"></i>
+                                                    <span>Masukan nominal</span>
                                                 </button>
                                             @endif
                                         </div>
@@ -422,9 +427,9 @@
                                                     </label>
                                                 </div>
                                                 <button type="button" onclick="modalRegistrasi()"
-                                                    class="text-white bg-red-500 hover:bg-red-600 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center mr-2"><i
-                                                        class="fa-solid fa-receipt mr-1"></i>
-                                                    Masukan nominal
+                                                    class="text-white bg-red-500 hover:bg-red-600 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center gap-1">
+                                                    <i class="fa-solid fa-receipt"></i>
+                                                    <span>Masukan nominal</span>
                                                 </button>
                                             @endif
                                         </div>
@@ -508,6 +513,33 @@
                         </header>
                         <hr>
                         <section class="flex flex-col gap-3">
+                            @if ($user->schoolarship)
+                            <div class="flex justify-between items-end">
+                                <div class="space-y-2">
+                                    <h2 class="text-sm font-semibold text-gray-900">Beasiswa:</h2>
+                                    <ul class="max-w-md space-y-1 text-sm text-gray-500 list-inside">
+                                        <li class="flex items-center space-x-2">
+                                            <i class="block fa-regular fa-calendar text-gray-400"></i>
+                                            <span class="inline-block mr-2">Tanggal:
+                                                <span class="underline underline-offset-2 font-medium">{{ $user->scholarship_date ?? 'Tidak diketahui' }}</span>
+                                            </span>
+                                        </li>
+                                        <li class="flex items-center space-x-2">
+                                            <i class="block fa-solid fa-graduation-cap text-gray-400"></i>
+                                            <span class="inline-block mr-2">Kategori:
+                                                <span class="underline underline-offset-2 font-medium">{{ $user->scholarship_type ?? 'Tidak diketahui' }}</span>
+                                            </span>
+                                        </li>
+                                        <li class="flex items-center space-x-2">
+                                            <i class="block fa-solid fa-certificate text-gray-400"></i>
+                                            <span class="inline-block mr-2">Prestasi:
+                                                <span class="underline underline-offset-2 font-medium">{{ $user->achievement ?? 'Tidak diketahui' }}</span>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            @endif
                             @if ($user->is_applicant && $status_applicant)
                                 <div class="flex justify-between items-end">
                                     <div class="space-y-2">
@@ -516,13 +548,13 @@
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                 <span class="inline-block mr-2">Tanggal:
-                                                    <span class="underline">{{ $status_applicant->date }}</span>
+                                                    <span class="underline underline-offset-2 font-medium">{{ $status_applicant->date }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-solid fa-timeline text-gray-400"></i>
                                                 <span class="inline-block mr-2">Gelombang:
-                                                    <span class="underline">{{ $status_applicant->session }}</span>
+                                                    <span class="underline underline-offset-2 font-medium">{{ $status_applicant->session }}</span>
                                                 </span>
                                             </li>
                                         </ul>
@@ -540,8 +572,8 @@
                                     @endif
                                 </div>
                             @else
-                                <p class="text-sm text-gray-600">
-                                    <i class="fa-solid fa-circle-xmark text-red-500 mr-1"></i>
+                                <p class="text-sm text-gray-600 space-x-1">
+                                    <i class="fa-solid fa-circle-xmark text-red-500"></i>
                                     <span>Belum aplikan</span>
                                 </p>
                             @endif
@@ -553,31 +585,31 @@
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-solid fa-receipt text-gray-400"></i>
                                                 <span class="inline-block mr-2">No. Kwitansi:
-                                                    <span class="underline">{{ $enrollment->receipt }}</span>
+                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->receipt }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                 <span class="inline-block mr-2">Tanggal:
-                                                    <span class="underline">{{ $enrollment->date }}</span>
+                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->date }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-solid fa-timeline text-gray-400"></i>
                                                 <span class="inline-block mr-2">Gelombang:
-                                                    <span class="underline">{{ $enrollment->session }}</span>
+                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->session }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="fa-regular fa-note-sticky block text-gray-400"></i>
                                                 <span class="inline-block mr-2">Keterangan:
-                                                    <span class="underline">{{ $enrollment->register }}</span>
+                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->register }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="fa-regular fa-note-sticky block text-gray-400"></i>
                                                 <span class="inline-block mr-2">Keterangan Daftar:
-                                                    <span class="underline">{{ $enrollment->register_end }}</span>
+                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->register_end }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
@@ -591,7 +623,7 @@
                                                 <li class="flex items-center space-x-2">
                                                     <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                     <span class="inline-block mr-2">Pengembalian BK:
-                                                        <span class="underline">{{ $enrollment->repayment }}</span>
+                                                        <span class="underline underline-offset-2 font-medium">{{ $enrollment->repayment }}</span>
                                                     </span>
                                                 </li>
                                                 <li class="flex items-center space-x-2">
@@ -624,8 +656,8 @@
                                     @endif
                                 </div>
                             @else
-                                <p class="text-sm text-gray-600">
-                                    <i class="fa-solid fa-circle-xmark text-red-500 mr-1"></i>
+                                <p class="text-sm text-gray-600 space-x-1">
+                                    <i class="fa-solid fa-circle-xmark text-red-500"></i>
                                     <span>Belum daftar</span>
                                 </p>
                             @endif
@@ -637,7 +669,7 @@
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                 <span class="inline-block mr-2">Tanggal:
-                                                    <span class="underline">{{ $registration->date }}</span>
+                                                    <span class="underline underline-offset-2 font-medium">{{ $registration->date }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
@@ -676,8 +708,8 @@
                                     @endif
                                 </div>
                             @else
-                                <p class="text-sm text-gray-600">
-                                    <i class="fa-solid fa-circle-xmark text-red-500 mr-1"></i>
+                                <p class="text-sm text-gray-600 space-x-1">
+                                    <i class="fa-solid fa-circle-xmark text-red-500"></i>
                                     <span>Belum registrasi</span>
                                 </p>
                             @endif
@@ -901,7 +933,7 @@
                                 if (!confirmed) {
                                     alert(
                                         'Jika ini salah, maka silakan perbarui jurusan di bagian Edit Profil melalui akun Presenter.'
-                                        );
+                                    );
                                     window.location.href = `/database/${database.data.user.id}/edit`;
                                     loadingMisil.classList.toggle('hidden');
                                     return;

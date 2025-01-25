@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\ApplicantUpdateImport;
+use App\Models\EventDetail;
 use App\Models\StatusApplicantsEnrollment;
 use App\Models\StatusApplicantsRegistration;
 use Illuminate\Validation\Rule;
@@ -665,7 +666,30 @@ class ApplicantController extends Controller
         } else {
             return back()->with('error', 'Tidak diizinkan.');
         }
-        return view('pages.database.show.chat');
+    }
+
+    public function events($identity)
+    {
+        $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
+            ->where('identity', $identity)
+            ->firstOrFail();
+
+        if (Auth::user()->identity == $user->identity_user || Auth::user()->role == 'A') {
+            if (Auth::user()->role == 'P') {
+                $user = Applicant::where(['identity' => $identity, 'identity_user' => Auth::user()->identity])->firstOrFail();
+                $events = EventDetail::with('event')->where('identity_user', $user->identity)->get();
+            } elseif (Auth::user()->role == 'A') {
+                $user = Applicant::where(['identity' => $identity])->firstOrFail();
+                $events = EventDetail::with('event')->where('identity_user', $user->identity)->get();
+            }
+
+            return view('pages.database.show.events')->with([
+                'user' => $user,
+                'events' => $events
+            ]);
+        } else {
+            return back()->with('error', 'Tidak diizinkan.');
+        }
     }
 
     /**
@@ -1063,11 +1087,14 @@ class ApplicantController extends Controller
         if (Auth::user()->identity == $applicant->identity_user || Auth::user()->role == 'A') {
             $family = ApplicantFamily::where('identity_user', $applicant->identity);
             $status_applicant_applicant = StatusApplicantsApplicant::where('identity_user', $applicant->identity);
+            $status_applicant_enrollment = StatusApplicantsEnrollment::where('identity_user', $applicant->identity);
+            $status_applicant_registration = StatusApplicantsRegistration::where('identity_user', $applicant->identity);
             $user_upload = UserUpload::where('identity_user', $applicant->identity);
             $organization = Organization::where('identity_user', $applicant->identity);
             $achievement = Achievement::where('identity_user', $applicant->identity);
             $integration = Integration::where('identity_user', $applicant->identity);
             $recommendation = Recommendation::where('identity_user', $applicant->identity);
+            $event_detail = EventDetail::where('identity_user', $applicant->identity);
             $user = User::where('identity', $applicant->identity);
             $user->delete();
             $family->delete();
@@ -1077,7 +1104,10 @@ class ApplicantController extends Controller
             $achievement->delete();
             $integration->delete();
             $recommendation->delete();
+            $event_detail->delete();
             $status_applicant_applicant->delete();
+            $status_applicant_enrollment->delete();
+            $status_applicant_registration->delete();
             return redirect()->route('database.index')->with('message', 'Data aplikan berhasil dihapus!');
         } else {
             return back()->with('error', 'Tidak diizinkan.');

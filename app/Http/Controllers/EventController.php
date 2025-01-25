@@ -8,6 +8,7 @@ use App\Models\StatusApplicantsApplicant;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Event;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\EventDetail;
 use App\Models\School;
@@ -95,6 +96,16 @@ class EventController extends Controller {
 
             $schoolInput = $request->input( 'school' );
 
+            $phone = null;
+
+            if (!empty($request->input( 'phone' )) && strlen($request->input( 'phone' )) > 8) {
+                if (substr($request->input( 'phone' ), 0, 1) === '0') {
+                    $phone = '62' . substr($request->input( 'phone' ), 1);
+                } else {
+                    $phone = '62' . $request->input( 'phone' );
+                }
+            }
+
             if ( empty( $schoolInput ) ) {
                 $school = null;
             } else {
@@ -156,7 +167,8 @@ class EventController extends Controller {
                     'pmb' => getYearPMB(),
                     'name' => ucwords( strtolower( $request->input( 'name' ) ) ),
                     'school' => $school,
-                    'phone' => $request->input( 'phone' ),
+                    'phone' => $phone,
+                    'email' => $event->is_scholarship ? $phone . '@lp3i.ac.id' : null,
                     'major' => $request->input( 'major' ),
                     'address' => $address_applicant,
                     'identity_user' => $request->input( 'information' ),
@@ -164,7 +176,7 @@ class EventController extends Controller {
                     /* Scholarship */
                     'schoolarship' => $event->is_scholarship,
                     'is_applicant' => $event->is_scholarship,
-                    'scholarship_date' => $event->is_scholarship ?: Carbon::now()->setTimezone( 'Asia/Jakarta' ),
+                    'scholarship_date' => $event->is_scholarship ? Carbon::now()->setTimezone( 'Asia/Jakarta' ) : null,
                     'scholarship_type' => $request->input( 'scholarship_type' ),
                     'achievement' => $request->input( 'achievement' ),
 
@@ -186,22 +198,41 @@ class EventController extends Controller {
 
                 $create_mother = [
                     'identity_user' => $identity_val,
-                    'name' => $request->input( 'parent_gender' ) == 0 ? $request->input( 'name' ) : null,
+                    'name' => $request->input( 'parent_gender' ) == 0 ? $request->input( 'parent_name' ) : null,
                     'gender' => 0, // Gender untuk mother
-                    'phone' => $request->input( 'parent_gender' ) == 0 ? $request->input( 'phone' ) : null,
+                    'phone' => $request->input( 'parent_gender' ) == 0 ? $request->input( 'parent_phone' ) : null,
                 ];
 
                 $create_father = [
                     'identity_user' => $identity_val,
-                    'name' => $request->input( 'parent_gender' ) == 1 ? $request->input( 'name' ) : null,
+                    'name' => $request->input( 'parent_gender' ) == 1 ? $request->input( 'parent_name' ) : null,
                     'gender' => 1, // Gender untuk father
-                    'phone' => $request->input( 'parent_gender' ) == 1 ? $request->input( 'phone' ) : null,
+                    'phone' => $request->input( 'parent_gender' ) == 1 ? $request->input( 'parent_phone' ) : null,
                 ];
 
                 $data_event_detail = [
                     'event_id' => $request->input( 'event_id' ),
                     'identity_user' => $identity_val,
                 ];
+
+                $account = User::where( 'phone', $phone )->first();
+
+                $data_account = [
+                    'identity' => $identity_val,
+                    'name' => ucwords( strtolower( $request->input( 'name' ) ) ),
+                    'gender' => 1,
+                    'email' => $phone . '@lp3i.ac.id',
+                    'password' => Hash::make( $phone ),
+                    'phone' => $phone,
+                    'role' => 'S',
+                    'status' => 1,
+                ];
+
+                if ( $account ) {
+                    $account->update( $data_account );
+                } else {
+                    User::create( $data_account );
+                }
 
                 StatusApplicantsApplicant::create( $data_status_applicant );
                 ApplicantFamily::create( $create_mother );

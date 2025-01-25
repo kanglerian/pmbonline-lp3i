@@ -2,15 +2,7 @@
     <x-slot name="header">
         <div
             class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-5">
-            @if (!$account)
-                @if (Auth::user()->role == 'S')
-                    <h2 class="font-bold text-xl text-gray-800 leading-tight">Registrasi Pembayaran</h2>
-                @else
-                    <h2 class="font-bold text-xl text-gray-800 leading-tight">Dashboard</h2>
-                @endif
-            @else
-                <h2 class="text-sm">Halo, <span class="font-medium">{{ Auth::user()->name }}</span> 👋</h2>
-            @endif
+            <h2 class="text-base">Halo, <span class="font-medium">{{ Auth::user()->name }}</span> 👋</h2>
             <div class="flex flex-wrap justify-center items-center gap-3 px-2 text-gray-600">
                 @if (Auth::user()->status != 1)
                     <div class="px-6 py-2 rounded-lg bg-red-500 text-white text-sm">
@@ -23,106 +15,19 @@
 
     <section class="space-y-5">
         @if (Auth::user()->role == 'S')
-            <div class="py-10">
-                <div>
-                    @if (session('error'))
-                        <div id="alert"
-                            class="mb-3 flex items-center px-5 py-4 bg-red-500 text-white rounded-2xl"
-                            role="alert">
-                            <i class="fa-solid fa-circle-exclamation"></i>
-                            <div class="ml-3 text-sm font-reguler">
-                                {{ session('error') }}
-                            </div>
-                        </div>
-                    @endif
-
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-5 px-5 md:px-0">
-                        <div class="w-full md:w-6/12 space-y-5 order-2 md:order-none">
-                            @if ($account)
-                                <div class="space-y-3">
-                                    <h3 class="text-3xl font-bold text-gray-800">Selamat Datang di LP3I</h3>
-                                    <p class="text-gray-700">Selamat datang di LP3I! Mulai hari ini, perjalanan
-                                        pendidikan Anda telah dimulai. Ini adalah awal dari perjalanan yang menarik dan
-                                        penuh tantangan. Tetaplah semangat dan berikan yang terbaik dalam setiap langkah
-                                        Anda. Setiap harinya adalah kesempatan baru untuk belajar, tumbuh, dan
-                                        berkembang. Bersama-sama, kita akan menjelajahi dunia pengetahuan, memperluas
-                                        wawasan, dan mencapai impian kita. Mari kita tunjukkan dedikasi, kerja keras,
-                                        dan ketekunan dalam mengejar tujuan kita. Selamat belajar, selamat berkarya, dan
-                                        jadilah yang terbaik dari yang terbaik!</p>
-                                    <a href="https://wa.me/{{ $applicant->identity_user }}" target="_blank"
-                                        class="inline-block bg-emerald-500 hover:bg-emerald-600 px-5 py-2 rounded-xl text-sm text-white">
-                                        <i class="fa-brands fa-whatsapp"></i>
-                                        <span>Ada pertanyaan?</span>
-                                    </a>
-
-                                </div>
-                            @else
-                                <div class="space-y-3">
-                                    <h3 class="text-2xl font-bold text-gray-800">Silahkan untuk lakukan Transfer!</h3>
-                                    <p class="text-gray-700">Isi formulir pendaftaran dan raih kesempatan yang luar
-                                        biasa di
-                                        depan mata.</p>
-                                </div>
-                            @endif
-                            @if (!$account)
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-end">
-                                    <div class="space-y-3">
-                                        <img src="{{ asset('logo/btn.png') }}" alt="Logo BTN" width="150px">
-                                        <div onclick="copyRecord('0003401300001406')"
-                                            class="bg-gray-50 cursor-pointer flex justify-between items-center border px-5 py-2 rounded-xl">
-                                            <div class="space-y-1">
-                                                <h1 class="font-bold text-sm text-gray-800">BANK BTN LP3I Tasikmalaya
-                                                </h1>
-                                                <p class="text-sm text-gray-700">0003401300001406</p>
-                                            </div>
-                                            <button onclick="copyRecord('0003401300001406')"><i
-                                                    class="fa-solid fa-clipboard text-gray-500 hover:text-blue-500"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-3">
-                                        <img src="{{ asset('logo/bsi.png') }}" alt="Logo BSI" width="150px">
-                                        <div onclick="copyRecord('1025845605')"
-                                            class="bg-gray-50 cursor-pointer flex justify-between items-center border px-5 py-2 rounded-xl">
-                                            <div class="space-y-1">
-                                                <h1 class="font-bold text-sm text-gray-800">BANK BSI (LPPPI TASIKMALAYA)
-                                                </h1>
-                                                <p class="text-sm text-gray-700">1025845605</p>
-                                            </div>
-                                            <button onclick="copyRecord('1025845605')"><i
-                                                    class="fa-solid fa-clipboard text-gray-500 hover:text-blue-500"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-3">
-                                        <img src="{{ asset('logo/bni.png') }}" alt="Logo BNI" width="100px">
-                                        <div onclick="copyRecord('4549998888')"
-                                            class="bg-gray-50 cursor-pointer flex justify-between items-center border px-5 py-2 rounded-xl">
-                                            <div class="space-y-1">
-                                                <h1 class="font-bold text-sm text-gray-800">BANK BNI (LP3I Tasikmalaya)
-                                                </h1>
-                                                <p class="text-sm text-gray-700">4549998888</p>
-                                            </div>
-                                            <button onclick="copyRecord('4549998888')"><i
-                                                    class="fa-solid fa-clipboard text-gray-500 hover:text-blue-500"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="w-full md:w-5/12 order-1 md:order-none">
-                            <div class="flex items-center justify-center">
-                                @if ($account)
-                                    <lottie-player src="{{ asset('animations/laptop.json') }}" background="Transparent"
-                                        speed="1" style="width: 400px; height: 400px" direction="1" mode="normal"
-                                        loop autoplay></lottie-player>
-                                @else
-                                    <lottie-player src="{{ asset('animations/transfer.json') }}"
-                                        background="Transparent" speed="1" style="width: 400px; height: 400px"
-                                        direction="1" mode="normal" loop autoplay></lottie-player>
-                                @endif
-                            </div>
-                        </div>
+            <div class="max-w-5xl mx-auto">
+                <section class=" flex flex-col items-center gap-5">
+                    <div class="w-full flex flex-col items-center justify-center">
+                        <lottie-player src="{{ asset('animations/underconstruct.json') }}" background="Transparent" speed="1"
+                            style="width: 250px; height: 250px" direction="1" mode="normal" loop autoplay></lottie-player>
                     </div>
-                </div>
+                    <div class="text-center space-y-1 px-5">
+                        <h2 class="font-bold text-xl">Sedang Melakukan Pengembangan 🚧</h2>
+                        <p class="text-gray-700">Kami sedang melakukan pengembangan pada halaman ini untuk meningkatkan kualitas dan 
+                            menambahkan fitur baru. Silakan kembali lagi di lain waktu untuk melihat pembaruan terbaru. 
+                            Terima kasih atas pengertiannya!</p>
+                    </div>
+                </section>
             </div>
         @endif
 
