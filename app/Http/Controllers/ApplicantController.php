@@ -1237,8 +1237,11 @@ class ApplicantController extends Controller
 
     public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother)
     {
+
+        $identity_val = Str::uuid();
+
         $data_applicant = [
-            'identity' => $applicants[$i][1],
+            'identity' => $identity_val,
             'pmb' => $applicants[$i][2],
             'name' => !empty($applicants[$i][3]) ? ucwords(strtolower($applicants[$i][3])) : null,
             'phone' => $phone,
@@ -1436,20 +1439,20 @@ class ApplicantController extends Controller
             }
 
             $create_father = [
-                'identity_user' => $applicants[$i][1],
+                'identity_user' => $identity_val,
                 'name' => $applicants[$i][21] ?? null,
                 'phone' => strval($applicants[$i][23] ?? ''),
                 'gender' => 1,
                 'job' => $applicants[$i][24] ?? null,
             ];
             $create_mother = [
-                'identity_user' => $applicants[$i][1],
+                'identity_user' => $identity_val,
                 'name' => $applicants[$i][22] ?? null,
                 'gender' => 0,
                 'job' => $applicants[$i][25] ?? null,
             ];
 
-            if (!empty($applicants[$i][0]) && !empty($applicants[$i][1]) && !empty($applicants[$i][2]) && !empty($applicants[$i][3])) {
+            if (!empty($applicants[$i][0]) && !empty($identity_val) && !empty($applicants[$i][2]) && !empty($applicants[$i][3])) {
                 if ($phone) {
                     $studentDataPhone = Applicant::where(['phone' => $phone])->first();
                     if ($studentDataPhone) {
