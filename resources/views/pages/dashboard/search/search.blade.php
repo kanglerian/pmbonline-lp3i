@@ -130,7 +130,7 @@
                     }, {
                         data: 'presenter',
                         render: (data) => {
-                            return typeof(data) == 'object' ? data.name : 'Tidak diketahui';
+                            return data && typeof data === 'object' && data.name ? data.name : 'Tidak diketahui';
                         }
                     }, {
                         data: 'email',
@@ -226,7 +226,7 @@
                 }, {
                     data: 'presenter',
                     render: (data) => {
-                        return typeof(data) == 'object' ? data.name : 'Tidak diketahui';
+                        return data && typeof data === 'object' && data.name ? data.name : 'Tidak diketahui';
                     }
                 }, {
                     data: 'email',
@@ -312,7 +312,7 @@
                 }, {
                     data: 'presenter',
                     render: (data) => {
-                        return typeof(data) == 'object' ? data.name : 'Tidak diketahui';
+                        return data && typeof data === 'object' && data.name ? data.name : 'Tidak diketahui';
                     }
                 }, {
                     data: 'source_setting',
