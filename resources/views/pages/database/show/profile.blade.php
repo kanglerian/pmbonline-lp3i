@@ -336,7 +336,7 @@
                                                     <i class="fa-solid fa-xmark-circle"></i>
                                                     <span>Tidak diketahui</span>
                                                 </button>
-                                            @elseif(!$user->is_applicant)
+                                            @elseif(!$user->is_applicant && $user->schoolarship)
                                                 <p class="text-red-500 text-xs">*Silahkan aktifkan toggle Aplikan.</p>
                                             @endif
                                         </form>
