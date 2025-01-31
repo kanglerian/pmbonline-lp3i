@@ -1594,6 +1594,8 @@ class ApplicantController extends Controller
         $data = [
             'schoolarship' => $applicant->schoolarship == 1 ? 0 : 1,
             'scholarship_date' => $applicant->schoolarship == 1 ? null : Carbon::now()->setTimezone('Asia/Jakarta'),
+            'scholarship_type' => $applicant->schoolarship == 1 ? null : $request->input('scholarship_type'),
+            'achievement' => $applicant->schoolarship == 1 ? null : $request->input('achievement'),
         ];
         $applicant->update($data);
         return back()->with('message', 'Data aplikan berhasil diupdate');

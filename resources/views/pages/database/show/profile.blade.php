@@ -46,7 +46,7 @@
     <div id="identity_user" class="hidden">{{ $user->identity }}</div>
 
     <main class="flex flex-col md:flex-row px-5 md:px-0 gap-5">
-        <div class="w-full md:w-4/6">
+        <div class="w-full md:w-7/12">
             <div class="p-8 bg-gray-50 border border-gray-100 rounded-3xl">
                 <div class="w-full">
                     <section class="space-y-4">
@@ -224,7 +224,7 @@
             </div>
         </div>
 
-        <div class="w-full md:w-2/6 mx-auto space-y-6">
+        <div class="w-full md:w-5/12 mx-auto space-y-6">
             <div class="p-8 bg-gray-50 border border-gray-100 rounded-3xl">
                 <div class="w-full">
                     <section class="space-y-4">
@@ -252,12 +252,44 @@
                                     </p>
                                 </div>
                             @elseif($account > 0)
-                                <div class="w-full space-y-2">
-                                    <button type="button"
-                                        class="w-full bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-xl text-white text-sm space-x-1">
+                                <div class="w-full bg-emerald-50">
+                                    <div
+                                        class="w-full text-center bg-emerald-500 px-4 py-3 text-white text-sm space-x-1 border-b-8 border-emerald-600">
                                         <i class="fa-solid fa-circle-check"></i>
                                         <span>Sudah memiliki akun</span>
-                                    </button>
+                                    </div>
+                                    <div class="p-5 border-l-4 border-emerald-600 space-y-5">
+                                        <ul class="text-sm space-y-3 text-emerald-900">
+                                            <li class="flex items-center justify-between">
+                                                <div class="space-x-2">
+                                                    <span>Email: </span>
+                                                    <span
+                                                        class="font-medium underline underline-offset-4">{{ $profile->email }}</span>
+                                                </div>
+                                                <div>
+                                                    <button onclick="copyToClipboard('{{ $profile->email }}')" type="button">
+                                                        <i class="fa-solid fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-center justify-between">
+                                                <div class="space-x-2">
+                                                    <span>Password Default: </span>
+                                                    <span
+                                                        class="font-medium underline underline-offset-4">{{ $profile->phone }}</span>
+                                                </div>
+                                                <div>
+                                                    <button onclick="copyToClipboard('{{ $profile->phone }}')" type="button">
+                                                        <i class="fa-solid fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <form action="{{ route('user.reset_password_default', $profile->id) }}" action="GET" onsubmit="return confirmAction()">
+                                            @csrf
+                                            <button type="submit" class="block bg-red-500 hover:bg-red-600 transition-all ease-in-out rounded-lg text-white px-5 py-2 text-xs">Reset Password</button>
+                                        </form>
+                                    </div>
                                 </div>
                             @endif
                             @if ($user->identity_user === '6281313608558')
@@ -279,12 +311,18 @@
                                                 </button>
                                                 <span class="ml-3 text-sm font-medium text-gray-900">Beasiswa</span>
                                             </label>
-                                            @if ($user->schoolarship && $user->scholarship_type)
-                                                <p
-                                                    class="text-xs font-medium bg-sky-500 text-white px-3 py-2 rounded-lg space-x-1">
+                                            @if ($user->schoolarship && $user->scholarship_type && $user->is_applicant)
+                                                <button type="button" onclick="modalEditBeasiswa()"
+                                                    class="text-xs font-medium bg-sky-500 hover:bg-sky-600 transition-all ease-in-out text-white px-3 py-2 rounded-lg space-x-1">
                                                     <i class="fa-solid fa-graduation-cap"></i>
                                                     <span>{{ $user->scholarship_type }}</span>
-                                                </p>
+                                                </button>
+                                            @elseif($user->schoolarship && $user->is_applicant)
+                                                <button type="button" onclick="modalEditBeasiswa()"
+                                                    class="text-xs font-medium bg-red-500 hover:bg-red-600 transition-all ease-in-out text-white px-3 py-2 rounded-lg space-x-1">
+                                                    <i class="fa-solid fa-xmark-circle"></i>
+                                                    <span>Tidak diketahui</span>
+                                                </button>
                                             @endif
                                         </form>
                                     </div>
@@ -326,10 +364,22 @@
                                             @if ($user->is_applicant && $status_applicant)
                                                 <div class="flex items-center gap-3 mt-1">
                                                     <i class="fa-solid fa-circle-check text-emerald-500"></i>
-                                                    <button onclick="modalEditAplikan()">
+                                                    <button type="button" onclick="modalEditAplikan()">
                                                         <i
                                                             class="fa-solid fa-pen-to-square text-yellow-500 hover:text-yellow-600"></i>
                                                     </button>
+                                                    @if ($status_applicant && !$enrollment && Auth::user()->role == 'A')
+                                                        <form
+                                                            action="{{ route('database.delete_is_applicant', $user->id) }}"
+                                                            method="POST" onsubmit="return confirmDelete()">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit">
+                                                                <i
+                                                                    class="fa-solid fa-trash-can text-red-500 hover:text-red-600"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
@@ -357,16 +407,27 @@
                                                     @else
                                                         <i class="fa-solid fa-circle-xmark text-red-500"></i>
                                                     @endif
-                                                    <button onclick="modalEditDaftar()">
+                                                    <button type="button" onclick="modalEditDaftar()">
                                                         <i
                                                             class="fa-solid fa-pen-to-square text-yellow-500 hover:text-yellow-600"></i>
                                                     </button>
+                                                    @if ($status_applicant && $enrollment && !$registration && Auth::user()->role == 'A')
+                                                        <form action="{{ route('enrollment.destroy', $user->id) }}"
+                                                            method="POST" onsubmit="return confirmDelete()">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit">
+                                                                <i
+                                                                    class="fa-solid fa-trash-can text-red-500 hover:text-red-600"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </div>
                                             @else
                                                 <div>
                                                     <label class="relative inline-flex items-center cursor-pointer">
                                                         <input type="checkbox" class="sr-only peer">
-                                                        <button disabled
+                                                        <button type="button" disabled
                                                             class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
                                                         </button>
                                                         <span
@@ -404,16 +465,27 @@
                                                 </form>
                                                 <div class="flex items-center gap-3">
                                                     <i class="fa-solid fa-circle-check text-emerald-500"></i>
-                                                    <button onclick="modalEditRegistrasi()">
+                                                    <button type="button" onclick="modalEditRegistrasi()">
                                                         <i
                                                             class="fa-solid fa-pen-to-square text-yellow-500 hover:text-yellow-600"></i>
                                                     </button>
+                                                    @if (Auth::user()->role == 'A')
+                                                        <form action="{{ route('registration.destroy', $user->id) }}"
+                                                            method="POST" onsubmit="return confirmDelete()">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit">
+                                                                <i
+                                                                    class="fa-solid fa-trash-can text-red-500 hover:text-red-600"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </div>
                                             @else
                                                 <div>
                                                     <label class="relative inline-flex items-center cursor-pointer">
                                                         <input type="checkbox"class="sr-only peer">
-                                                        <button disabled
+                                                        <button type="button" disabled
                                                             class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
                                                         </button>
                                                         <span
@@ -508,31 +580,35 @@
                         <hr>
                         <section class="flex flex-col gap-3">
                             @if ($user->schoolarship)
-                            <div class="flex justify-between items-end">
-                                <div class="space-y-2">
-                                    <h2 class="text-sm font-semibold text-gray-900">Beasiswa:</h2>
-                                    <ul class="max-w-md space-y-1 text-sm text-gray-500 list-inside">
-                                        <li class="flex items-center space-x-2">
-                                            <i class="block fa-regular fa-calendar text-gray-400"></i>
-                                            <span class="inline-block mr-2">Tanggal:
-                                                <span class="underline underline-offset-2 font-medium">{{ $user->scholarship_date ?? 'Tidak diketahui' }}</span>
-                                            </span>
-                                        </li>
-                                        <li class="flex items-center space-x-2">
-                                            <i class="block fa-solid fa-graduation-cap text-gray-400"></i>
-                                            <span class="inline-block mr-2">Kategori:
-                                                <span class="underline underline-offset-2 font-medium">{{ $user->scholarship_type ?? 'Tidak diketahui' }}</span>
-                                            </span>
-                                        </li>
-                                        <li class="flex items-center space-x-2">
-                                            <i class="block fa-solid fa-certificate text-gray-400"></i>
-                                            <span class="inline-block mr-2">Prestasi:
-                                                <span class="underline underline-offset-2 font-medium">{{ $user->achievement ?? 'Tidak diketahui' }}</span>
-                                            </span>
-                                        </li>
-                                    </ul>
+                                <div class="flex justify-between items-end">
+                                    <div class="space-y-2">
+                                        <h2 class="text-sm font-semibold text-gray-900">Beasiswa:</h2>
+                                        <ul class="max-w-md space-y-1 text-sm text-gray-500 list-inside">
+                                            <li class="flex items-center space-x-2">
+                                                <i class="block fa-regular fa-calendar text-gray-400"></i>
+                                                <span class="inline-block mr-2">Tanggal:
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $user->scholarship_date ?? 'Tidak diketahui' }}</span>
+                                                </span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <i class="block fa-solid fa-graduation-cap text-gray-400"></i>
+                                                <span class="inline-block mr-2">Kategori:
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $user->scholarship_type ?? 'Tidak diketahui' }}</span>
+                                                </span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <i class="block fa-solid fa-certificate text-gray-400"></i>
+                                                <span class="inline-block mr-2">Prestasi:
+                                                    <span
+                                                        class="underline 
+                                                        underline-offset-2 font-medium">{{ $user->achievement ?? 'Tidak diketahui' }}</span>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
                             @endif
                             @if ($user->is_applicant && $status_applicant)
                                 <div class="flex justify-between items-end">
@@ -542,28 +618,19 @@
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                 <span class="inline-block mr-2">Tanggal:
-                                                    <span class="underline underline-offset-2 font-medium">{{ $status_applicant->date }}</span>
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $status_applicant->date }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-solid fa-timeline text-gray-400"></i>
                                                 <span class="inline-block mr-2">Gelombang:
-                                                    <span class="underline underline-offset-2 font-medium">{{ $status_applicant->session }}</span>
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $status_applicant->session }}</span>
                                                 </span>
                                             </li>
                                         </ul>
                                     </div>
-                                    @if ($status_applicant && !$enrollment && Auth::user()->role == 'A')
-                                        <form action="{{ route('database.delete_is_applicant', $user->id) }}"
-                                            method="POST" onsubmit="return confirmDelete()">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="bg-red-500 hover:bg-red-600 text-white text-xs px-5 py-2.5 rounded-xl transition-all ease-in-out">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </button>
-                                        </form>
-                                    @endif
                                 </div>
                             @else
                                 <p class="text-sm text-gray-600 space-x-1">
@@ -579,31 +646,36 @@
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-solid fa-receipt text-gray-400"></i>
                                                 <span class="inline-block mr-2">No. Kwitansi:
-                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->receipt }}</span>
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $enrollment->receipt }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                 <span class="inline-block mr-2">Tanggal:
-                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->date }}</span>
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $enrollment->date }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-solid fa-timeline text-gray-400"></i>
                                                 <span class="inline-block mr-2">Gelombang:
-                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->session }}</span>
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $enrollment->session }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="fa-regular fa-note-sticky block text-gray-400"></i>
                                                 <span class="inline-block mr-2">Keterangan:
-                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->register }}</span>
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $enrollment->register }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="fa-regular fa-note-sticky block text-gray-400"></i>
                                                 <span class="inline-block mr-2">Keterangan Daftar:
-                                                    <span class="underline underline-offset-2 font-medium">{{ $enrollment->register_end }}</span>
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $enrollment->register_end }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
@@ -617,7 +689,8 @@
                                                 <li class="flex items-center space-x-2">
                                                     <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                     <span class="inline-block mr-2">Pengembalian BK:
-                                                        <span class="underline underline-offset-2 font-medium">{{ $enrollment->repayment }}</span>
+                                                        <span
+                                                            class="underline underline-offset-2 font-medium">{{ $enrollment->repayment }}</span>
                                                     </span>
                                                 </li>
                                                 <li class="flex items-center space-x-2">
@@ -637,17 +710,6 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    @if ($status_applicant && $enrollment && !$registration && Auth::user()->role == 'A')
-                                        <form action="{{ route('enrollment.destroy', $user->id) }}" method="POST"
-                                            onsubmit="return confirmDelete()">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="bg-red-500 hover:bg-red-600 text-white text-xs px-5 py-2.5 rounded-xl transition-all ease-in-out">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </button>
-                                        </form>
-                                    @endif
                                 </div>
                             @else
                                 <p class="text-sm text-gray-600 space-x-1">
@@ -663,7 +725,8 @@
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                 <span class="inline-block mr-2">Tanggal:
-                                                    <span class="underline underline-offset-2 font-medium">{{ $registration->date }}</span>
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $registration->date }}</span>
                                                 </span>
                                             </li>
                                             <li class="flex items-center space-x-2">
@@ -689,17 +752,6 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    @if (Auth::user()->role == 'A')
-                                        <form action="{{ route('registration.destroy', $user->id) }}" method="POST"
-                                            onsubmit="return confirmDelete()">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="bg-red-500 hover:bg-red-600 text-white text-xs px-5 py-2.5 rounded-xl transition-all ease-in-out">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </button>
-                                        </form>
-                                    @endif
                                 </div>
                             @else
                                 <p class="text-sm text-gray-600 space-x-1">
@@ -713,6 +765,7 @@
             </div>
         </div>
     </main>
+    @include('pages.database.show.modal.beasiswa')
     @include('pages.database.show.modal.account')
     @include('pages.database.show.modal.aplikan')
     @include('pages.database.show.modal.daftar')
@@ -769,6 +822,16 @@
                     e.target.value = null;
                 }
             }
+
+            const copyToClipboard = (copy) => {
+                let textarea = document.createElement('textarea');
+                textarea.value = copy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('Copied!');
+            }
         </script>
         <script>
             const modalAccount = () => {
@@ -800,6 +863,15 @@
 
             const modalEditAplikan = () => {
                 let modal = document.getElementById('modal-edit-aplikan');
+                if (modal.classList.contains('hidden')) {
+                    modal.classList.remove('hidden');
+                } else {
+                    modal.classList.add('hidden');
+                }
+            }
+
+            const modalEditBeasiswa = () => {
+                let modal = document.getElementById('modal-edit-beasiswa');
                 if (modal.classList.contains('hidden')) {
                     modal.classList.remove('hidden');
                 } else {

@@ -41,7 +41,7 @@ class CreateApplicantsTable extends Migration
 
 
             $table->boolean('schoolarship')->default(false);
-            $table->timestamp('scholarship_date')->nullable();
+            $table->dateTime('scholarship_date')->nullable();
             $table->text('scholarship_type')->nullable();
 
             $table->text('note')->nullable();

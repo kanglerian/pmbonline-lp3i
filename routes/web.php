@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Applicant\Status\StatusBeasiswaController;
 use App\Http\Controllers\Applicant\Status\StatusDaftarController;
 use App\Http\Controllers\Applicant\Status\StatusRegistrasiController;
 use App\Http\Controllers\EventController;
@@ -106,8 +107,11 @@ Route::middleware(['auth', 'status:1', 'role:A'])->group(function () {
 Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
     Route::resource('database', ApplicantController::class);
     /* Status Database */
+    Route::patch('status/database/beasiswa/{id}', [StatusBeasiswaController::class, 'update'])->name('statusdatabasebeasiswa.update');
+
     Route::patch('status/database/aplikan/{id}', [StatusApplicantController::class, 'update'])->name('statusdatabaseaplikan.update');
     Route::delete('status/database/aplikan/{id}', [StatusApplicantController::class, 'destroy'])->name('statusdatabaseaplikan.destroy');
+
     Route::delete('status/database/daftar/{id}', [StatusDaftarController::class, 'destroy'])->name('statusdatabasedaftar.destroy');
     Route::delete('status/database/registrasi/{id}', [StatusRegistrasiController::class, 'destroy'])->name('statusdatabaseregistrasi.destroy');
     /* Import from Spreadsheet */
@@ -142,6 +146,7 @@ Route::middleware(['auth', 'status:1', 'role:A'])->group(function () {
     Route::get('get/users/{role?}/{status?}', [UserController::class, 'get_all'])->name('user.get');
     Route::patch('user/update_account/{id}', [UserController::class, 'update_account'])->name('user.update_account');
     Route::patch('user/change_password/{id}', [UserController::class, 'change_password'])->name('user.change_password');
+    Route::get('user/reset_password_default/{id}', [UserController::class, 'reset_password_default'])->name('user.reset_password_default');
     Route::get('user/status/{id}', [UserController::class, 'status'])->name('user.status');
     Route::get('presenter/status/{id}', [PresenterController::class, 'status'])->name('presenters.status');
     Route::patch('presenter/change_password/{id}', [PresenterController::class, 'change_password'])->name('presenters.password');

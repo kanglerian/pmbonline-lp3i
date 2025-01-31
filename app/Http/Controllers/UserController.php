@@ -384,4 +384,13 @@ class UserController extends Controller
         $user->update($data);
         return back()->with('message', 'Status berhasil diubah!');
     }
+
+    public function reset_password_default($id)
+    {
+        $user = User::findOrFail($id);
+        $user->update([
+            'password' => Hash::make($user->phone),
+        ]);
+        return back()->with('message', 'Password berhasil direset!');
+    }
 }
