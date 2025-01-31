@@ -1417,6 +1417,9 @@ select {
 .border-l-4 {
   border-left-width: 4px;
 }
+.border-l-8 {
+  border-left-width: 8px;
+}
 .border-r {
   border-right-width: 1px;
 }
@@ -1942,6 +1945,10 @@ select {
 .text-emerald-600 {
   --tw-text-opacity: 1;
   color: rgb(5 150 105 / var(--tw-text-opacity));
+}
+.text-emerald-800 {
+  --tw-text-opacity: 1;
+  color: rgb(6 95 70 / var(--tw-text-opacity));
 }
 .text-emerald-900 {
   --tw-text-opacity: 1;

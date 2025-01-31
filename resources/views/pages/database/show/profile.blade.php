@@ -258,11 +258,11 @@
                                         <i class="fa-solid fa-circle-check"></i>
                                         <span>Sudah memiliki akun</span>
                                     </div>
-                                    <div class="p-5 border-l-4 border-emerald-600 space-y-5">
+                                    <div class="p-5 border-l-8 border-emerald-600 space-y-5">
                                         <ul class="text-sm space-y-3 text-emerald-900">
                                             <li class="flex items-center justify-between">
-                                                <div class="space-x-2">
-                                                    <span>Email: </span>
+                                                <div class="flex items-center gap-2">
+                                                    <span><i class="fa-solid fa-envelope"></i> Email: </span>
                                                     <span
                                                         class="font-medium underline underline-offset-4">{{ $profile->email }}</span>
                                                 </div>
@@ -273,8 +273,8 @@
                                                 </div>
                                             </li>
                                             <li class="flex items-center justify-between">
-                                                <div class="space-x-2">
-                                                    <span>Password Default: </span>
+                                                <div class="flex items-center gap-2">
+                                                    <span><i class="fa-solid fa-key"></i> Password Default: </span>
                                                     <span
                                                         class="font-medium underline underline-offset-4">{{ $profile->phone }}</span>
                                                 </div>
@@ -288,7 +288,20 @@
                                         <form action="{{ route('user.reset_password_default', $profile->id) }}" action="GET" onsubmit="return confirmAction()">
                                             @csrf
                                             <button type="submit" class="block bg-red-500 hover:bg-red-600 transition-all ease-in-out rounded-lg text-white px-5 py-2 text-xs">Reset Password</button>
+                                            <small class="block mt-4 text-xs text-emerald-800"><span class="font-bold">Catatan</span>: Password dienkripsi sehingga presenter dan admin <span class="font-bold">tidak dapat melihatnya</span>. Lakukan <span class="font-bold">reset</span> jika aplikan lupa password.</small>
                                         </form>
+                                        <div class="flex items-center justify-between text-emerald-900 text-sm">
+                                            <div class="flex flex-col gap-2">
+                                                <span><i class="fa-solid fa-globe"></i> Hak-Akses: </span>
+                                                <div class="flex flex-wrap items-center gap-2">
+                                                    <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">PMB Online</a>
+                                                    <a href="https://sbpmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">SBPMB</a>
+                                                    <a href="https://test-gaya-belajar.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">Tes Gaya Belajar</a>
+                                                    <a href="https://psikotest.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">Psikotest</a>
+                                                    <a href="https://test-otak.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">Otak Kiri & kanan</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             @endif
@@ -323,6 +336,8 @@
                                                     <i class="fa-solid fa-xmark-circle"></i>
                                                     <span>Tidak diketahui</span>
                                                 </button>
+                                            @elseif(!$user->is_applicant)
+                                                <p class="text-red-500 text-xs">*Silahkan aktifkan toggle Aplikan.</p>
                                             @endif
                                         </form>
                                     </div>
