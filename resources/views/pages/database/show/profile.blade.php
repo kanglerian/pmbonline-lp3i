@@ -93,8 +93,17 @@
                                     @if (Auth::user()->role == 'A')
                                         <li class="space-x-2">
                                             <span>Presenter:</span>
-                                            <span
-                                                class="border-b">{{ $user->identity_user == null ? '___' : $user->presenter->name }}</span>
+                                            <span class="border-b">
+                                                @if ($user->identity_user)
+                                                    @if ($user->presenter)
+                                                        {{ $user->presenter->name }}
+                                                    @else
+                                                        <span class="text-red-500">Presenter tidak ditemukan</span>
+                                                    @endif
+                                                @else
+                                                    Tidak diketahui
+                                                @endif
+                                            </span>
                                         </li>
                                     @endif
                                     <li class="space-x-2">
@@ -267,7 +276,8 @@
                                                         class="font-medium underline underline-offset-4">{{ $profile->email }}</span>
                                                 </div>
                                                 <div>
-                                                    <button onclick="copyToClipboard('{{ $profile->email }}')" type="button">
+                                                    <button onclick="copyToClipboard('{{ $profile->email }}')"
+                                                        type="button">
                                                         <i class="fa-solid fa-copy"></i>
                                                     </button>
                                                 </div>
@@ -279,26 +289,46 @@
                                                         class="font-medium underline underline-offset-4">{{ $profile->phone }}</span>
                                                 </div>
                                                 <div>
-                                                    <button onclick="copyToClipboard('{{ $profile->phone }}')" type="button">
+                                                    <button onclick="copyToClipboard('{{ $profile->phone }}')"
+                                                        type="button">
                                                         <i class="fa-solid fa-copy"></i>
                                                     </button>
                                                 </div>
                                             </li>
                                         </ul>
-                                        <form action="{{ route('user.reset_password_default', $profile->id) }}" action="GET" onsubmit="return confirmAction()">
+                                        <form action="{{ route('user.reset_password_default', $profile->id) }}"
+                                            action="GET" onsubmit="return confirmAction()">
                                             @csrf
-                                            <button type="submit" class="block bg-red-500 hover:bg-red-600 transition-all ease-in-out rounded-lg text-white px-5 py-2 text-xs">Reset Password</button>
-                                            <small class="block mt-4 text-xs text-emerald-800"><span class="font-bold">Catatan</span>: Password dienkripsi sehingga presenter dan admin <span class="font-bold">tidak dapat melihatnya</span>. Lakukan <span class="font-bold">reset</span> jika aplikan lupa password.</small>
+                                            <button type="submit"
+                                                class="block bg-red-500 hover:bg-red-600 transition-all ease-in-out rounded-lg text-white px-5 py-2 text-xs">Reset
+                                                Password</button>
+                                            <small class="block mt-4 text-xs text-emerald-800"><span
+                                                    class="font-bold">Catatan</span>: Password dienkripsi sehingga
+                                                presenter dan admin <span class="font-bold">tidak dapat
+                                                    melihatnya</span>. Lakukan <span class="font-bold">reset</span>
+                                                jika aplikan lupa password.</small>
                                         </form>
                                         <div class="flex items-center justify-between text-emerald-900 text-sm">
                                             <div class="flex flex-col gap-2">
                                                 <span><i class="fa-solid fa-globe"></i> Hak-Akses: </span>
                                                 <div class="flex flex-wrap items-center gap-2">
-                                                    <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">PMB Online</a>
-                                                    <a href="https://sbpmb.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">SBPMB</a>
-                                                    <a href="https://test-gaya-belajar.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">Tes Gaya Belajar</a>
-                                                    <a href="https://psikotest.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">Psikotest</a>
-                                                    <a href="https://test-otak.politekniklp3i-tasikmalaya.ac.id" target="_blank" class="underline underline-offset-2 font-medium">Otak Kiri & kanan</a>
+                                                    <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id"
+                                                        target="_blank"
+                                                        class="underline underline-offset-2 font-medium">PMB Online</a>
+                                                    <a href="https://sbpmb.politekniklp3i-tasikmalaya.ac.id"
+                                                        target="_blank"
+                                                        class="underline underline-offset-2 font-medium">SBPMB</a>
+                                                    <a href="https://test-gaya-belajar.politekniklp3i-tasikmalaya.ac.id"
+                                                        target="_blank"
+                                                        class="underline underline-offset-2 font-medium">Tes Gaya
+                                                        Belajar</a>
+                                                    <a href="https://psikotest.politekniklp3i-tasikmalaya.ac.id"
+                                                        target="_blank"
+                                                        class="underline underline-offset-2 font-medium">Psikotest</a>
+                                                    <a href="https://test-otak.politekniklp3i-tasikmalaya.ac.id"
+                                                        target="_blank"
+                                                        class="underline underline-offset-2 font-medium">Otak Kiri &
+                                                        kanan</a>
                                                 </div>
                                             </div>
                                         </div>
