@@ -116,7 +116,15 @@
                                     @endforeach
                                 @else
                                     <option value="{{ $applicant->identity_user }}">
-                                        {{ $applicant->presenter->name }}
+                                        @if ($applicant->identity_user)
+                                            @if ($applicant->presenter)
+                                                {{ $applicant->presenter->name }}
+                                            @else
+                                                <span class="text-red-500">Presenter tidak ditemukan</span>
+                                            @endif
+                                        @else
+                                            Tidak diketahui
+                                        @endif
                                     </option>
                                     @foreach ($presenters as $presenter)
                                         <option value="{{ $presenter->identity }}">
