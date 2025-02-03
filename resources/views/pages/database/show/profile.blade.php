@@ -315,6 +315,10 @@
                                                     <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id"
                                                         target="_blank"
                                                         class="underline underline-offset-2 font-medium">PMB Online</a>
+                                                    <a href="https://beasiswa.politekniklp3i-tasikmalaya.ac.id"
+                                                        target="_blank"
+                                                        class="underline underline-offset-2 font-medium">Beasiswa
+                                                        PPO</a>
                                                     <a href="https://sbpmb.politekniklp3i-tasikmalaya.ac.id"
                                                         target="_blank"
                                                         class="underline underline-offset-2 font-medium">SBPMB</a>
