@@ -315,7 +315,7 @@
                                                     <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id"
                                                         target="_blank"
                                                         class="underline underline-offset-2 font-medium">PMB Online</a>
-                                                    <a href="https://beasiswa.politekniklp3i-tasikmalaya.ac.id"
+                                                    <a href="https://beasiswa.politekniklp3i-tasikmalaya.ac.id/login"
                                                         target="_blank"
                                                         class="underline underline-offset-2 font-medium">Beasiswa
                                                         PPO</a>
