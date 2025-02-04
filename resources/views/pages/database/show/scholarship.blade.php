@@ -49,7 +49,7 @@
     @push('scripts')
         <script>
             const checkServer = async () => {
-                await axios.get(`${URL_API_LP3I}`)
+                await axios.get(`https://pmb-api.politekniklp3i-tasikmalaya.ac.id`)
                     .then((response) => {
                         if (response.status == 200) {
                             $('#content').show();
