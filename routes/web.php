@@ -56,8 +56,9 @@ Route::get('/link', function () {
     return view('link');
 })->name('link');
 
-Route::get('/events/{code}', [EventController::class, 'show'])->name('events.index');
+Route::get('/events/{code}', [EventController::class, 'participant'])->name('events.index');
 Route::post('/eventstore', [EventController::class, 'store_event'])->name('events.store_event');
+Route::patch('/eventrating/{id}', [EventController::class, 'update_event'])->name('events.rating');
 
 Route::prefix('recommendation-data')->group(function () {
     Route::get('/kkn', [DataController::class, 'kkn'])->name('recommendation-data.input-kkn');
@@ -208,6 +209,7 @@ Route::middleware(['auth', 'status:1', 'role:A'])
     ->group(function () {
         Route::get('/menu', [SettingController::class, 'index'])->name('menu.index');
         Route::resource('programtype', ProgramTypeController::class);
+        Route::get('programtype/{id}/status', [ProgramTypeController::class, 'status'])->name('programtype.status');
         Route::resource('source', SourceController::class);
         Route::resource('fileupload', FileUploadController::class);
         Route::resource('applicantstatus', ApplicantStatusController::class);
@@ -217,6 +219,9 @@ Route::middleware(['auth', 'status:1', 'role:A'])
         Route::get('event/{id}/status', [EventController::class, 'status'])->name('event.status');
         Route::get('event/{id}/scholarship', [EventController::class, 'scholarship'])->name('event.scholarship');
         Route::get('event/{id}/files', [EventController::class, 'files'])->name('event.files');  
+        Route::get('event/{id}/employee', [EventController::class, 'employee'])->name('event.employee');  
+        Route::get('event/{id}/program', [EventController::class, 'program'])->name('event.program');    
+        Route::post('event/{id}/programstatus', [EventController::class, 'programstatus'])->name('event.programstatus');  
     });
 
 /* Route Scholarship */

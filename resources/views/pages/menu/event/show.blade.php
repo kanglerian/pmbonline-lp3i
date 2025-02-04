@@ -1,477 +1,207 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description"
-        content="Politeknik LP3I Kampus Tasikmalaya adalah kampus vokasi di Priangan Timur dengan penempatan kerja. Tepat dan Cepat Kerja!">
-    <meta name="author" content="Politeknik LP3I Kampus Tasikmalaya" />
-    <meta name="keywords"
-        content="Kampus Penempatan Kerja, Kampus Tasikmalaya, Kuliah di Tasikmalaya, Kampus Dengan Penempatan kerja, Kuliah Sambil Kerja, Tasikmalaya, Kampus Vokasi, LP3I Tasikmalaya, Politeknik LP3I Kampus Tasikmalaya, LP3I, Tepat dan Cepat Kerja, Kuliah murah di Tasikmalaya">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fontss -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon/favicon.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Source+Code+Pro:wght@400;600;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
-    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/select2-input.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        html {
-            scroll-behavior: smooth !important;
-        }
-
-        .js-example-input-single {
-            width: 100%;
-        }
-
-        .select2-selection {
-            border-radius: 0.75rem !important;
-            padding-top: 22px !important;
-            padding-bottom: 22px !important;
-        }
-
-        .select2-selection__rendered {
-            top: -13px !important;
-        }
-    </style>
-</head>
-
-<body class="bg-gray-200 flex flex-col justify-center items-center py-10">
-    <div class="container max-w-2xl mx-auto flex flex-col items-center justify-center gap-5 px-5 md:px-0">
-        <div class="w-full bg-white border-b-8 border-lp3i-200 py-8 px-5 rounded-3xl shadow-lg space-y-4">
-            <div class="flex justify-center">
-                <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="h-14">
-            </div>
-            <div class="space-y-2">
-                <h2 class="text-2xl font-bold text-center text-gray-900">{{ $event->title }}</h2>
-                <hr>
-                <p class="text-center text-gray-700 text-md">{{ $event->description }}</p>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-5 pb-3">
+            <nav class="flex">
+                <ol class="inline-flex items-center space-x-2 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('database.index') }}"
+                            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
+                            <i class="fa-regular fa-window-restore mr-2"></i>
+                            Others
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-chevron-right text-gray-300 mr-1"></i>
+                            <a href="{{ route('event.index') }}"
+                                class="ml-1 text-sm font-medium text-gray-700 md:ml-2">Master Kegiatan</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-chevron-right text-gray-300 mr-1"></i>
+                            <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{ $event->title }} ({{ $event->code }})</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+            <div class="flex flex-wrap justify-center gap-1 px-2 text-gray-600">
+                <div class="flex bg-gray-200 px-4 py-2 text-sm rounded-xl items-center gap-2">
+                    <i class="fa-solid fa-users"></i>
+                    <h2>{{ $total }}</h2>
+                </div>
             </div>
         </div>
-        <form id="event-form" method="POST" class="w-full space-y-5">
-            @csrf
-            <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
-                <input type="hidden" name="event_id" value="{{ $event->id }}">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nama lengkap <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" name="name" id="name" value=""
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your full name..." />
-                        <li id="error-name" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
-                    </div>
-                    <div>
-                        <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">No. Whatsapp <span
-                                class="text-red-500">*</span></label>
-                        <input type="number" name="phone" id="phone" value=""
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your phone..." />
-                        <li id="error-phone" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
-                    </div>
-                    <div>
-                        <label for="school" class="block text-sm font-medium text-gray-900">Sekolah <span
-                                class="text-red-500">*</span></label>
-                        <select name="school" id="school"
-                            class="js-example-input-single bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5">
-                            <option>Pilih Sekolah</option>
-                            @foreach ($schools as $school)
-                                <option value="{{ $school->id }}">{{ $school->name }}</option>
-                            @endforeach
-                        </select>
-                        <li id="error-school" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
-                    </div>
-                    <div>
-                        <label for="major" class="block mb-2 text-sm font-medium text-gray-900">Jurusan
-                            SMA/K/MA <span class="text-red-500">*</span></label>
-                        <input type="text" name="major" id="major" value="Teknik Kendaraan Ringan"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your major..." />
-                        <li id="error-major" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
-                    </div>
+    </x-slot>
+
+    <main class="max-w-7xl mx-auto space-y-3">
+        @if (session('message'))
+            <div id="alert" class="flex items-center p-4 mb-4 bg-emerald-500 text-emerald-50 rounded-2xl"
+                role="alert">
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="ml-3 text-sm font-reguler">
+                    {{ session('message') }}
                 </div>
             </div>
-            <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="place" class="block mb-2 text-sm font-medium text-gray-900">Jl/Kp/Perum <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" name="place" id="place" value="Jl. Cibungkul"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your place..." required />
-                    </div>
-                    <div>
-                        <label for="postal_code" class="block mb-2 text-sm font-medium text-gray-900">Kode Pos <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" name="postal_code" id="postal_code" value="46151" maxlength="7"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="00000" required />
-                    </div>
-                    <div>
-                        <label for="rt" class="block mb-2 text-sm font-medium text-gray-900">RT <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" name="rt" id="rt" value="05" maxlength="2"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="00" required />
-                    </div>
-                    <div>
-                        <label for="rw" class="block mb-2 text-sm font-medium text-gray-900">RW <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" name="rw" id="rw" value="13" maxlength="2"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="00" required />
-                    </div>
-                    <div>
-                        <label for="provinces" class="block mb-2 text-sm font-medium text-gray-900">Provinsi <span
-                                class="text-red-500">*</span></label>
-                        <select name="provinces" id="provinces"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            disabled required>
-                            <option value="0">Pilih Provinsi</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="regencies" class="block mb-2 text-sm font-medium text-gray-900">Kota/Kabupaten
-                            <span class="text-red-500">*</span></label>
-                        <select name="regencies" id="regencies"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            disabled required>
-                            <option>Pilih Kota / Kabupaten</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="districts" class="block mb-2 text-sm font-medium text-gray-900">Kecamatan <span
-                                class="text-red-500">*</span></label>
-                        <select name="districts" id="districts"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            disabled required>
-                            <option>Pilih Kecamatan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="villages" class="block mb-2 text-sm font-medium text-gray-900">Desa/Kelurahan
-                            <span class="text-red-500">*</span></label>
-                        <select name="villages" id="villages"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            disabled required>
-                            <option>Pilih Desa / Kelurahan</option>
-                        </select>
-                    </div>
+        @endif
+        @if (session('error'))
+            <div id="alert" class="flex items-center p-4 mb-4 bg-red-500 text-red-50 rounded-2xl" role="alert">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <div class="ml-3 text-sm font-reguler">
+                    {{ session('error') }}
                 </div>
             </div>
-            <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="scholarship_type" class="block mb-2 text-sm font-medium text-gray-900">Kategori
-                            Beasiswa <span class="text-red-500">*</span></label>
-                        <select name="scholarship_type" id="scholarship_type"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            required>
-                            <option value="Beasiswa Akademik">Beasiswa Akademik</option>
-                            <option value="Beasiswa Non Akademik">Beasiswa Non Akademik</option>
-                            <option value="Beasiswa Ranking 1 - 10">Beasiswa Ranking 1 - 10</option>
-                            <option value="Beasiswa Hafidz Qur'an 5 - 30 Juz">Beasiswa Hafidz Qur'an 5 - 30 Juz
-                            </option>
-                            <option value="Beasiswa Aktivis Sekolah">Beasiswa Aktivis Sekolah</option>
-                            <option value="Beasiswa Atlet">Beasiswa Atlet</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="achievement" class="block mb-2 text-sm font-medium text-gray-900">Prestasi
-                            Ranking</label>
-                        <input type="text" id="achievement" name="achievement" value="{{ old('achievement') }}"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Contoh: Ranking 1" />
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="parent_name" class="block mb-2 text-sm font-medium text-gray-900">Nama
-                            Orangtua <span class="text-red-500">*</span></label>
-                        <input type="text" id="parent_name" name="parent_name" value="Nani"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your full parent name..." required />
-                        <div class="flex items-center gap-3 mt-3 ml-2">
-                            <div class="flex items-center">
-                                <input checked id="parent-radio-0" type="radio" value="0"
-                                    name="parent_gender"
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-                                <label for="parent-radio-0" class="ms-2 text-xs font-medium text-gray-900">Ibu</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="parent-radio-1" type="radio" value="1" name="parent_gender"
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-                                <label for="parent-radio-1"
-                                    class="ms-2 text-xs font-medium text-gray-900">Ayah</label>
-                            </div>
+        @endif
+
+        <section class="overflow-hidden border rounded-3xl">
+            <section class="px-6 py-4">
+                <div class="bg-white">
+                    <label for="table-search" class="sr-only">Search</label>
+                    <form method="GET" action="{{ route('event.show', $event->id) }}" class="relative mt-1">
+                        <div
+                            class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <i class="fa-solid fa-search text-gray-400"></i>
                         </div>
-                    </div>
-                    <div>
-                        <label for="parent_phone" class="block mb-2 text-sm font-medium text-gray-900">No.
-                            Handphone <span class="text-red-500">*</span></label>
-                        <input type="number" name="parent_phone" value="6281286505051" id="parent_phone"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your parent phone..." required />
+                        <input type="text" name="name"
+                            class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-xl w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Cari nama disini..." autofocus required>
+                    </form>
+                </div>
+            </section>
+            <div class="p-6 bg-gray-50">
+                <div class="relative overflow-x-auto sm:rounded-lg">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase">
+                            <tr class="border-b border-gray-100">
+                                <th scope="col" class="px-6 py-3 bg-gray-100 text-center">
+                                    <i class="fa-solid fa-user"></i>
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-white text-center">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-gray-100 text-center">
+                                    Nama lengkap
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-white text-center">
+                                    No. Telpon (Whatsapp)
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-gray-100 text-center">
+                                    Presenter
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-white text-center">
+                                    Asal sekolah
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-gray-100 text-center">
+                                    Jurusan
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-white text-center">
+                                    Tahun lulus
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-gray-100 text-center">
+                                    Rating
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-white text-center">
+                                    Komentar
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($applicants as $applicant)
+                                <tr class="border-b border-gray-100">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
+                                        <button type="button"
+                                            class="bg-sky-500 hover:bg-sky-600 px-3 py-1 rounded-lg text-xs text-white"
+                                            onclick="copyRecord(
+                                                `{{ $applicant->applicant->name }}`,
+                                                `{{ $applicant->applicant->phone }}`,
+                                                `{{ $applicant->applicant->schoolapplicant ? $applicant->applicant->schoolapplicant->name : 'Tidak diketahui' }}`,
+                                                `{{ $applicant->applicant->year ?? 'Tidak diketahui' }}`,
+                                                `{{ $applicant->applicant->program ?? 'Tidak diketahui' }}`,
+                                                `{{ $applicant->applicant->source_id ? $applicant->applicant->sourcesetting->name : 'Tidak diketahui' }}`,
+                                                `{{ $applicant->applicant->programtype ? $applicant->applicant->programtype->name : 'Tidak diketahui' }}`,
+                                                `{{ $applicant->applicant->applicantstatus ? $applicant->applicant->applicantstatus->name : 'Tidak diketahui' }}`,
+                                                );">
+                                            <i class="fa-solid fa-copy"></i>
+                                        </button>
+                                    </th>
+                                    <td class="px-6 py-4 bg-white text-center">
+                                        <div class="flex gap-2">
+                                            <span
+                                                class="text-sm {{ $applicant->applicant->is_applicant ? 'text-yellow-500' : 'text-gray-300' }}"><i
+                                                    class="fa-solid fa-file-lines"></i></span>
+                                            <span
+                                                class="text-sm {{ $applicant->applicant->is_daftar ? 'text-sky-500' : 'text-gray-300' }}"><i
+                                                    class="fa-solid fa-id-badge"></i></span>
+                                            <span
+                                                class="text-sm {{ $applicant->applicant->is_register ? 'text-emerald-500' : 'text-gray-300' }}"><i
+                                                    class="fa-solid fa-user-check"></i></span>
+                                            <span
+                                                class="text-sm {{ $applicant->applicant->schoolarship ? 'text-cyan-500' : 'text-gray-300' }}"><i
+                                                    class="fa-solid fa-graduation-cap"></i></span>
+                                        </div>
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 bg-gray-50 text-center  {{ $applicant->applicant->identity_user == '6281313608558' ? 'text-red-500' : 'text-gray-600' }}">
+                                        <a target="_blank" href="{{ route('database.show', $applicant->applicant->identity) }}"
+                                            class="font-bold underline">{{ $applicant->applicant->name }}</a>
+                                    </td>
+                                    <td class="px-6 py-4 bg-white text-center">
+                                        {{ $applicant->applicant->phone ?? 'Tidak diketahui' }}
+                                    </td>
+                                    <td class="px-6 py-4 bg-gray-50 text-center">
+                                        @if ($applicant->applicant->identity_user)
+                                            @if ($applicant->applicant->presenter)
+                                                {{ $applicant->applicant->presenter->name }}
+                                            @else
+                                                <span class="text-red-500">Presenter tidak ditemukan</span>
+                                            @endif
+                                        @else
+                                            Tidak diketahui
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 bg-white text-center">
+                                        {{ $applicant->applicant->school ? $applicant->applicant->schoolapplicant->name : 'Tidak diketahui' }}
+                                    </td>
+                                    <td class="px-6 py-4 bg-gray-50 text-center">
+                                        {{ $applicant->applicant->major ?? 'Tidak diketahui' }}
+                                    </td>
+                                    <td class="px-6 py-4 bg-white text-center">
+                                        {{ $applicant->applicant->year ?? 'Tidak diketahui' }}
+                                    </td>
+                                    <td class="px-6 py-4 bg-gray-50 text-center">
+                                        {{ $applicant->rating }}
+                                    </td>
+                                    <td class="px-6 py-4 bg-white text-center">
+                                        {{ $applicant->comment ?? 'Tidak ada komentar' }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="10" class="px-6 py-4 text-center">Data tidak ditemukan.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                    <div class="p-1">
+                        {{ $applicants->links() }}
                     </div>
                 </div>
             </div>
-            <div class="w-full flex items-center gap-5">
-                <div class="w-full">
-                    <select name="information" id="information"
-                        class="bg-gray-50 border-2 border-lp3i-100 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                        required>
-                        <option value="6281313608558">Pilih Sumber Informasi</option>
-                        @foreach ($informations as $information)
-                            <option value="{{ $information->identity }}">{{ $information->name }}</option>
-                        @endforeach
-                        <option value="6281313608558">Sosial Media</option>
-                    </select>
-                </div>
-                <button type="submit"
-                    class="w-1/2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">Simpan</button>
-            </div>
-        </form>
-    </div>
-    <div class="fixed" style="z-index: -9;left: 0;top:20px">
-        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_snisb0ad.json" background="transparent"
-            speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
-    </div>
-    <div class="fixed" style="z-index: -9;right: 0">
-        <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_vubims6l.json" background="transparent"
-            speed="1" style="width: 700px; height: 700px;" loop autoplay></lottie-player>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"
-        integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
-    <script src="{{ asset('js/axios.min.js') }}"></script>
-    <script src="{{ asset('js/lottie.js') }}"></script>
-    <script src="{{ asset('js/select2.min.js') }}"></script>
-    <script src="{{ asset('js/indonesia.js') }}"></script>
+        </section>
+    </main>
+
     <script>
-        $(document).ready(function() {
-            $('.js-example-input-single').select2({
-                tags: true,
-            });
-        });
-
-        let phoneInput = document.getElementById('phone');
-        phoneInput.addEventListener('input', function() {
-            let phone = phoneInput.value;
-
-            if (phone.startsWith("62")) {
-                if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
-                    phoneInput.value = '62';
-                } else {
-                    phoneInput.value = phone;
-                }
-            } else if (phone.startsWith("0")) {
-                phoneInput.value = '62' + phone.substring(1);
-            } else {
-                phoneInput.value = '62';
-            }
-        });
-
-        let parentPhoneInput = document.getElementById('parent_phone');
-        parentPhoneInput.addEventListener('input', function() {
-            let phone = parentPhoneInput.value;
-
-            if (phone.startsWith("62")) {
-                if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
-                    parentPhoneInput.value = '62';
-                } else {
-                    parentPhoneInput.value = phone;
-                }
-            } else if (phone.startsWith("0")) {
-                parentPhoneInput.value = '62' + phone.substring(1);
-            } else {
-                parentPhoneInput.value = '62';
-            }
-        });
-
-        document.getElementById("event-form").addEventListener("submit", async function(e) {
-            e.preventDefault(); // Mencegah submit default form
-
-            const form = e.target; // Ambil form
-            const formData = new FormData(form);
-
-            await axios.post(`/eventstore`, formData, {
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                })
-                .then(response => {
-                    console.log(response.data);
-                })
-                .catch(error => {
-                    console.log(error);
-                    if (error.response.status === 422) {
-                        let errors = error.response.data;
-                        for (const key in errors) {
-                            if (Object.hasOwnProperty.call(errors, key)) {
-                                const elements = errors[key];
-                                const newErrors = {
-                                    name: elements.name || [],
-                                    phone: elements.phone || [],
-                                    school: elements.school || [],
-                                    major: elements.major || []
-                                }
-                                if (newErrors.name.length > 0) {
-                                    let errorElement = '';
-                                    newErrors.name.forEach(error => {
-                                        errorElement += `<li>${error}</li>`;
-                                    });
-                                    document.getElementById('error-name').style.display = 'block';
-                                    document.getElementById('error-name').innerHTML = errorElement;
-                                    window.scrollTo(0, 0);
-                                }
-                                if (newErrors.phone.length > 0) {
-                                    let errorElement = '';
-                                    newErrors.phone.forEach(error => {
-                                        errorElement += `<li>${error}</li>`;
-                                    });
-                                    document.getElementById('error-phone').style.display = 'block';
-                                    document.getElementById('error-phone').innerHTML = errorElement;
-                                    window.scrollTo(0, 0);
-                                }
-                                if (newErrors.school.length > 0) {
-                                    let errorElement = '';
-                                    newErrors.school.forEach(error => {
-                                        errorElement += `<li>${error}</li>`;
-                                    });
-                                    document.getElementById('error-school').style.display = 'block';
-                                    document.getElementById('error-school').innerHTML = errorElement;
-                                    window.scrollTo(0, 0);
-                                }
-                                if (newErrors.major.length > 0) {
-                                    let errorElement = '';
-                                    newErrors.major.forEach(error => {
-                                        errorElement += `<li>${error}</li>`;
-                                    });
-                                    document.getElementById('error-major').style.display = 'block';
-                                    document.getElementById('error-major').innerHTML = errorElement;
-                                    window.scrollTo(0, 0);
-                                }
-                            }
-                        }
-                    }
-                });
-        });
+        const copyRecord = (name, phone, school, year, program, source, programtype, status) => {
+            const textarea = document.createElement("textarea");
+            textarea.value =
+                `Nama lengkap: ${name} \nNo. Telp (Whatsapp): ${phone} \nAsal sekolah dan tahun lulus: ${school} (${year})\nMinat Prodi: ${program}\nProgram Kuliah: ${programtype}\nSumber: ${source}`;
+            textarea.style.position = "fixed";
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            alert('Data sudah disalin.');
+        }
     </script>
-    <script>
-        gsap.from(".profile-card", {
-            duration: 2.5,
-            scale: 0,
-            delay: 0.3,
-            rotation: -30,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".logo-one", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.4,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".logo-two", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.5,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".title", {
-            duration: 0.7,
-            opacity: 0,
-            delay: 0.7,
-            y: 100
-        });
-        gsap.from(".desc", {
-            duration: 0.7,
-            opacity: 0,
-            delay: 0.8,
-            y: 100
-        });
-        gsap.from(".sosmed-1", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.4,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".sosmed-2", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.5,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".sosmed-3", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.6,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".sosmed-4", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.7,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".sosmed-5", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.8,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from("#links", {
-            duration: 0.7,
-            opacity: 0,
-            delay: 1,
-            y: 100
-        });
-        gsap.from("#link-one", {
-            duration: 2.5,
-            opacity: 0,
-            delay: 1,
-            y: 100,
-            ease: "elastic.out(1,0.5)"
-        });
-        gsap.from("#link-two", {
-            duration: 2.5,
-            opacity: 0,
-            delay: 1.5,
-            y: 100,
-            ease: "elastic.out(1,0.5)"
-        });
-        gsap.from("#link-three", {
-            duration: 2.5,
-            opacity: 0,
-            delay: 2,
-            y: 100,
-            ease: "elastic.out(1,0.5)"
-        });
-    </script>
-</body>
-
-</html>
+</x-app-layout>

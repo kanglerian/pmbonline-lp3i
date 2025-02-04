@@ -21,6 +21,9 @@ class CreateEventsTable extends Migration
             $table->text('description');
             $table->boolean('is_scholarship')->default(false);
             $table->boolean('is_files')->default(false);
+            $table->boolean('is_employee')->default(false);
+            $table->boolean('is_program')->default(false);
+            $table->char('program', 3)->default('R');
             $table->boolean('is_status')->default(true);
             $table->timestamps();
         });

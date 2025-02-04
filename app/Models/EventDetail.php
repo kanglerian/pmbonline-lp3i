@@ -36,4 +36,9 @@ class EventDetail extends Model
     {
         return $this->belongsTo(Event::class, 'event_id', 'id');
     }
+
+    public function applicant()
+    {
+        return $this->belongsTo(Applicant::class, 'identity_user', 'identity');
+    }
 }

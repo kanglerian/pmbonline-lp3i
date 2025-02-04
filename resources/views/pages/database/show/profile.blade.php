@@ -299,42 +299,58 @@
                                         <form action="{{ route('user.reset_password_default', $profile->id) }}"
                                             action="GET" onsubmit="return confirmAction()">
                                             @csrf
-                                            <button type="submit"
-                                                class="block bg-red-500 hover:bg-red-600 transition-all ease-in-out rounded-lg text-white px-5 py-2 text-xs">Reset
-                                                Password</button>
+                                            <div class="flex items-center gap-3">
+                                                <button type="submit"
+                                                    class="block bg-red-500 hover:bg-red-600 transition-all ease-in-out rounded-lg text-white px-5 py-2 text-xs space-x-1">
+                                                    <i class="fa-solid fa-arrows-rotate"></i>
+                                                    <span>Reset Password</span>
+                                                </button>
+                                                <button type="button" onclick="sendWhatsapp('{{ $profile->name }}','{{ $profile->email }}','{{ $profile->phone }}','{{ $user->presenter->name }}','{{ $user->presenter->phone }}')"
+                                                    class="block bg-emerald-600 hover:bg-emerald-700 transition-all ease-in-out rounded-lg text-white px-5 py-2 text-xs">
+                                                    <i class="fa-brands fa-whatsapp"></i>
+                                                    <span>Kirim Informasi Akun</span>
+                                                </button>
+                                            </div>
                                             <small class="block mt-4 text-xs text-emerald-800"><span
-                                                    class="font-bold">Catatan</span>: Password dienkripsi sehingga
+                                                    class="font-bold text-red-600">Catatan</span>: Password dienkripsi
+                                                sehingga
                                                 presenter dan admin <span class="font-bold">tidak dapat
                                                     melihatnya</span>. Lakukan <span class="font-bold">reset</span>
                                                 jika aplikan lupa password.</small>
                                         </form>
-                                        <div class="flex items-center justify-between text-emerald-900 text-sm">
+                                        <hr class="border-b-[1px] border-emerald-600/10" />
+                                        <div class="flex flex-col text-emerald-900 text-sm">
                                             <div class="flex flex-col gap-2">
-                                                <span><i class="fa-solid fa-globe"></i> Hak-Akses: </span>
-                                                <div class="flex flex-wrap items-center gap-2">
-                                                    <a href="https://pmb.politekniklp3i-tasikmalaya.ac.id"
-                                                        target="_blank"
-                                                        class="underline underline-offset-2 font-medium">PMB Online</a>
-                                                    <a href="https://beasiswa.politekniklp3i-tasikmalaya.ac.id/login"
-                                                        target="_blank"
+                                                <span><i class="fa-solid fa-copy"></i> Hak-Akses: </span>
+                                                <div class="flex flex-wrap items-center font-medium gap-2">
+                                                    <button type="button"
+                                                        onclick="copyToClipboard('https://pmb.politekniklp3i-tasikmalaya.ac.id')"
+                                                        class="underline underline-offset-2 font-medium">PMB
+                                                        Online</button>
+                                                    <button type="button"
+                                                        onclick="copyToClipboard('https://beasiswa.politekniklp3i-tasikmalaya.ac.id/login')"
                                                         class="underline underline-offset-2 font-medium">Beasiswa
-                                                        PPO</a>
-                                                    <a href="https://sbpmb.politekniklp3i-tasikmalaya.ac.id"
-                                                        target="_blank"
-                                                        class="underline underline-offset-2 font-medium">SBPMB</a>
-                                                    <a href="https://test-gaya-belajar.politekniklp3i-tasikmalaya.ac.id"
-                                                        target="_blank"
+                                                        PPO</button>
+                                                    <button type="button"
+                                                        onclick="copyToClipboard('https://sbpmb.politekniklp3i-tasikmalaya.ac.id')"
+                                                        class="underline underline-offset-2 font-medium">SBPMB</button>
+                                                    <button type="button"
+                                                        onclick="copyToClipboard('https://test-gaya-belajar.politekniklp3i-tasikmalaya.ac.id')"
                                                         class="underline underline-offset-2 font-medium">Tes Gaya
-                                                        Belajar</a>
-                                                    <a href="https://psikotest.politekniklp3i-tasikmalaya.ac.id"
-                                                        target="_blank"
-                                                        class="underline underline-offset-2 font-medium">Psikotest</a>
-                                                    <a href="https://test-otak.politekniklp3i-tasikmalaya.ac.id"
-                                                        target="_blank"
+                                                        Belajar</button>
+                                                    <button type="button"
+                                                        onclick="copyToClipboard('https://psikotest.politekniklp3i-tasikmalaya.ac.id')"
+                                                        class="underline underline-offset-2 font-medium">Psikotest</button>
+                                                    <button type="button"
+                                                        onclick="copyToClipboard('https://test-otak.politekniklp3i-tasikmalaya.ac.id')"
                                                         class="underline underline-offset-2 font-medium">Otak Kiri &
-                                                        kanan</a>
+                                                        Kanan</button>
                                                 </div>
                                             </div>
+                                            <small class="block mt-4 text-xs text-emerald-800"><span
+                                                    class="font-bold text-red-600">Catatan</span>: silahkan <span
+                                                    class="font-bold">Tap</span> link situs dan kirimkan ke
+                                                aplikan.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -832,6 +848,13 @@
 
             function confirmAction() {
                 return confirm('Apakah Anda yakin akan melakukan tindakan ini?');
+            }
+
+            function sendWhatsapp(name, email, phone, presenter, presenterPhone){
+                const message = `Halo ${name},\nBerikut adalah informasi akun Anda:\n\nEmail: ${email}\nPassword Default: ${phone}\n\nSilakan login menggunakan informasi di atas. Jika mengalami kendala saat login, Anda dapat meminta *reset password* kepada *${presenter}* (${presenterPhone}) atau menghubungi *Administrator*\n\nTerima kasih.`;
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+                window.open(whatsappUrl, '_blank');
             }
         </script>
 

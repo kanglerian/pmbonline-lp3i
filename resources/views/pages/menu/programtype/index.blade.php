@@ -64,6 +64,14 @@
                                     {{ $programtype->name }}
                                 </td>
                                 <td class="px-6 py-4 bg-gray-50">
+                                    <form action="{{ route('programtype.status', $programtype->id) }}" method="GET"
+                                        class="inline-block">
+                                        @csrf
+                                        <button type="submit"
+                                            class="{{ $programtype->status ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                            {!! $programtype->status ? '<i class="fa-solid fa-toggle-on"></i>' : '<i class="fa-solid fa-toggle-off"></i>' !!}
+                                        </button>
+                                    </form>
                                     <a href="{{ route('programtype.edit', $programtype->id) }}"
                                         class="inline-block bg-amber-500 hover:bg-amber-600 px-3 py-2 rounded-xl text-white transition-all ease-in-out">
                                         <i class="fa-regular fa-pen-to-square"></i>

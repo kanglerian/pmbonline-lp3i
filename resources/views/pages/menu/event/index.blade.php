@@ -67,22 +67,22 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase">
                         <tr>
-                            <th scope="col" class="px-6 py-4 bg-gray-50">
+                            <th scope="col" class="px-6 py-4 bg-gray-100">
                                 No.
                             </th>
-                            <th scope="col" class="px-6 py-4">
+                            <th scope="col" class="px-6 py-4 bg-gray-50">
                                 PMB
                             </th>
-                            <th scope="col" class="px-6 py-4 bg-gray-50">
+                            <th scope="col" class="px-6 py-4 bg-gray-100">
                                 Kode Kegiatan
                             </th>
-                            <th scope="col" class="px-6 py-4">
+                            <th scope="col" class="px-6 py-4 bg-gray-50">
                                 Judul Kegiatan
                             </th>
-                            <th scope="col" class="px-6 py-4 bg-gray-50">
+                            <th scope="col" class="px-6 py-4 bg-gray-100">
                                 Pengaturan
                             </th>
-                            <th scope="col" class="px-6 py-4 text-center">
+                            <th scope="col" class="px-6 py-4 bg-gray-50 text-center">
                                 Aksi
                             </th>
                         </tr>
@@ -98,7 +98,7 @@
                                     {{ $event->pmb }}
                                 </td>
                                 <td class="px-6 py-4 font-medium text-gray-700 bg-gray-50">
-                                    <span class="underline underline-offset-4 font-medium">{{ $event->code }}</span>
+                                    <a target="_blank" href="{{ route('event.show', $event->id) }}" class="underline underline-offset-4 font-medium">{{ $event->code }}</a>
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $event->title }}
@@ -119,9 +119,42 @@
                                         @csrf
                                         <button type="submit"
                                             class="{{ $event->is_files ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
-                                            {!! $event->is_files ? '<i class="fa-solid fa-file"></i>' : '<i class="fa-solid fa-file"></i>' !!}
+                                            {!! $event->is_files ? '<i class="fa-solid fa-upload"></i>' : '<i class="fa-solid fa-upload"></i>' !!}
                                         </button>
                                     </form>
+                                    <form action="{{ route('event.employee', $event->id) }}" method="GET"
+                                        class="inline-block">
+                                        @csrf
+                                        <button type="submit"
+                                            class="{{ $event->is_employee ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                            {!! $event->is_employee ? '<i class="fa-solid fa-briefcase"></i>' : '<i class="fa-solid fa-briefcase"></i>' !!}
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('event.program', $event->id) }}" method="GET"
+                                        class="inline-block">
+                                        @csrf
+                                        <button type="submit"
+                                            class="{{ $event->is_program ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                            {!! $event->is_program ? '<i class="fa-solid fa-book"></i>' : '<i class="fa-solid fa-book"></i>' !!}
+                                        </button>
+                                    </form>
+                                    @if (count($program_types) > 0 && $event->is_program)
+                                        <div
+                                            class="inline-block bg-gray-200 border border-gray-300 rounded-xl px-3 py-2 ml-3">
+                                            @foreach ($program_types as $type)
+                                                <form action="{{ route('event.programstatus', $event->id) }}"
+                                                    method="POST" class="inline-block">
+                                                    @csrf
+                                                    <input type="text" name="program" value="{{ $type->code }}"
+                                                        hidden>
+                                                    <button type="submit"
+                                                        class="font-medium text-xs {{ $event->program == $type->code ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                                        {!! $event->program == $type->code ? $type->code : $type->code !!}
+                                                    </button>
+                                                </form>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     <form action="{{ route('event.status', $event->id) }}" method="GET"
@@ -137,7 +170,7 @@
                                         class="inline-block bg-sky-500 hover:bg-sky-600 px-3 py-2 rounded-xl text-white transition-all ease-in-out">
                                         <i class="fa-solid fa-link"></i>
                                     </button>
-                                    <a target="_blank" href="{{ route('event.show', $event->code) }}"
+                                    <a target="_blank" href="{{ route('event.show', $event->id) }}"
                                         class="inline-block bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-xl text-white transition-all ease-in-out">
                                         <i class="fa-regular fa-eye"></i>
                                     </a>
@@ -168,38 +201,39 @@
                 </div>
             </div>
         </section>
-        <script>
-            const getYearPMB = () => {
-                const currentDate = new Date();
-                const currentYear = currentDate.getFullYear();
-                const currentMonth = currentDate.getMonth() + 1;
-                const startYear = currentMonth >= 10 ? currentYear + 1 : currentYear;
-                document.getElementById('pmb').value = startYear;
+    </main>
+    <script>
+        const getYearPMB = () => {
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth() + 1;
+            const startYear = currentMonth >= 10 ? currentYear + 1 : currentYear;
+            document.getElementById('pmb').value = startYear;
+        }
+        getYearPMB();
+    </script>
+    <script>
+        function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pmb = urlParams.get('pmb');
+            const title = urlParams.get('title');
+            if (pmb) {
+                document.getElementById('pmb').value = pmb;
+            } else {
+                getYearPMB();
             }
-            getYearPMB();
-        </script>
-        <script>
-            function getUrlParams() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const pmb = urlParams.get('pmb');
-                const title = urlParams.get('title');
-                if (pmb) {
-                    document.getElementById('pmb').value = pmb;
-                } else {
-                    getYearPMB();
-                }
-                document.getElementById('title').value = title;
-            }
-            getUrlParams();
+            document.getElementById('title').value = title;
+        }
+        getUrlParams();
 
-            function copyToClipboard(code, url) {
-                const clipboard = `${url}/events/${code}`;
-                navigator.clipboard.writeText(clipboard);
-                alert('Link kegiatan berhasil disalin!');
-            }
+        function copyToClipboard(code, url) {
+            const clipboard = `${url}/events/${code}`;
+            navigator.clipboard.writeText(clipboard);
+            alert('Link kegiatan berhasil disalin!');
+        }
 
-            function confirmDelete() {
-                return confirm('Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.');
-            }
-        </script>
+        function confirmDelete() {
+            return confirm('Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.');
+        }
+    </script>
 </x-app-layout>

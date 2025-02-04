@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Applicant;
 use App\Models\ApplicantBySourceDaftarId;
 use App\Models\ApplicantBySourceId;
+use App\Models\EventDetail;
 use App\Models\ProgramType;
 use App\Models\Report\RegisterBySchool;
 use App\Models\Report\RegisterBySchoolYear;
@@ -94,6 +95,11 @@ class DashboardController extends Controller
         $approval_count = $approvalQuery->count();
         $approval = $approvalQuery->get();
 
+        $event = EventDetail::with( 'event', 'applicant', 'applicant.SourceSetting', 'applicant.SourceDaftarSetting', 'applicant.ApplicantStatus', 'applicant.ProgramType', 'applicant.SchoolApplicant', 'applicant.FollowUp', 'applicant.father', 'applicant.mother', 'applicant.presenter' )->where([
+            'identity_user' => Auth::user()->identity,
+            'rating' => 0
+        ])->first();
+
         return view('pages.dashboard.index')->with([
             'userupload' => $userupload,
             'fileupload' => $fileupload,
@@ -115,6 +121,8 @@ class DashboardController extends Controller
             'applicant' => $applicant,
             'approval_count' => $approval_count,
             'approval' => $approval,
+            // Event
+            'event' => $event,
         ]);
     }
     /**

@@ -62,6 +62,8 @@ class CreateApplicantsTable extends Migration
             $table->text('other_campus')->nullable();
             $table->string('income_parent')->nullable();
 
+            $table->text('place_of_working')->nullable();
+
             $table->unsignedBigInteger('source_daftar_id')->nullable();
             $table->unsignedBigInteger('school')->nullable();
             $table->unsignedBigInteger('followup_id')->nullable();

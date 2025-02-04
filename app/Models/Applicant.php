@@ -61,6 +61,8 @@ class Applicant extends Model
         'other_campus',
         'income_parent',
 
+        'place_of_working',
+
         'followup_id',
         'programtype_id',
         'source_daftar_id',
@@ -146,6 +148,11 @@ class Applicant extends Model
     public function integration()
     {
         return $this->hasOne(Integration::class, 'identity_user', 'identity');
+    }
+
+    public function event()
+    {
+        return $this->hasOne(EventDetail::class, 'identity_user', 'identity');
     }
 
 }

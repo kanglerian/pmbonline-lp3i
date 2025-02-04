@@ -21,6 +21,9 @@ class Event extends Model
         'description',
         'is_scholarship',
         'is_files',
+        'is_employee',
+        'is_program',
+        'program',
         'is_status'
     ];
 

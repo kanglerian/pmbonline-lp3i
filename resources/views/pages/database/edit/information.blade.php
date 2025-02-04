@@ -353,7 +353,15 @@
                         </p>
                     </div>
                 </div>
-                <div class="grid grid-cols-1">
+                <div class="grid grid-cols-1 gap-2">
+                    <div class="relative z-0 w-full group">
+                        <x-label for="place_of_working" :value="__('Tempat Bekerja')" />
+                        <x-input id="place_of_working" type="text" name="place_of_working"
+                            value="{{ $applicant->place_of_working }}" placeholder="Tempat bekerja" />
+                        <p class="mt-2 text-xs text-gray-500">
+                            <span class="text-red-500 text-xs">{{ $errors->first('place_of_working') }}</span>
+                        </p>
+                    </div>
                     <div class="relative z-0 w-full group">
                         <x-label for="note" :value="__('Catatan')" />
                         <x-textarea id="note" name="note" value="{{ $applicant->note }}"

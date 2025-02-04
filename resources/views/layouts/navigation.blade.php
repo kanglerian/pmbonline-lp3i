@@ -41,6 +41,7 @@
                             'database.scholarship',
                             'database.achievement',
                             'database.organization',
+                            'database.events',
                             'recommendation.index',
                             'recommendation.edit',
                         ])">
@@ -241,6 +242,7 @@
                     'database.scholarship',
                     'database.achievement',
                     'database.organization',
+                    'database.events',
                 ])">
                     {{ __('Databases') }}
                 </x-responsive-nav-link>

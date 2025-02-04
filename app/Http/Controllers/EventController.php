@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Applicant;
 use App\Models\ApplicantFamily;
+use App\Models\ProgramType;
 use App\Models\StatusApplicantsApplicant;
 use DateTime;
 use Carbon\Carbon;
@@ -48,7 +49,8 @@ class EventController extends Controller {
         }
 
         $events = $event_query->paginate( 10 );
-        return view( 'pages.menu.event.index', compact( 'events' ) );
+        $program_types = ProgramType::where( 'status', 1 )->get();
+        return view( 'pages.menu.event.index', compact( 'events', 'program_types' ) );
     }
 
     /**
@@ -75,6 +77,7 @@ class EventController extends Controller {
                 'phone' => [ 'required', 'string', 'min:10', 'max:13' ],
                 'school' => [ 'required', 'max:100', 'not_in:Pilih Sekolah' ],
                 'major' => [ 'required' ],
+                'information' => [ 'required' ],
             ], [
                 'name.required' => 'Nama Lengkap harus diisi',
                 'name.max' => 'Nama Lengkap maksimal 255 karakter',
@@ -85,6 +88,7 @@ class EventController extends Controller {
                 'school.max' => 'Sekolah maksimal 100 karakter',
                 'school.not_in' => 'Sekolah harus dipilih',
                 'major.required' => 'Jurusan harus diisi',
+                'information.required' => 'Informasi harus diisi',
             ] );
 
             function getYearPMB() {
@@ -98,11 +102,17 @@ class EventController extends Controller {
 
             $phone = null;
 
-            if (!empty($request->input( 'phone' )) && strlen($request->input( 'phone' )) > 8) {
-                if (substr($request->input( 'phone' ), 0, 1) === '0') {
-                    $phone = '62' . substr($request->input( 'phone' ), 1);
-                } else {
-                    $phone = '62' . $request->input( 'phone' );
+            if ( !empty( $request->input( 'phone' ) ) && strlen( $request->input( 'phone' ) ) > 8 ) {
+                $phone = $request->input( 'phone' );
+
+                // Jika nomor dimulai dengan '0', ubah ke format '62'
+                if ( substr( $phone, 0, 1 ) === '0' ) {
+                    $phone = '62' . substr( $phone, 1 );
+                }
+
+                // Jika nomor sudah diawali dengan '62', biarkan saja
+                elseif ( substr( $phone, 0, 2 ) !== '62' ) {
+                    $phone = '62' . $phone;
                 }
             }
 
@@ -127,135 +137,243 @@ class EventController extends Controller {
                 }
             }
 
+            $identity_val = Str::uuid();
+
+            $data_applicant = [
+                'identity' => $identity_val,
+                'pmb' => getYearPMB(),
+                'name' => ucwords( strtolower( $request->input( 'name' ) ) ),
+                'school' => $school,
+                'phone' => $phone,
+                'major' => $request->input( 'major' ),
+                'identity_user' => $request->input( 'information' ),
+                'source_id' => 1,
+                'source_daftar_id' => 1,
+                'status_id' => 1,
+                'come' => 0,
+                'isread' => '0',
+            ];
+
+            $data_account = [
+                'identity' => $identity_val,
+                'name' => ucwords( strtolower( $request->input( 'name' ) ) ),
+                'gender' => 1,
+                'email' => $phone . '@lp3i.ac.id',
+                'password' => Hash::make( $phone ),
+                'phone' => $phone,
+                'role' => 'S',
+                'status' => 1,
+            ];
+
+            $create_mother = [
+                'identity_user' => $identity_val,
+                'gender' => 0,
+            ];
+
+            $create_father = [
+                'identity_user' => $identity_val,
+                'gender' => 1,
+            ];
+
+            $data_event_detail = [
+                'event_id' => $request->input( 'event_id' ),
+                'identity_user' => $identity_val,
+            ];
+
             $event = Event::where( 'id', $request->input( 'event_id' ) )->first();
 
-            if ( $event->is_scholarship ) {
-                $rt_digit = strlen( $request->input( 'rt' ) ) < 2 ? '0' . $request->input( 'rt' ) : $request->input( 'rt' );
-                $rw_digit = strlen( $request->input( 'rw' ) ) < 2 ? '0' . $request->input( 'rw' ) : $request->input( 'rw' );
+            $currentDate = Carbon::now()->setTimezone( 'Asia/Jakarta' );
+            $currentMonth = ( int ) $currentDate->format( 'm' );
 
-                $place = $request->input( 'place' ) !== null ? ucwords( strtolower( $request->input( 'place' ) ) ) . ', ' : null;
-                $rt = $request->input( 'rt' ) !== null ? 'RT. ' . $rt_digit . ' ' : null;
-                $rw = $request->input( 'rw' ) !== null ? 'RW. ' . $rw_digit . ', ' : null;
-                $kel = $request->input( 'villages' ) !== null ? 'Desa/Kelurahan ' . ucwords( strtolower( $request->input( 'villages' ) ) ) . ', ' : null;
-                $kec = $request->input( 'districts' ) !== null ? 'Kecamatan ' . ucwords( strtolower( $request->input( 'districts' ) ) ) . ', ' : null;
-                $reg = $request->input( 'regencies' ) !== null ? 'Kota/Kabupaten ' . ucwords( strtolower( $request->input( 'regencies' ) ) ) . ', ' : null;
-                $prov = $request->input( 'provinces' ) !== null ? 'Provinsi ' . ucwords( strtolower( $request->input( 'provinces' ) ) ) . ', ' : null;
-                $postal = $request->input( 'postal_code' ) !== null ? 'Kode Pos ' . $request->input( 'postal_code' ) : null;
+            $session = 6;
 
-                $address_applicant = $place . $rt . $rw . $kel . $kec . $reg . $prov . $postal;
-
-                $currentDate = Carbon::now()->setTimezone( 'Asia/Jakarta' );
-                $currentMonth = ( int ) $currentDate->format( 'm' );
-
-                $session = 6;
-
-                if ( $currentMonth >= 1 && $currentMonth <= 3 ) {
-                    $session = 2;
-                } elseif ( $currentMonth >= 4 && $currentMonth <= 6 ) {
-                    $session = 3;
-                } elseif ( $currentMonth >= 7 && $currentMonth <= 9 ) {
-                    $session = 4;
-                } elseif ( $currentMonth >= 10 && $currentMonth <= 12 ) {
-                    $session = 1;
-                }
-
-                $identity_val = Str::uuid();
-
-                $data_applicant = [
-                    'event_id' => $request->input( 'event_id' ),
-                    'identity' => $identity_val,
-                    'pmb' => getYearPMB(),
-                    'name' => ucwords( strtolower( $request->input( 'name' ) ) ),
-                    'school' => $school,
-                    'phone' => $phone,
-                    'email' => $event->is_scholarship ? $phone . '@lp3i.ac.id' : null,
-                    'major' => $request->input( 'major' ),
-                    'address' => $address_applicant,
-                    'identity_user' => $request->input( 'information' ),
-
-                    /* Scholarship */
-                    'schoolarship' => $event->is_scholarship,
-                    'is_applicant' => $event->is_scholarship,
-                    'scholarship_date' => $event->is_scholarship ? Carbon::now()->setTimezone( 'Asia/Jakarta' ) : null,
-                    'scholarship_type' => $request->input( 'scholarship_type' ),
-                    'achievement' => $request->input( 'achievement' ),
-
-                    'source_id' => 10,
-                    'source_daftar_id' => 10,
-                    'status_id' => 4,
-                    'come' => 0,
-                    'isread' => '0',
-                ];
-
-                $applicant = Applicant::create( $data_applicant );
-
-                $data_status_applicant = [
-                    'pmb' => $applicant->pmb,
-                    'identity_user' => $identity_val,
-                    'date' => $currentDate,
-                    'session' => $session,
-                ];
-
-                $create_mother = [
-                    'identity_user' => $identity_val,
-                    'name' => $request->input( 'parent_gender' ) == 0 ? $request->input( 'parent_name' ) : null,
-                    'gender' => 0, // Gender untuk mother
-                    'phone' => $request->input( 'parent_gender' ) == 0 ? $request->input( 'parent_phone' ) : null,
-                ];
-
-                $create_father = [
-                    'identity_user' => $identity_val,
-                    'name' => $request->input( 'parent_gender' ) == 1 ? $request->input( 'parent_name' ) : null,
-                    'gender' => 1, // Gender untuk father
-                    'phone' => $request->input( 'parent_gender' ) == 1 ? $request->input( 'parent_phone' ) : null,
-                ];
-
-                $data_event_detail = [
-                    'event_id' => $request->input( 'event_id' ),
-                    'identity_user' => $identity_val,
-                ];
-
-                $account = User::where( 'phone', $phone )->first();
-
-                $data_account = [
-                    'identity' => $identity_val,
-                    'name' => ucwords( strtolower( $request->input( 'name' ) ) ),
-                    'gender' => 1,
-                    'email' => $phone . '@lp3i.ac.id',
-                    'password' => Hash::make( $phone ),
-                    'phone' => $phone,
-                    'role' => 'S',
-                    'status' => 1,
-                ];
-
-                if ( $account ) {
-                    $account->update( $data_account );
-                } else {
-                    User::create( $data_account );
-                }
-
-                StatusApplicantsApplicant::create( $data_status_applicant );
-                ApplicantFamily::create( $create_mother );
-                ApplicantFamily::create( $create_father );
-                EventDetail::create( $data_event_detail );
-
-                return response()->json( [
-                    'message' => 'Data berhasil disimpan',
-                ] );
-
-            } else {
-                $data_applicant = [
-                    'event_id' => $request->input( 'event_id' ),
-                    'pmb' => getYearPMB(),
-                    'name' => ucwords( strtolower( $request->input( 'name' ) ) ),
-                    'school' => $school,
-                    'phone' => $request->input( 'phone' ),
-                    'major' => $request->input( 'major' ),
-                    'identity_user' => $request->input( 'information' ),
-                ];
+            if ( $currentMonth >= 1 && $currentMonth <= 3 ) {
+                $session = 2;
+            } elseif ( $currentMonth >= 4 && $currentMonth <= 6 ) {
+                $session = 3;
+            } elseif ( $currentMonth >= 7 && $currentMonth <= 9 ) {
+                $session = 4;
+            } elseif ( $currentMonth >= 10 && $currentMonth <= 12 ) {
+                $session = 1;
             }
 
-            return response()->json( $data_applicant, 200 );
+            $data_status_applicant = [
+                'pmb' => getYearPMB(),
+                'identity_user' => $identity_val,
+                'date' => $currentDate,
+                'session' => $session,
+            ];
+
+            $check_applicant = Applicant::where( 'phone', $phone )->first();
+
+            if ( $check_applicant ) {
+                if ( $check_applicant->is_register && $check_applicant->is_daftar ) {
+                    return response()->json( [
+                        'message' => 'Data registrasi',
+                    ], 200 );
+                } else {
+                    $data_applicant[ 'identity' ] = $check_applicant->identity;
+                    $data_applicant['identity_user'] = $check_applicant->identity_user;
+
+                    $data_status_applicant[ 'pmb' ] = $check_applicant->pmb;
+                    $data_status_applicant[ 'identity_user' ] = $check_applicant->identity;
+
+                    $data_account[ 'identity' ] = $check_applicant->identity;
+                    $data_account[ 'email' ] =  $check_applicant->email ?? $check_applicant->phone . '@lp3i.ac.id';
+
+                    $data_event_detail[ 'identity_user' ] = $check_applicant->identity;
+
+                    if ( $event->is_program ) {
+                        $programtype = ProgramType::where( 'code', $request->input( 'code' ) )->first();
+
+                        $data_applicant[ 'programtype_id' ] = $programtype ? $programtype->id : null;
+                        $data_applicant[ 'program' ] = $programtype ? $request->input( 'program' ) : null;
+                        $data_applicant[ 'program_second' ] = $programtype ? $request->input( 'program' ) : null;
+                    }
+
+                    if ( $event->is_scholarship ) {
+                        $rt_digit = strlen( $request->input( 'rt' ) ) < 2 ? '0' . $request->input( 'rt' ) : $request->input( 'rt' );
+                        $rw_digit = strlen( $request->input( 'rw' ) ) < 2 ? '0' . $request->input( 'rw' ) : $request->input( 'rw' );
+
+                        $place = $request->input( 'place' ) !== null ? ucwords( strtolower( $request->input( 'place' ) ) ) . ', ' : null;
+                        $rt = $request->input( 'rt' ) !== null ? 'RT. ' . $rt_digit . ' ' : null;
+                        $rw = $request->input( 'rw' ) !== null ? 'RW. ' . $rw_digit . ', ' : null;
+                        $kel = $request->input( 'villages' ) !== null ? 'Desa/Kelurahan ' . ucwords( strtolower( $request->input( 'villages' ) ) ) . ', ' : null;
+                        $kec = $request->input( 'districts' ) !== null ? 'Kecamatan ' . ucwords( strtolower( $request->input( 'districts' ) ) ) . ', ' : null;
+                        $reg = $request->input( 'regencies' ) !== null ? 'Kota/Kabupaten ' . ucwords( strtolower( $request->input( 'regencies' ) ) ) . ', ' : null;
+                        $prov = $request->input( 'provinces' ) !== null ? 'Provinsi ' . ucwords( strtolower( $request->input( 'provinces' ) ) ) . ', ' : null;
+                        $postal = $request->input( 'postal_code' ) !== null ? 'Kode Pos ' . $request->input( 'postal_code' ) : null;
+
+                        $address_applicant = $place . $rt . $rw . $kel . $kec . $reg . $prov . $postal;
+                        $data_applicant[ 'address' ] = $address_applicant;
+
+                        $data_applicant[ 'email' ] = $check_applicant->email ?? $phone . '@lp3i.ac.id';
+                        $data_applicant[ 'schoolarship' ] = 1;
+                        $data_applicant[ 'scholarship_date' ] = $check_applicant->scholarship_date ?? Carbon::now()->setTimezone( 'Asia/Jakarta' );
+                        $data_applicant[ 'scholarship_type' ] = $request->input( 'scholarship_type' );
+                        $data_applicant[ 'achievement' ] = $request->input( 'achievement' );
+                        $data_applicant[ 'is_applicant' ] = 1;
+
+                        $data_applicant[ 'source_id' ] = 10;
+                        $data_applicant[ 'source_daftar_id' ] = 10;
+                        $data_applicant[ 'status_id' ] = 4;
+
+                        $parent = ApplicantFamily::where( [
+                            'identity_user' => $check_applicant->identity,
+                            'gender' =>  $request->input( 'parent_gender' )
+                        ] )->first();
+
+                        $parent->update( [
+                            'name' => $request->input( 'parent_name' ),
+                            'phone' => $request->input( 'parent_phone' )
+                        ] );
+                    }
+
+                    if ( $event->is_employee ) {
+                        $data_applicant[ 'year' ] = $request->input( 'year' );
+                        $data_applicant[ 'class' ] = $request->input( 'class' );
+                        $data_applicant[ 'place_of_working' ] = $request->input( 'place_of_working' );
+                    }
+
+                    $check_applicant->update( $data_applicant );
+                }
+            } else {
+                if ( $event->is_program ) {
+                    $programtype = ProgramType::where( 'code', $request->input( 'code' ) )->first();
+
+                    $data_applicant[ 'programtype_id' ] = $programtype ? $programtype->id : null;
+                    $data_applicant[ 'program' ] = $programtype ? $request->input( 'program' ) : null;
+                    $data_applicant[ 'program_second' ] = $programtype ? $request->input( 'program' ) : null;
+                }
+
+                if ( $event->is_scholarship ) {
+                    $rt_digit = strlen( $request->input( 'rt' ) ) < 2 ? '0' . $request->input( 'rt' ) : $request->input( 'rt' );
+                    $rw_digit = strlen( $request->input( 'rw' ) ) < 2 ? '0' . $request->input( 'rw' ) : $request->input( 'rw' );
+
+                    $place = $request->input( 'place' ) !== null ? ucwords( strtolower( $request->input( 'place' ) ) ) . ', ' : null;
+                    $rt = $request->input( 'rt' ) !== null ? 'RT. ' . $rt_digit . ' ' : null;
+                    $rw = $request->input( 'rw' ) !== null ? 'RW. ' . $rw_digit . ', ' : null;
+                    $kel = $request->input( 'villages' ) !== null ? 'Desa/Kelurahan ' . ucwords( strtolower( $request->input( 'villages' ) ) ) . ', ' : null;
+                    $kec = $request->input( 'districts' ) !== null ? 'Kecamatan ' . ucwords( strtolower( $request->input( 'districts' ) ) ) . ', ' : null;
+                    $reg = $request->input( 'regencies' ) !== null ? 'Kota/Kabupaten ' . ucwords( strtolower( $request->input( 'regencies' ) ) ) . ', ' : null;
+                    $prov = $request->input( 'provinces' ) !== null ? 'Provinsi ' . ucwords( strtolower( $request->input( 'provinces' ) ) ) . ', ' : null;
+                    $postal = $request->input( 'postal_code' ) !== null ? 'Kode Pos ' . $request->input( 'postal_code' ) : null;
+
+                    $address_applicant = $place . $rt . $rw . $kel . $kec . $reg . $prov . $postal;
+                    $data_applicant[ 'address' ] = $address_applicant;
+
+                    $data_applicant[ 'email' ] = $phone . '@lp3i.ac.id';
+                    $data_applicant[ 'schoolarship' ] = 1;
+                    $data_applicant[ 'scholarship_date' ] = Carbon::now()->setTimezone( 'Asia/Jakarta' );
+                    $data_applicant[ 'scholarship_type' ] = $request->input( 'scholarship_type' );
+                    $data_applicant[ 'achievement' ] = $request->input( 'achievement' );
+                    $data_applicant[ 'is_applicant' ] = 1;
+
+                    $data_applicant[ 'source_id' ] = 10;
+                    $data_applicant[ 'source_daftar_id' ] = 10;
+                    $data_applicant[ 'status_id' ] = 4;
+                    $data_applicant[ 'come' ] = 0;
+                    $data_applicant[ 'isread' ] = '0';
+
+                    if ( $request->input( 'parent_gender' ) == 1 ) {
+                        $create_father[ 'name' ] = $request->input( 'parent_name' );
+                        $create_father[ 'phone' ] = $request->input( 'parent_phone' );
+                    } else {
+                        $create_mother[ 'name' ] = $request->input( 'parent_name' );
+                        $create_mother[ 'phone' ] = $request->input( 'parent_phone' );
+                    }
+                }
+
+                if ( $event->is_employee ) {
+                    $data_applicant[ 'year' ] = $request->input( 'year' );
+                    $data_applicant[ 'class' ] = $request->input( 'class' );
+                    $data_applicant[ 'place_of_working' ] = $request->input( 'place_of_working' );
+                }
+
+                $applicant = Applicant::create( $data_applicant );
+                ApplicantFamily::create( $create_mother );
+                ApplicantFamily::create( $create_father );
+
+                $data_status_applicant[ 'pmb' ] = $applicant->pmb;
+                $data_status_applicant[ 'identity_user' ] = $applicant->identity;
+
+                $data_account[ 'identity' ] = $applicant->identity;
+                $data_account[ 'email' ] =  $applicant->email ?? $applicant->phone . '@lp3i.ac.id';
+
+                $data_event_detail[ 'identity_user' ] = $applicant->identity;
+            }
+
+            if ( $event->is_schoolarship ) {
+                $status_applicant = StatusApplicantsApplicant::where( 'identity_user', $data_status_applicant[ 'identity_user' ] )->first();
+                if ( $status_applicant ) {
+                    $status_applicant->update( $data_status_applicant );
+                } else {
+                    StatusApplicantsApplicant::create( $data_status_applicant );
+                }
+            }
+
+            $account = User::where( 'phone', $phone )->first();
+
+            if ( $account ) {
+                $account->update( $data_account );
+            } else {
+                User::create( $data_account );
+            }
+
+            $event_applicant = EventDetail::where( [
+                'event_id' => $data_event_detail[ 'event_id' ],
+                'identity_user' => $data_event_detail[ 'identity_user' ]
+            ] )->first();
+
+            if ( $event_applicant ) {
+                $event_applicant->update( $data_event_detail );
+            } else {
+                EventDetail::create( $data_event_detail );
+            }
+
+            return response()->json( [
+                'message' => 'Data berhasil disimpan',
+            ], 200 );
 
         } catch ( \Illuminate\Validation\ValidationException $e ) {
             // Mengambil pesan error dari exception
@@ -310,7 +428,34 @@ class EventController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function show( $code ): \Illuminate\Contracts\View\View {
+    public function show( $id ): \Illuminate\Contracts\View\View {
+        $event = Event::findOrFail( $id );
+
+        $nameVal = request('name');
+
+        $applicant_query = EventDetail::query();
+
+        $appends = [];
+
+        if($nameVal){
+            $applicant_query->whereHas('applicant', function ($query) use ($nameVal) {
+                $query->where('name', 'like', "%$nameVal%");
+            });
+        
+            $appends['name'] = $nameVal;
+        }
+
+        $applicants = $applicant_query
+        ->with(['event', 'applicant', 'applicant.SourceSetting', 'applicant.SourceDaftarSetting', 'applicant.ApplicantStatus', 'applicant.ProgramType', 'applicant.SchoolApplicant', 'applicant.FollowUp', 'applicant.father', 'applicant.mother', 'applicant.presenter'])
+        ->where( 'event_id', $id )
+        ->orderByDesc('created_at')
+        ->paginate(5);
+
+        $total = EventDetail::where( 'event_id', $id )->count();
+        return view( 'pages.menu.event.show', compact( 'event', 'applicants', 'total' ) );
+    }
+
+    public function participant( $code ): \Illuminate\Contracts\View\View {
         $event = Event::where( [
             'code' => $code,
             'is_status' => true
@@ -320,7 +465,7 @@ class EventController extends Controller {
             'role' => 'P',
             'status' => true
         ] )->get();
-        return view( 'pages.menu.event.show', compact( 'event', 'schools', 'informations' ) );
+        return view( 'pages.menu.event.participant', compact( 'event', 'schools', 'informations' ) );
     }
 
     /**
@@ -380,6 +525,34 @@ class EventController extends Controller {
         }
     }
 
+    public function update_event( Request $request, $id ): \Illuminate\Http\RedirectResponse {
+
+        $request->validate( [
+            'rating' => [ 'required', 'integer', 'min:1', 'max:5' ],
+            'comment' => [ 'required' ],
+        ],[
+            'rating.required' => 'Rating is required',
+            'rating.integer' => 'Rating must be a number',
+            'rating.min' => 'Rating must be at least 1',
+            'rating.max' => 'Rating must be at most 5',
+            'comment.required' => 'Comment is required',
+        ]);
+
+        $data = [
+            'rating' => $request->input('rating'),
+            'comment' => $request->input('comment'),
+        ];
+
+        try {
+            $event_detail = EventDetail::findOrFail( $id );
+            $event_detail->update($data);
+            return redirect()->route('dashboard.index')->with('message', 'Rating has been added successfully.');
+        } catch ( \Throwable $th ) {
+            return redirect()->route( 'dashboard.index' )->with( 'error', $th->getMessage() );
+
+        }
+    }
+
     /**
     * Remove the specified resource from storage.
     *
@@ -416,6 +589,36 @@ class EventController extends Controller {
             ]
         );
         return redirect()->route( 'event.index' )->with( 'message', 'Event files updated successfully' );
+    }
+
+    public function employee( $id ): \Illuminate\Http\RedirectResponse {
+        $event = Event::findOrFail( $id );
+        $event->update(
+            [
+                'is_employee' => !$event->is_employee
+            ]
+        );
+        return redirect()->route( 'event.index' )->with( 'message', 'Event employee updated successfully' );
+    }
+
+    public function program( $id ): \Illuminate\Http\RedirectResponse {
+        $event = Event::findOrFail( $id );
+        $event->update(
+            [
+                'is_program' => !$event->is_program
+            ]
+        );
+        return redirect()->route( 'event.index' )->with( 'message', 'Event program updated successfully' );
+    }
+
+    public function programstatus( Request $request, $id ): \Illuminate\Http\RedirectResponse {
+        $event = Event::findOrFail( $id );
+        $event->update(
+            [
+                'program' => $request->input( 'program' ),
+            ]
+        );
+        return redirect()->route( 'event.index' )->with( 'message', 'Event program status updated successfully' );
     }
 
     public function status( $id ): \Illuminate\Http\RedirectResponse {
