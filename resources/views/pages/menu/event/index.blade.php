@@ -98,7 +98,7 @@
                                     {{ $event->pmb }}
                                 </td>
                                 <td class="px-6 py-4 font-medium text-gray-700 bg-gray-50">
-                                    <a target="_blank" href="{{ route('event.show', $event->id) }}" class="underline underline-offset-4 font-medium">{{ $event->code }}</a>
+                                    <a target="_blank" href="{{ route('events.index', $event->code) }}" class="underline underline-offset-4 font-medium">{{ $event->code }}</a>
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $event->title }}
