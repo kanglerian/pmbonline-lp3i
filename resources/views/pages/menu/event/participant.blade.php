@@ -469,7 +469,7 @@
                                             );
 
                                             await $.ajax({
-                                                url: `/userupload`,
+                                                url: `/useruploadevent`,
                                                 type: 'POST',
                                                 data: {
                                                     data: status,
