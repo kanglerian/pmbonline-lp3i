@@ -207,10 +207,12 @@ class EventController extends Controller {
             $check_applicant = Applicant::where( 'phone', $phone )->first();
 
             if ( $check_applicant ) {
-                if ( $check_applicant->is_register && $check_applicant->is_daftar ) {
+                if ( $check_applicant->is_register || $check_applicant->is_daftar ) {
                     return response()->json( [
-                        'message' => 'Data registrasi',
-                    ], 200 );
+                        'status' => 403,
+                        'error' => 'Forbidden',
+                        'message' => 'Data sudah tidak bisa terdaftar!',
+                    ], 403 );
                 } else {
                     $data_applicant[ 'identity' ] = $check_applicant->identity;
                     $data_applicant['identity_user'] = $check_applicant->identity_user;
@@ -372,6 +374,8 @@ class EventController extends Controller {
             }
 
             return response()->json( [
+                'data' => $data_applicant,
+                'event' => $event,
                 'message' => 'Data berhasil disimpan',
             ], 200 );
 

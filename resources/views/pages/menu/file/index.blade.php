@@ -49,6 +49,9 @@
                             <th scope="col" class="px-6 py-4">
                                 Nama
                             </th>
+                            <th scope="col" class="px-6 py-4">
+                                Nama File
+                            </th>
                             <th scope="col" class="px-6 py-4 bg-gray-50">
                                 Accept
                             </th>
@@ -65,6 +68,9 @@
                                 </th>
                                 <td class="px-6 py-4">
                                     {{ $file->name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $file->namefile }}
                                 </td>
                                 <td class="px-6 py-4 bg-gray-50">
                                     {{ $file->accept }}

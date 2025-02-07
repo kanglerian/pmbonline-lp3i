@@ -50,9 +50,16 @@
     </style>
 </head>
 
-<body class="bg-gray-200 flex flex-col justify-center items-center py-10">
-    <div class="container max-w-2xl mx-auto flex flex-col items-center justify-center gap-5 px-5 md:px-0">
-        <div class="w-full bg-white border-b-8 border-lp3i-200 py-8 px-5 rounded-3xl shadow-lg space-y-4">
+<body class="bg-gray-200">
+    <div class="flex flex-col items-center justify-center bg-black bg-opacity-90 w-full h-full z-50 fixed hidden"
+        id="data-loading">
+        <lottie-player src="{{ asset('animations/server.json') }}" background="Transparent" speed="1"
+            style="width: 300px; height: 300px" direction="1" mode="normal" loop autoplay></lottie-player>
+        <h1 class="text-white relative top-[-40px] text-sm">Sedang memuat data...</h1>
+    </div>
+    <div class="container max-w-2xl mx-auto flex flex-col items-center justify-center gap-5 px-5 md:px-0 py-10">
+        <div id="banner"
+            class="w-full bg-white border-b-8 border-lp3i-200 py-8 px-5 rounded-3xl shadow-lg space-y-4">
             <div class="flex justify-center">
                 <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="h-14">
             </div>
@@ -62,9 +69,9 @@
                 <p class="text-center text-gray-700 text-md">{{ $event->description }}</p>
             </div>
         </div>
-        <form id="event-form" method="POST" class="w-full space-y-5">
+        <form id="event-form" method="POST" class="w-full space-y-5" enctype="multipart/form-data">
             @csrf
-            <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
+            <div id="profile" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
                 <input type="hidden" name="event_id" value="{{ $event->id }}">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2 md:col-span-1">
@@ -98,7 +105,7 @@
                     <div class="col-span-2 md:col-span-1">
                         <label for="major" class="block mb-2 text-sm font-medium text-gray-900">Jurusan
                             SMA/K/MA <span class="text-red-500">*</span></label>
-                        <input type="text" name="major" id="major" value="Teknik Kendaraan Ringan"
+                        <input type="text" name="major" id="major"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                             placeholder="Your major..." />
                         <li id="error-major" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
@@ -140,7 +147,7 @@
                 </div>
             </div>
             @if ($event->is_scholarship)
-                <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
+                <div id="address" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label for="place" class="block mb-2 text-sm font-medium text-gray-900">Jl/Kp/Perum
@@ -210,7 +217,7 @@
                 </div>
             @endif
             @if ($event->is_scholarship)
-                <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
+                <div id="scholarship" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-2 md:col-span-1">
                             <label for="scholarship_type"
@@ -229,8 +236,8 @@
                             </select>
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label for="achievement" class="block mb-2 text-sm font-medium text-gray-900">Prestasi
-                                Ranking</label>
+                            <label for="achievement"
+                                class="block mb-2 text-sm font-medium text-gray-900">Prestasi</label>
                             <input type="text" id="achievement" name="achievement"
                                 value="{{ old('achievement') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
@@ -239,33 +246,50 @@
                     </div>
                 </div>
             @endif
+            @if ($event->is_files)
+                <div id="upload" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
+                    <div class="grid grid-cols-1 gap-5">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-900" for="kartu_keluarga">Kartu
+                                Keluarga</label>
+                            <input
+                                class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 px-3 py-2.5"
+                                id="kartu_keluarga" type="file" accept=".pdf" required />
+                            <p class="mt-1 text-xs text-gray-500">*Format file .pdf</p>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-900"
+                                for="foto_rumah_luar_dan_dalam">Foto Rumah (Luar & Dalam)</label>
+                            <input
+                                class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 px-3 py-2.5"
+                                id="foto_rumah_luar_dan_dalam" type="file" accept="image/*" required />
+                            <p class="mt-1 text-xs text-gray-500">*Format file .jpg, .jpeg, .png</p>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-900"
+                                for="sertifikat_pendukung">Sertifikat Pendukung (Prestasi)</label>
+                            <input
+                                class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 px-3 py-2.5"
+                                id="sertifikat_pendukung" type="file" accept=".pdf" required />
+                            <p class="mt-1 text-xs text-gray-500">*Format file .pdf</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
             @if ($event->is_program)
-                <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
+                <div id="prodi" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
                     <div class="grid grid-cols-1">
                         <input type="hidden" name="code" id="code" value="{{ $event->program }}">
                         <div class="space-y-4">
                             <label for="program" class="block mb-2 text-sm font-medium text-gray-900">Program Studi &
                                 Peminatan <span class="text-red-500">*</span></label>
-                            <div class="space-y-5" id="program">
-                                <div class="flex">
-                                    <div class="flex items-center h-5">
-                                        <input id="helper-radio" type="radio" name="program" value=""
-                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-                                    </div>
-                                    <div class="ms-2 text-sm">
-                                        <label for="helper-radio" class="font-medium text-gray-900">Free shipping via
-                                            Flowbite</label>
-                                        <p id="helper-radio-text" class="text-xs font-normal text-gray-500">For orders
-                                            shipped from $25 in books or $29 in other categories</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="space-y-5" id="program"></div>
                         </div>
                     </div>
                 </div>
             @endif
             @if ($event->is_scholarship)
-                <div class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
+                <div id="parent" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-2 md:col-span-1">
                             <label for="parent_name" class="block mb-2 text-sm font-medium text-gray-900">Nama
@@ -299,7 +323,7 @@
                     </div>
                 </div>
             @endif
-            <div class="w-full flex items-center gap-5">
+            <div id="event-submit" class="w-full flex items-center gap-5">
                 <div class="w-full">
                     <select name="information" id="information"
                         class="bg-gray-50 border-2 border-lp3i-100 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
@@ -376,11 +400,13 @@
                 phoneInput.value = '62';
             }
         });
-
+    </script>
+    <script>
         document.getElementById("event-form").addEventListener("submit", async function(e) {
-            e.preventDefault(); // Mencegah submit default form
+            e.preventDefault();
+            document.getElementById('data-loading').classList.remove('hidden');
 
-            const form = e.target; // Ambil form
+            const form = e.target;
             const formData = new FormData(form);
 
             await axios.post(`/eventstore`, formData, {
@@ -389,10 +415,114 @@
                     }
                 })
                 .then(response => {
-                    console.log(response.data);
+                    if (response.data.event.is_files) {
+                        const filesToUpload = [{
+                                id: 'kartu_keluarga',
+                                name: 'kartu-keluarga',
+                                fileupload_id: 7
+                            },
+                            {
+                                id: 'sertifikat_pendukung',
+                                name: 'sertifikat-pendukung',
+                                fileupload_id: 8
+                            },
+                            {
+                                id: 'foto_rumah_luar_dan_dalam',
+                                name: 'foto-rumah-luar-dan-dalam',
+                                fileupload_id: 12
+                            }
+                        ];
+
+                        const uploadFile = async (fileInput, data_file) => {
+                            return new Promise((resolve, reject) => {
+                                const file = document.getElementById(fileInput).files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = async (event) => {
+                                        let data = {
+                                            identity: response.data.data
+                                                .identity,
+                                            image: event.target.result.split(
+                                                ';base64,').pop(),
+                                            namefile: data_file.name,
+                                            typefile: file.name.split('.')
+                                                .pop(),
+                                        };
+
+                                        let status = {
+                                            fileupload_id: data_file
+                                                .fileupload_id,
+                                            identity: response.data.data
+                                                .identity,
+                                            typefile: file.name.split('.')
+                                                .pop(),
+                                        };
+
+                                        try {
+                                            const res = await axios.post(
+                                                `https://uploadhub.politekniklp3i-tasikmalaya.ac.id/upload`,
+                                                data, {
+                                                    headers: {
+                                                        'lp3i-api-key': 'cdbdb5ea29b98565'
+                                                    }
+                                                }
+                                            );
+
+                                            await $.ajax({
+                                                url: `/userupload`,
+                                                type: 'POST',
+                                                data: {
+                                                    data: status,
+                                                    '_token': $(
+                                                        'meta[name="csrf-token"]'
+                                                    ).attr(
+                                                        'content')
+                                                },
+                                                success: function(
+                                                    response) {
+                                                    console.log(
+                                                        response);
+                                                },
+                                                error: function(xhr, status,
+                                                    error) {
+                                                    console.log(error);
+                                                }
+                                            });
+                                            console.log(res.data);
+                                            resolve(); // Menandakan selesai
+                                        } catch (err) {
+                                            console.log(err.message);
+                                            reject(err);
+                                        }
+                                    };
+                                    reader.readAsDataURL(file);
+                                } else {
+                                    resolve(); // Jika tidak ada file, langsung resolve
+                                }
+                            });
+                        };
+
+                        Promise.all(filesToUpload.map(file => uploadFile(file.id, file)))
+                            .then(() => {
+                                document.getElementById('data-loading').classList.add('hidden');
+                                alert('Yay! Semua file sudah terunggah 🎉');
+                                location.reload();
+                            })
+                            .catch((err) => {
+                                console.error('Terjadi kesalahan saat upload:', err);
+                            });
+                    } else {
+                        document.getElementById('data-loading').classList.add('hidden');
+                        alert('Proses selesai, semua sudah aman! ✅');
+                        location.reload();
+                    }
                 })
                 .catch(error => {
-                    console.log(error);
+                    if (error.response.status === 403) {
+                        alert(
+                            'Tidak bisa mengikuti, anda sudah terdaftar di LP3I. Hubungi administrator untuk mengubah aturan.'
+                        );
+                    }
                     if (error.response.status === 422) {
                         let errors = error.response.data;
                         for (const key in errors) {
@@ -446,39 +576,40 @@
                 });
         });
     </script>
-    <script>
-        const filterProgram = async () => {
-            let programType = document.getElementById('code').value;
-            await axios.get('https://endpoint.politekniklp3i-tasikmalaya.ac.id/programs', {
-                    headers: {
-                        'lp3i-api-key': 'b35e0a901904d293'
-                    }
-                })
-                .then((res) => {
-                    let programs = res.data;
-                    var results;
-                    let bucket = '';
-                    switch (programType) {
-                        case "R":
-                            results = programs.filter(program => program.type === "R");
-                            break;
-                        case "N":
-                            results = programs.filter(program => program.type === "N");
-                            break;
-                        case "RPL":
-                            results = programs.filter(program => program.type === "RPL");
-                            break;
-                        default:
-                            results = [];
-                            break;
-                    }
+    @if ($event->is_program)
+        <script>
+            const filterProgram = async () => {
+                let programType = document.getElementById('code').value;
+                await axios.get('https://endpoint.politekniklp3i-tasikmalaya.ac.id/programs', {
+                        headers: {
+                            'lp3i-api-key': 'b35e0a901904d293'
+                        }
+                    })
+                    .then((res) => {
+                        let programs = res.data;
+                        var results;
+                        let bucket = '';
+                        switch (programType) {
+                            case "R":
+                                results = programs.filter(program => program.type === "R");
+                                break;
+                            case "N":
+                                results = programs.filter(program => program.type === "N");
+                                break;
+                            case "RPL":
+                                results = programs.filter(program => program.type === "RPL");
+                                break;
+                            default:
+                                results = [];
+                                break;
+                        }
 
-                    if (programType !== 'NONE') {
-                        if (results.length > 0) {
-                            results.map((result) => {
-                                let option = '';
-                                result.interests.map((inter, index) => {
-                                    option += `
+                        if (programType !== 'NONE') {
+                            if (results.length > 0) {
+                                results.map((result) => {
+                                    let option = '';
+                                    result.interests.map((inter, index) => {
+                                        option += `
                                     <div class="flex">
                                         <div class="flex items-center h-5">
                                             <input id="helper-radio-${index}" type="radio" name="program" value="${result.level} ${result.title}"
@@ -493,119 +624,81 @@
                                             </p>
                                         </div>
                                     </div>`
-                                })
-                                bucket += `<div class="space-y-4">${option}</div>`;
-                            });
-                            document.getElementById('program').innerHTML = bucket;
-                        } else {
-                            bucket = `<div>Program Studi tidak tersedia</div>`;
-                            document.getElementById('program').innerHTML = bucket;
-                            document.getElementById('program').disabled = true;
+                                    })
+                                    bucket += `<div class="space-y-4">${option}</div>`;
+                                });
+                                document.getElementById('program').innerHTML = bucket;
+                            } else {
+                                bucket = `<div>Program Studi tidak tersedia</div>`;
+                                document.getElementById('program').innerHTML = bucket;
+                                document.getElementById('program').disabled = true;
+                            }
                         }
-                    }
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
+                    })
+                    .catch((err) => {
+                        console.log(err.message);
+                    });
 
-        }
-        filterProgram();
-    </script>
+            }
+            filterProgram();
+        </script>
+    @endif
     <script>
-        gsap.from(".profile-card", {
-            duration: 2.5,
-            scale: 0,
-            delay: 0.3,
-            rotation: -30,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".logo-one", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.4,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".logo-two", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
+        gsap.from("#banner", {
+            duration: 3.5,
+            opacity: 0,
             delay: 0.5,
-            ease: "elastic.out(1,0.3)"
+            y: 100,
+            ease: "elastic.out(1,0.2)"
         });
-        gsap.from(".title", {
-            duration: 0.7,
-            opacity: 0,
-            delay: 0.7,
-            y: 100
-        });
-        gsap.from(".desc", {
-            duration: 0.7,
-            opacity: 0,
-            delay: 0.8,
-            y: 100
-        });
-        gsap.from(".sosmed-1", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.4,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".sosmed-2", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.5,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".sosmed-3", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.6,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".sosmed-4", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.7,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from(".sosmed-5", {
-            duration: 2.5,
-            y: -200,
-            rotation: -30,
-            delay: 0.8,
-            ease: "elastic.out(1,0.3)"
-        });
-        gsap.from("#links", {
-            duration: 0.7,
-            opacity: 0,
-            delay: 1,
-            y: 100
-        });
-        gsap.from("#link-one", {
-            duration: 2.5,
+        gsap.from("#profile", {
+            duration: 3.5,
             opacity: 0,
             delay: 1,
             y: 100,
-            ease: "elastic.out(1,0.5)"
+            ease: "elastic.out(1,0.2)"
         });
-        gsap.from("#link-two", {
-            duration: 2.5,
+        gsap.from("#address", {
+            duration: 3.5,
+            opacity: 0,
+            delay: 1.1,
+            y: 100,
+            ease: "elastic.out(1,0.2)"
+        });
+        gsap.from("#scholarship", {
+            duration: 3.5,
+            opacity: 0,
+            delay: 1.2,
+            y: 100,
+            ease: "elastic.out(1,0.2)"
+        });
+        gsap.from("#upload", {
+            duration: 3.5,
+            opacity: 0,
+            delay: 1.3,
+            y: 100,
+            ease: "elastic.out(1,0.2)"
+        });
+        gsap.from("#prodi", {
+            duration: 3.5,
+            opacity: 0,
+            delay: 1.4,
+            y: 100,
+            ease: "elastic.out(1,0.2)"
+        });
+        gsap.from("#parent", {
+            duration: 3.5,
             opacity: 0,
             delay: 1.5,
             y: 100,
-            ease: "elastic.out(1,0.5)"
+            ease: "elastic.out(1,0.2)"
         });
-        gsap.from("#link-three", {
-            duration: 2.5,
+        gsap.from("#event-submit", {
+            duration: 3.5,
             opacity: 0,
-            delay: 2,
+            delay: 1.6,
             y: 100,
-            ease: "elastic.out(1,0.5)"
+            ease: "elastic.out(1,0.2)"
         });
     </script>
 </body>
