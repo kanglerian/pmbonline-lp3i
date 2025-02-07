@@ -345,7 +345,7 @@ class EventController extends Controller {
                 $data_event_detail[ 'identity_user' ] = $applicant->identity;
             }
 
-            if ( $event->is_schoolarship ) {
+            if ( $event->is_scholarship ) {
                 $status_applicant = StatusApplicantsApplicant::where( 'identity_user', $data_status_applicant[ 'identity_user' ] )->first();
                 if ( $status_applicant ) {
                     $status_applicant->update( $data_status_applicant );

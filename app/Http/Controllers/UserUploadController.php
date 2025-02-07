@@ -105,27 +105,18 @@ class UserUploadController extends Controller {
 
     public function store_event( Request $request ) {
 
-        // $berkas = $request->all();
-        return response()->json($request->all());
-
-        if ( Auth::user()->role == 'S' ) {
-            $data = [
-                'identity_user' => Auth::user()->identity,
-                'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
-                'typefile' => $berkas[ 'data' ][ 'typefile' ],
-            ];
-        } else {
-            $data = [
-                'identity_user' => $berkas[ 'data' ][ 'identity' ],
-                'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
-                'typefile' => $berkas[ 'data' ][ 'typefile' ],
-            ];
-        }
+        $berkas = $request->all();
+        
+        $data = [
+            'identity_user' => $berkas[ 'identity' ],
+            'fileupload_id' => $berkas[ 'fileupload_id' ],
+            'typefile' => $berkas[ 'typefile' ],
+        ];
 
         $userupload = UserUpload::where( [
-            'identity_user' => $berkas[ 'data' ][ 'identity' ],
-            'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
-            'typefile' => $berkas[ 'data' ][ 'typefile' ],
+            'identity_user' => $berkas[ 'identity' ],
+            'fileupload_id' => $berkas[ 'fileupload_id' ],
+            'typefile' => $berkas[ 'typefile' ],
         ] )->first();
 
         if ( $userupload ) {
@@ -134,11 +125,8 @@ class UserUploadController extends Controller {
                 $dataku = [
                     'avatar' => $file->namefile . '.' . $data[ 'typefile' ],
                 ];
-                if ( Auth::user()->role == 'S' ) {
-                    $user = User::findOrFail( Auth::user()->id );
-                } else {
-                    $user = User::where( 'identity', $data[ 'identity_user' ] );
-                }
+
+                $user = User::where( 'identity', $data[ 'identity_user' ] );
                 $user->update( $dataku );
             }
             $userupload->update( $data );
@@ -153,11 +141,8 @@ class UserUploadController extends Controller {
                 $dataku = [
                     'avatar' => $file->namefile . '.' . $data[ 'typefile' ],
                 ];
-                if ( Auth::user()->role == 'S' ) {
-                    $user = User::findOrFail( Auth::user()->id );
-                } else {
-                    $user = User::where( 'identity', $data[ 'identity_user' ] );
-                }
+                
+                $user = User::where( 'identity', $data[ 'identity_user' ] );
                 $user->update( $dataku );
             }
 
