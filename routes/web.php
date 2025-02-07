@@ -164,13 +164,11 @@ Route::middleware(['auth', 'status:1'])->group(function () {
 });
 
 /* Route Student */
-Route::middleware(['auth', 'status:1'])->group(function () {
-    Route::resource('userupload', UserUploadController::class)->except(['store']);
-    Route::resource('recommendation', RecommendationController::class);
-    Route::patch('recommendation/admin/{id}', [RecommendationController::class, 'update_admin'])->name('recommendation.update_admin');
-    Route::patch('recommendation/change/{id}', [RecommendationController::class, 'change_status'])->name('recommendation.change');
-    Route::post('payment', [UserUploadController::class, 'upload_pembayaran'])->name('upload.payment');
-});
+Route::resource('userupload', UserUploadController::class)->except(['store'])->middleware(['auth', 'status:1']);
+Route::resource('recommendation', RecommendationController::class)->middleware(['auth', 'status:1']);
+Route::patch('recommendation/admin/{id}', [RecommendationController::class, 'update_admin'])->name('recommendation.update_admin')->middleware(['auth', 'status:1']);
+Route::patch('recommendation/change/{id}', [RecommendationController::class, 'change_status'])->name('recommendation.change')->middleware(['auth', 'status:1']);
+Route::post('payment', [UserUploadController::class, 'upload_pembayaran'])->name('upload.payment')->middleware(['auth', 'status:1']);
 
 /* Route Enrollment */
 Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
@@ -218,10 +216,10 @@ Route::middleware(['auth', 'status:1', 'role:A'])
 
         Route::get('event/{id}/status', [EventController::class, 'status'])->name('event.status');
         Route::get('event/{id}/scholarship', [EventController::class, 'scholarship'])->name('event.scholarship');
-        Route::get('event/{id}/files', [EventController::class, 'files'])->name('event.files');  
-        Route::get('event/{id}/employee', [EventController::class, 'employee'])->name('event.employee');  
-        Route::get('event/{id}/program', [EventController::class, 'program'])->name('event.program');    
-        Route::post('event/{id}/programstatus', [EventController::class, 'programstatus'])->name('event.programstatus');  
+        Route::get('event/{id}/files', [EventController::class, 'files'])->name('event.files');
+        Route::get('event/{id}/employee', [EventController::class, 'employee'])->name('event.employee');
+        Route::get('event/{id}/program', [EventController::class, 'program'])->name('event.program');
+        Route::post('event/{id}/programstatus', [EventController::class, 'programstatus'])->name('event.programstatus');
     });
 
 /* Route Scholarship */
