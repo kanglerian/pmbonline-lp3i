@@ -153,28 +153,28 @@
                         <div>
                             <label for="place" class="block mb-2 text-sm font-medium text-gray-900">Jl/Kp/Perum
                                 <span class="text-red-500">*</span></label>
-                            <input type="text" name="place" id="place" value="Jl. Cibungkul"
+                            <input type="text" name="place" id="place"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="Your place..." required />
                         </div>
                         <div>
                             <label for="postal_code" class="block mb-2 text-sm font-medium text-gray-900">Kode Pos
                                 <span class="text-red-500">*</span></label>
-                            <input type="text" name="postal_code" id="postal_code" value="46151" maxlength="7"
+                            <input type="text" name="postal_code" id="postal_code" maxlength="7"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="00000" required />
                         </div>
                         <div>
                             <label for="rt" class="block mb-2 text-sm font-medium text-gray-900">RT <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="rt" id="rt" value="05" maxlength="2"
+                            <input type="text" name="rt" id="rt" maxlength="2"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="00" required />
                         </div>
                         <div>
                             <label for="rw" class="block mb-2 text-sm font-medium text-gray-900">RW <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="rw" id="rw" value="13" maxlength="2"
+                            <input type="text" name="rw" id="rw" maxlength="2"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="00" required />
                         </div>
@@ -295,7 +295,7 @@
                         <div class="col-span-2 md:col-span-1">
                             <label for="parent_name" class="block mb-2 text-sm font-medium text-gray-900">Nama
                                 Orangtua <span class="text-red-500">*</span></label>
-                            <input type="text" id="parent_name" name="parent_name" value="Nani"
+                            <input type="text" id="parent_name" name="parent_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="Your full parent name..." required />
                             <div class="flex items-center gap-3 mt-3 ml-2">
@@ -317,7 +317,7 @@
                         <div class="col-span-2 md:col-span-1">
                             <label for="parent_phone" class="block mb-2 text-sm font-medium text-gray-900">No.
                                 Handphone <span class="text-red-500">*</span></label>
-                            <input type="number" name="parent_phone" value="6281286505051" id="parent_phone"
+                            <input type="number" name="parent_phone" id="parent_phone"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="Your parent phone..." required />
                         </div>
