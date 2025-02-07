@@ -60,8 +60,9 @@
     <div class="container max-w-2xl mx-auto flex flex-col items-center justify-center gap-5 px-5 md:px-0 py-10">
         <div id="banner"
             class="w-full bg-white border-b-8 border-lp3i-200 py-8 px-5 rounded-3xl shadow-lg space-y-4">
-            <div class="flex justify-center">
-                <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="h-14">
+            <div class="flex justify-center gap-2">
+                <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="w-48">
+                <img src="{{ asset('logo/logo-kampusglobalmandiri.png') }}" alt="" class="w-36">
             </div>
             <div class="space-y-2">
                 <h2 class="text-2xl font-bold text-center text-gray-900">{{ $event->title }}</h2>
