@@ -567,6 +567,7 @@ class EventController extends Controller {
     public function destroy( $id ): \Illuminate\Http\RedirectResponse {
         try {
             $event = Event::findOrFail( $id );
+            EventDetail::where( 'event_id', $id )->delete();
             $event->delete();
             return redirect()->route( 'event.index' )->with( 'message', 'Event deleted successfully' );
         } catch ( \Throwable $th ) {
