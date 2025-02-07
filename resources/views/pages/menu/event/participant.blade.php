@@ -429,7 +429,7 @@
                             {
                                 id: 'foto_rumah_luar_dan_dalam',
                                 name: 'foto-rumah-luar-dan-dalam',
-                                fileupload_id: 12
+                                fileupload_id: 13
                             }
                         ];
 
