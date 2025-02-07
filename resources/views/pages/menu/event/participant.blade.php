@@ -459,6 +459,7 @@
                                         };
 
                                         try {
+                                            // Upload ke server eksternal
                                             const res = await axios.post(
                                                 `https://uploadhub.politekniklp3i-tasikmalaya.ac.id/upload`,
                                                 data, {
@@ -468,30 +469,22 @@
                                                 }
                                             );
 
-                                            await $.ajax({
-                                                url: `/useruploadevent`,
-                                                type: 'POST',
-                                                data: {
-                                                    data: status,
-                                                    '_token': $(
-                                                        'meta[name="csrf-token"]'
-                                                    ).attr(
-                                                        'content')
-                                                },
-                                                success: function(
-                                                    response) {
-                                                    console.log(
-                                                        response);
-                                                },
-                                                error: function(xhr, status,
-                                                    error) {
-                                                    console.log(error);
-                                                }
-                                            });
-                                            console.log(res.data);
-                                            resolve(); // Menandakan selesai
+                                            // Upload ke server Laravel
+                                            const userupload = await axios.post(
+                                                '/useruploadevent', status, {
+                                                    headers: {
+                                                        'X-CSRF-TOKEN': $(
+                                                            'meta[name="csrf-token"]'
+                                                            ).attr(
+                                                            'content')
+                                                    }
+                                                });
+
+                                            console.log(userupload.data);
+                                            resolve();
                                         } catch (err) {
-                                            console.log(err.message);
+                                            console.error("Error:", err.response ?
+                                                err.response.data : err.message);
                                             reject(err);
                                         }
                                     };

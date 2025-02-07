@@ -164,7 +164,7 @@ Route::middleware(['auth', 'status:1'])->group(function () {
 });
 
 /* Route Student */
-Route::post('/useruploadevent', [UserUploadController::class, 'store'])->name('useruploadevent.store');
+Route::post('/useruploadevent', [UserUploadController::class, 'store_event'])->name('useruploadevent.store');
 Route::middleware(['auth', 'status:1'])->group(function () {
     Route::resource('userupload', UserUploadController::class)->except(['store'])->middleware(['auth', 'status:1']);
     Route::resource('recommendation', RecommendationController::class);

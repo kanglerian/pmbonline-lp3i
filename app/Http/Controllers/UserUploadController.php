@@ -103,6 +103,73 @@ class UserUploadController extends Controller {
 
     }
 
+    public function store_event( Request $request ) {
+
+        // $berkas = $request->all();
+        return response()->json($request->all());
+
+        if ( Auth::user()->role == 'S' ) {
+            $data = [
+                'identity_user' => Auth::user()->identity,
+                'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
+                'typefile' => $berkas[ 'data' ][ 'typefile' ],
+            ];
+        } else {
+            $data = [
+                'identity_user' => $berkas[ 'data' ][ 'identity' ],
+                'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
+                'typefile' => $berkas[ 'data' ][ 'typefile' ],
+            ];
+        }
+
+        $userupload = UserUpload::where( [
+            'identity_user' => $berkas[ 'data' ][ 'identity' ],
+            'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
+            'typefile' => $berkas[ 'data' ][ 'typefile' ],
+        ] )->first();
+
+        if ( $userupload ) {
+            if ( $data[ 'fileupload_id' ] == 1 ) {
+                $file = FileUpload::findOrFail( $data[ 'fileupload_id' ] );
+                $dataku = [
+                    'avatar' => $file->namefile . '.' . $data[ 'typefile' ],
+                ];
+                if ( Auth::user()->role == 'S' ) {
+                    $user = User::findOrFail( Auth::user()->id );
+                } else {
+                    $user = User::where( 'identity', $data[ 'identity_user' ] );
+                }
+                $user->update( $dataku );
+            }
+            $userupload->update( $data );
+
+            return response()->json( [
+                'status' => 'success',
+                'message' => 'Data berhasil diupdate',
+            ] );
+        } else {
+            if ( $data[ 'fileupload_id' ] == 1 ) {
+                $file = FileUpload::findOrFail( $data[ 'fileupload_id' ] );
+                $dataku = [
+                    'avatar' => $file->namefile . '.' . $data[ 'typefile' ],
+                ];
+                if ( Auth::user()->role == 'S' ) {
+                    $user = User::findOrFail( Auth::user()->id );
+                } else {
+                    $user = User::where( 'identity', $data[ 'identity_user' ] );
+                }
+                $user->update( $dataku );
+            }
+
+            UserUpload::create( $data );
+            return response()->json( [
+                'status' => 'success',
+                'message' => 'Data berhasil disimpan',
+            ] );
+        }
+
+    }
+
     /**
     * Display the specified resource.
     *
