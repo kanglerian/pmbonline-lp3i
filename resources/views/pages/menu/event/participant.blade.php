@@ -256,7 +256,7 @@
                             <input
                                 class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 px-3 py-2.5"
                                 id="kartu_keluarga" type="file" accept=".pdf" required />
-                            <p class="mt-1 text-xs text-red-500">*Format file .pdf | maksimal 1mb</p>
+                            <p class="mt-1 text-xs text-red-500">*Format file .pdf | maksimal 1 MB</p>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-900"
@@ -264,7 +264,7 @@
                             <input
                                 class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 px-3 py-2.5"
                                 id="foto_rumah_luar_dan_dalam" type="file" accept="image/*" required />
-                            <p class="mt-1 text-xs text-red-500">*Format file .jpg, .jpeg, .png | maksimal 1mb</p>
+                            <p class="mt-1 text-xs text-red-500">*Format file .jpg, .jpeg, .png | maksimal 1 MB</p>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-900"
@@ -272,7 +272,7 @@
                             <input
                                 class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 px-3 py-2.5"
                                 id="sertifikat_pendukung" type="file" accept=".pdf" required />
-                            <p class="mt-1 text-xs text-red-500">*Format file .pdf | maksimal 1mb</p>
+                            <p class="mt-1 text-xs text-red-500">*Format file .pdf | maksimal 1 MB</p>
                         </div>
                     </div>
                 </div>
