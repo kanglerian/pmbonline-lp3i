@@ -165,7 +165,7 @@ Route::middleware(['auth', 'status:1'])->group(function () {
 
 /* Route Student */
 Route::middleware(['auth', 'status:1'])->group(function () {
-    Route::resource('userupload', UserUploadController::class);
+    Route::resource('userupload', UserUploadController::class)->except(['store']);
     Route::resource('recommendation', RecommendationController::class);
     Route::patch('recommendation/admin/{id}', [RecommendationController::class, 'update_admin'])->name('recommendation.update_admin');
     Route::patch('recommendation/change/{id}', [RecommendationController::class, 'change_status'])->name('recommendation.change');
