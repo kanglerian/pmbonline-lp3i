@@ -349,6 +349,12 @@
         <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_vubims6l.json" background="transparent"
             speed="1" style="width: 700px; height: 700px;" loop autoplay></lottie-player>
     </div>
+    <div class="fixed bottom-20 right-0">
+        <a href="https://politekniklp3i-tasikmalaya.ac.id/penerimaan-beasiswa"><lottie-player
+                src="{{ asset('animations/whatsapp.json') }}" background="Transparent" speed="1"
+                style="width: 100px; height: 100px" direction="1" mode="normal" loop autoplay></lottie-player>
+        </a>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"
         integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg=="

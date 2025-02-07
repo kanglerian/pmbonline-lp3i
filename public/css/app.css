@@ -722,6 +722,9 @@ select {
 .bottom-2\.5 {
   bottom: 0.625rem;
 }
+.bottom-20 {
+  bottom: 5rem;
+}
 .bottom-3 {
   bottom: 0.75rem;
 }
