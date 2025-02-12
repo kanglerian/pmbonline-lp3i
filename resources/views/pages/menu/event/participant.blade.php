@@ -620,7 +620,7 @@
                                     <div class="flex">
                                         <div class="flex items-center h-5">
                                             <input id="helper-radio-${index}" type="radio" name="program" value="${result.level} ${result.title}"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 mt-1">
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 mt-1" required>
                                         </div>
                                         <div class="ms-2 text-sm">
                                             <label for="helper-radio-${index}" class="font-medium text-gray-900">
