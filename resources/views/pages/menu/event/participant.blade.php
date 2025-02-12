@@ -73,14 +73,14 @@
         <form id="event-form" method="POST" class="w-full space-y-5" enctype="multipart/form-data">
             @csrf
             <div id="profile" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
-                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                <input type="hidden" name="event_id" value="{{ $event->id }}" required>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2 md:col-span-1">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nama lengkap <span
                                 class="text-red-500">*</span></label>
                         <input type="text" name="name" id="name" value=""
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your full name..." />
+                            placeholder="Your full name..." required />
                         <li id="error-name" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                     </div>
                     <div class="col-span-2 md:col-span-1">
@@ -88,7 +88,7 @@
                                 class="text-red-500">*</span></label>
                         <input type="number" name="phone" id="phone" value=""
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your phone..." />
+                            placeholder="Your phone..." required />
                         <li id="error-phone" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                     </div>
                     <div class="col-span-2 md:col-span-1">
@@ -108,7 +108,7 @@
                             SMA/K/MA <span class="text-red-500">*</span></label>
                         <input type="text" name="major" id="major"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                            placeholder="Your major..." />
+                            placeholder="Your major..." required />
                         <li id="error-major" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                     </div>
                     @if ($event->is_employee)
@@ -117,7 +117,7 @@
                                     class="text-red-500">*</span></label>
                             <input type="text" name="class" id="class"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                                placeholder="Your class..." />
+                                placeholder="Your class..." required />
                             <li id="error-class" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                         </div>
                     @endif
@@ -127,7 +127,7 @@
                                 <span class="text-red-500">*</span></label>
                             <input type="number" min="1945" max="3000" name="year" id="year"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                                placeholder="Your graduation year..." />
+                                placeholder="Your graduation year..." required />
                             <li id="error-year" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
                         </div>
                     @endif
@@ -138,7 +138,7 @@
                                 <span class="text-red-500">*</span></label>
                             <input type="text" name="place_of_working" id="place_of_working"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                                placeholder="Your place of working..." />
+                                placeholder="Your place of working..." required />
                             <li id="error-place-of-working" class="hidden text-red-500 text-xs ml-2 list-disc mt-2">
                             </li>
                         </div>
@@ -240,7 +240,7 @@
                             <input type="text" id="achievement" name="achievement"
                                 value="{{ old('achievement') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
-                                placeholder="Contoh: Ranking 1" />
+                                placeholder="Contoh: Ranking 1" required />
                         </div>
                     </div>
                 </div>
