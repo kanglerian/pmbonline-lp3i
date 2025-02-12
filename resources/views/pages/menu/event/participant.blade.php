@@ -393,6 +393,10 @@
         phoneInput.addEventListener('input', function() {
             let phone = phoneInput.value;
 
+            if (phone.length > 15) {
+                phone = phone.substring(0, 15);
+            }
+
             if (phone.startsWith("62")) {
                 if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
                     phoneInput.value = '62';
@@ -480,7 +484,7 @@
                                                     headers: {
                                                         'X-CSRF-TOKEN': $(
                                                             'meta[name="csrf-token"]'
-                                                            ).attr(
+                                                        ).attr(
                                                             'content')
                                                     }
                                                 });
