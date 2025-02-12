@@ -61,8 +61,8 @@
                     </div>
                     <div class="relative z-0 w-full group">
                         <x-label for="mother_phone" :value="__('No. Whatsapp')" />
-                        <x-input id="mother_phone" type="number" name="mother_phone" maxlength="14"  value="{{ $mother->phone }}"
-                            placeholder="Tulis no. Whatsapp disini..." />
+                        <x-input id="mother_phone" type="number" name="mother_phone" maxlength="14"
+                            value="{{ $mother->phone }}" placeholder="Tulis no. Whatsapp disini..." />
                         <p class="mt-2 text-xs text-gray-500">
                             <span class="text-red-500 text-xs">{{ $errors->first('mother_phone') }}</span>
                         </p>
@@ -73,7 +73,8 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                         <div class="relative z-0 w-full group">
                             <x-label for="mother_place" :value="__('Jl/Kp/Perum')" />
-                            <x-input id="mother_place" type="text"  name="mother_place" maxlength="100" placeholder="Jl. / Kp. / Perum" />
+                            <x-input id="mother_place" type="text" name="mother_place" maxlength="100"
+                                placeholder="Jl. / Kp. / Perum" />
                         </div>
                         <div class="relative z-0 w-full group">
                             <x-label for="mother_rt" :value="__('RT')" />
@@ -111,19 +112,21 @@
                         </div>
                         <div class="relative z-0 w-full group">
                             <x-label for="mother_postal_code" :value="__('Kode Pos')" />
-                            <x-input id="mother_postal_code" type="text" name="mother_postal_code" maxlength="7" placeholder="Kode Pos" />
+                            <x-input id="mother_postal_code" type="text" name="mother_postal_code" maxlength="7"
+                                placeholder="Kode Pos" />
                         </div>
                     </div>
                 </div>
                 @if ($mother->address)
-                <div class="space-y-2" id="address-content-mother">
-                    <h3 class="font-bold text-gray-900 text-sm">Alamat:</h3>
-                    <input type="hidden" id="mother_address" name="mother_address" value="{{ $mother->address }}">
-                    <p class="text-sm text-gray-700">{{ $mother->address }}</p>
-                    <span onclick="editAddressMother()"
-                        class="inline-block cursor-pointer text-xs bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1.5 rounded-lg">Ubah
-                        Alamat</span>
-                </div>
+                    <div class="space-y-2" id="address-content-mother">
+                        <h3 class="font-bold text-gray-900 text-sm">Alamat:</h3>
+                        <input type="hidden" id="mother_address" name="mother_address"
+                            value="{{ $mother->address }}">
+                        <p class="text-sm text-gray-700">{{ $mother->address }}</p>
+                        <span onclick="editAddressMother()"
+                            class="inline-block cursor-pointer text-xs bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1.5 rounded-lg">Ubah
+                            Alamat</span>
+                    </div>
                 @endif
             </section>
         </section>
@@ -132,21 +135,26 @@
 
 
 @push('scripts')
-<script>
-    let motherPhoneInput = document.getElementById('mother_phone');
-    motherPhoneInput.addEventListener('input', function() {
-        let phone = motherPhoneInput.value;
-        if (phone.startsWith("62")) {
-            if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
-                motherPhoneInput.value = '62';
-            } else {
-                motherPhoneInput.value = phone;
+    <script>
+        let motherPhoneInput = document.getElementById('mother_phone');
+        motherPhoneInput.addEventListener('input', function() {
+            let phone = motherPhoneInput.value;
+
+            if (phone.length > 14) {
+                phone = phone.substring(0, 14);
             }
-        } else if (phone.startsWith("0")) {
-            motherPhoneInput.value = '62' + phone.substring(1);
-        } else {
-            motherPhoneInput.value = '62';
-        }
-    });
-</script>
+
+            if (phone.startsWith("62")) {
+                if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
+                    motherPhoneInput.value = '62';
+                } else {
+                    motherPhoneInput.value = phone;
+                }
+            } else if (phone.startsWith("0")) {
+                motherPhoneInput.value = '62' + phone.substring(1);
+            } else {
+                motherPhoneInput.value = '62';
+            }
+        });
+    </script>
 @endpush

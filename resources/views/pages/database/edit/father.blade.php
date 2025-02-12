@@ -61,8 +61,8 @@
                     </div>
                     <div class="relative z-0 w-full group">
                         <x-label for="father_phone" :value="__('No. Whatsapp')" />
-                        <x-input id="father_phone" type="number" name="father_phone" maxlength="14"  value="{{ $father->phone }}"
-                            placeholder="Tulis no. Whatsapp disini..." />
+                        <x-input id="father_phone" type="number" name="father_phone" maxlength="14"
+                            value="{{ $father->phone }}" placeholder="Tulis no. Whatsapp disini..." />
                         <p class="mt-2 text-xs text-gray-500">
                             <span class="text-red-500 text-xs">{{ $errors->first('father_phone') }}</span>
                         </p>
@@ -72,15 +72,18 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                         <div class="relative z-0 w-full group">
                             <x-label for="father_place" :value="__('Jl/Kp/Perum')" />
-                            <x-input id="father_place" type="text"  name="father_place" maxlength="100" placeholder="Jl. / Kp. / Perum" />
+                            <x-input id="father_place" type="text" name="father_place" maxlength="100"
+                                placeholder="Jl. / Kp. / Perum" />
                         </div>
                         <div class="relative z-0 w-full group">
                             <x-label for="father_rt" :value="__('RT')" />
-                            <x-input id="father_rt" type="text" maxlength="2" name="father_rt" maxlength="2" placeholder="RT."/>
+                            <x-input id="father_rt" type="text" maxlength="2" name="father_rt" maxlength="2"
+                                placeholder="RT." />
                         </div>
                         <div class="relative z-0 w-full group">
                             <x-label for="father_rw" :value="__('RW')" />
-                            <x-input id="father_rw" type="text" maxlength="2" name="father_rw" maxlength="2" placeholder="RW."/>
+                            <x-input id="father_rw" type="text" maxlength="2" name="father_rw" maxlength="2"
+                                placeholder="RW." />
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
@@ -110,19 +113,21 @@
                         </div>
                         <div class="relative z-0 w-full group">
                             <x-label for="father_postal_code" :value="__('Kode Pos')" />
-                            <x-input id="father_postal_code" type="text" name="father_postal_code" maxlength="7" placeholder="Kode Pos" />
+                            <x-input id="father_postal_code" type="text" name="father_postal_code" maxlength="7"
+                                placeholder="Kode Pos" />
                         </div>
                     </div>
                 </div>
                 @if ($father->address)
-                <div class="space-y-2" id="address-content-father">
-                    <h3 class="font-bold text-gray-900 text-sm">Alamat:</h3>
-                    <input type="hidden" id="father_address" name="father_address" value="{{ $father->address }}">
-                    <p class="text-sm text-gray-700">{{ $father->address }}</p>
-                    <span onclick="editAddressFather()"
-                        class="inline-block cursor-pointer text-xs bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1.5 rounded-lg">Ubah
-                        Alamat</span>
-                </div>
+                    <div class="space-y-2" id="address-content-father">
+                        <h3 class="font-bold text-gray-900 text-sm">Alamat:</h3>
+                        <input type="hidden" id="father_address" name="father_address"
+                            value="{{ $father->address }}">
+                        <p class="text-sm text-gray-700">{{ $father->address }}</p>
+                        <span onclick="editAddressFather()"
+                            class="inline-block cursor-pointer text-xs bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1.5 rounded-lg">Ubah
+                            Alamat</span>
+                    </div>
                 @endif
             </section>
         </section>
@@ -130,21 +135,26 @@
 </div>
 
 @push('scripts')
-<script>
-    let fatherPhoneInput = document.getElementById('father_phone');
-    fatherPhoneInput.addEventListener('input', function() {
-        let phone = fatherPhoneInput.value;
-        if (phone.startsWith("62")) {
-            if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
-                fatherPhoneInput.value = '62';
-            } else {
-                fatherPhoneInput.value = phone;
+    <script>
+        let fatherPhoneInput = document.getElementById('father_phone');
+        fatherPhoneInput.addEventListener('input', function() {
+            let phone = fatherPhoneInput.value;
+
+            if (phone.length > 14) {
+                phone = phone.substring(0, 14);
             }
-        } else if (phone.startsWith("0")) {
-            fatherPhoneInput.value = '62' + phone.substring(1);
-        } else {
-            fatherPhoneInput.value = '62';
-        }
-    });
-</script>
+
+            if (phone.startsWith("62")) {
+                if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
+                    fatherPhoneInput.value = '62';
+                } else {
+                    fatherPhoneInput.value = phone;
+                }
+            } else if (phone.startsWith("0")) {
+                fatherPhoneInput.value = '62' + phone.substring(1);
+            } else {
+                fatherPhoneInput.value = '62';
+            }
+        });
+    </script>
 @endpush

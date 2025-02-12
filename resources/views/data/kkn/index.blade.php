@@ -186,6 +186,10 @@
         let phoneInput = document.getElementById('phone');
         let parentPhoneInput = document.getElementById('parent_phone');
 
+        if (phone.length > 14) {
+            phone = phone.substring(0, 14);
+        }
+        
         phoneInput.addEventListener('input', function() {
             let phone = phoneInput.value;
             if (phone.startsWith("62")) {
@@ -203,6 +207,11 @@
 
         parentPhoneInput.addEventListener('input', function() {
             let phone = parentPhoneInput.value;
+
+            if (phone.length > 14) {
+                phone = phone.substring(0, 14);
+            }
+        
             if (phone.startsWith("62")) {
                 if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
                     parentPhoneInput.value = '62';

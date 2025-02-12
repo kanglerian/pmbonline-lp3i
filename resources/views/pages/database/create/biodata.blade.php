@@ -78,7 +78,7 @@
                 <div class="grid md:grid-cols-2 gap-3">
                     <div class="relative z-0 w-full group">
                         <x-label for="email" :value="__('Email')" />
-                        <x-input id="email" type="email" name="email" maxlength="50"  :value="old('email')"
+                        <x-input id="email" type="email" name="email" maxlength="50" :value="old('email')"
                             placeholder="Tulis tempat lahir disini..." />
                         <p class="mt-2 text-xs text-gray-500">
                             <span class="text-red-500 text-xs">{{ $errors->first('email') }}</span>
@@ -117,6 +117,11 @@
         let phoneInput = document.getElementById('phone');
         phoneInput.addEventListener('input', function() {
             let phone = phoneInput.value;
+
+            if (phone.length > 14) {
+                phone = phone.substring(0, 14);
+            }
+
             if (phone.startsWith("62")) {
                 if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
                     phoneInput.value = '62';
