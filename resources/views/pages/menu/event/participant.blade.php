@@ -278,7 +278,7 @@
             @if ($event->is_program)
                 <div id="prodi" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
                     <div class="grid grid-cols-1">
-                        <input type="hidden" name="code" id="code" value="{{ $event->program }}">
+                        <input type="hidden" name="code" id="code" value="{{ $event->program }}" required>
                         <div class="space-y-4">
                             <label for="program" class="block mb-2 text-sm font-medium text-gray-900">Program Studi &
                                 Peminatan <span class="text-red-500">*</span></label>
