@@ -393,8 +393,8 @@
         phoneInput.addEventListener('input', function() {
             let phone = phoneInput.value;
 
-            if (phone.length > 15) {
-                phone = phone.substring(0, 15);
+            if (phone.length > 14) {
+                phone = phone.substring(0, 14);
             }
 
             if (phone.startsWith("62")) {
