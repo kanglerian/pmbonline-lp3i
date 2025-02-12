@@ -520,6 +520,7 @@
                         alert(
                             'Tidak bisa mengikuti, anda sudah terdaftar di LP3I. Hubungi administrator untuk mengubah aturan.'
                         );
+                        location.reload();
                     }
                     if (error.response.status === 422) {
                         let errors = error.response.data;

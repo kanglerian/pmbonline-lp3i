@@ -354,6 +354,8 @@ class EventController extends Controller
             if ($event->is_scholarship) {
                 $status_applicant = StatusApplicantsApplicant::where('identity_user', $data_status_applicant['identity_user'])->first();
                 if ($status_applicant) {
+                    $data_status_applicant['date'] = $status_applicant->date;
+                    $data_status_applicant['session'] = $status_applicant->session;
                     $status_applicant->update($data_status_applicant);
                 } else {
                     StatusApplicantsApplicant::create($data_status_applicant);
