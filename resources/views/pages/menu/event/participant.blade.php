@@ -327,7 +327,6 @@
                     <select name="information" id="information"
                         class="bg-gray-50 border-2 border-lp3i-100 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                         required>
-                        <option value="6281313608558">Pilih Sumber Informasi</option>
                         @foreach ($informations as $information)
                             <option value="{{ $information->identity }}">{{ $information->name }}</option>
                         @endforeach
