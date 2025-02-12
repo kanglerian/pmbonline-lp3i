@@ -61,8 +61,8 @@
         <div id="banner"
             class="w-full bg-white border-b-8 border-lp3i-200 py-8 px-5 rounded-3xl shadow-lg space-y-4">
             <div class="flex justify-center gap-2">
-                <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="w-48">
-                <img src="{{ asset('logo/logo-kampusglobalmandiri.png') }}" alt="" class="w-36">
+                <img src="{{ asset('img/lp3i-logo.svg') }}" alt="" class="w-36 md:w-48">
+                <img src="{{ asset('logo/logo-kampusglobalmandiri.png') }}" alt="" class="w-28 md:w-36">
             </div>
             <div class="space-y-2">
                 <h2 class="text-2xl font-bold text-center text-gray-900">{{ $event->title }}</h2>
@@ -115,7 +115,7 @@
                         <div class="col-span-2 md:col-span-1">
                             <label for="class" class="block mb-2 text-sm font-medium text-gray-900">Kelas <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="class" id="class" value="TKR2"
+                            <input type="text" name="class" id="class"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="Your class..." />
                             <li id="error-class" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
@@ -126,7 +126,6 @@
                             <label for="year" class="block mb-2 text-sm font-medium text-gray-900">Tahun Lulus
                                 <span class="text-red-500">*</span></label>
                             <input type="number" min="1945" max="3000" name="year" id="year"
-                                value="2016"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="Your graduation year..." />
                             <li id="error-year" class="hidden text-red-500 text-xs ml-2 list-disc mt-2"></li>
@@ -138,7 +137,6 @@
                                 Bekerja
                                 <span class="text-red-500">*</span></label>
                             <input type="text" name="place_of_working" id="place_of_working"
-                                value="PT Aisin Indonesia"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                                 placeholder="Your place of working..." />
                             <li id="error-place-of-working" class="hidden text-red-500 text-xs ml-2 list-disc mt-2">

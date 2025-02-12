@@ -266,7 +266,7 @@
                     <h2>SEKILAS TENTANG ANDA</h2>
                     <p>Mahasiswa Politeknik LP3I Kampus Tasikmalaya</p>
                     <p>Program Studi {{ $applicant->program == null ? '_______________' : $applicant->program }}
-                        ({{ $applicant->programtype->name }})</p>
+                        ({{ $applicant->programtype ? $applicant->programtype->name : 'Tidak diketahui' }})</p>
                     <p>
                         <span>Relasi:
                             {{ $applicant->relation == null ? '_______________' : $applicant->relation }}</span> |
@@ -417,7 +417,7 @@
                     <td style="width: 200px;">Program Studi</td>
                     <td>:</td>
                     <td>{{ $applicant->program == null ? '_______________' : $applicant->program }}
-                        ({{ $applicant->programtype->name }})</td>
+                        ({{ $applicant->programtype ? $applicant->programtype->name : 'Tidak diketahui' }})</td>
                 </tr>
             </table>
             <hr style="margin-top: 10px;">
