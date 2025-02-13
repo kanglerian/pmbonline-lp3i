@@ -19,6 +19,7 @@ class CreateEventsTable extends Migration
             $table->string('code', 10)->unique();
             $table->string('title');
             $table->text('description');
+            $table->integer('view')->default(0);
             $table->boolean('is_scholarship')->default(false);
             $table->boolean('is_files')->default(false);
             $table->boolean('is_employee')->default(false);

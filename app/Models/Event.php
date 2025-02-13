@@ -19,6 +19,7 @@ class Event extends Model
         'code',
         'title',
         'description',
+        'view',
         'is_scholarship',
         'is_files',
         'is_employee',

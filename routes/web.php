@@ -57,6 +57,7 @@ Route::get('/link', function () {
 })->name('link');
 
 Route::get('/events/{code}', [EventController::class, 'participant'])->name('events.index');
+Route::get('/events/{id}/view', [EventController::class, 'view'])->name('events.view');
 Route::post('/eventstore', [EventController::class, 'store_event'])->name('events.store_event');
 Route::patch('/eventrating/{id}', [EventController::class, 'update_event'])->name('events.rating');
 

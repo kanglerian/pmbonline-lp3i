@@ -657,4 +657,16 @@ class EventController extends Controller
         );
         return redirect()->route('event.index')->with('message', 'Event status updated successfully');
     }
+
+    public function view($id): \Illuminate\Http\JsonResponse {
+        $event = Event::findOrFail($id);
+        $event->update(
+            [
+                'view' => $event->view + 1
+            ]
+        );
+        return response()->json([
+            'message' => 'View updated successfully'
+        ], 200);
+    }
 }

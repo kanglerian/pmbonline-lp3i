@@ -73,7 +73,7 @@
         <form id="event-form" method="POST" class="w-full space-y-5" enctype="multipart/form-data">
             @csrf
             <div id="profile" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
-                <input type="hidden" name="event_id" value="{{ $event->id }}" required>
+                <input type="hidden" name="event_id" id="event_id" value="{{ $event->id }}" required>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2 md:col-span-1">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nama lengkap <span
@@ -706,6 +706,20 @@
             y: 100,
             ease: "elastic.out(1,0.2)"
         });
+    </script>
+    <script>
+        const setView = async () => {
+            const eventId = document.getElementById('event_id').value;
+            await axios.get(`/events/${eventId}/view`)
+            .then((response) => {
+                console.log(response.data.message);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+
+        setView();
     </script>
 </body>
 

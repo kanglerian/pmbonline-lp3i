@@ -82,7 +82,10 @@
                             <th scope="col" class="px-6 py-4 bg-gray-100">
                                 Pengaturan
                             </th>
-                            <th scope="col" class="px-6 py-4 bg-gray-50 text-center">
+                            <th scope="col" class="px-6 py-4 bg-gray-50">
+                                Dilihat
+                            </th>
+                            <th scope="col" class="px-6 py-4 bg-gray-100 text-center">
                                 Aksi
                             </th>
                         </tr>
@@ -157,6 +160,9 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
+                                    {{ $event->view }}
+                                </td>
+                                <td class="px-6 py-4 bg-gray-50">
                                     <form action="{{ route('event.status', $event->id) }}" method="GET"
                                         class="inline-block">
                                         @csrf
