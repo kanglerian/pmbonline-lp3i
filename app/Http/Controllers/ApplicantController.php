@@ -115,7 +115,7 @@ class ApplicantController extends Controller
                     $applicantsQuery->where('schoolarship', 1);
                     break;
             }
-            $appends['statusApplicant'] = $statusApplicant;
+            $appends['applicantstatus'] = $statusApplicant;
         }
 
         if ($dateStart !== 'all' && $dateEnd !== 'all') {
@@ -126,7 +126,7 @@ class ApplicantController extends Controller
 
         if ($yearGrad !== 'all') {
             $applicantsQuery->where('year', $yearGrad);
-            $appends['yearrad'] = $yearGrad;
+            $appends['year'] = $yearGrad;
         }
 
         if ($presenterVal !== 'all') {
