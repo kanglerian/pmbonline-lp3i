@@ -273,7 +273,8 @@ class EventController extends Controller
 
                         $parent->update([
                             'name' => $request->input('parent_name'),
-                            'phone' => $request->input('parent_phone')
+                            'phone' => $request->input('parent_phone'),
+                            'job' => $request->input('parent_job')
                         ]);
                     }
 
@@ -326,9 +327,11 @@ class EventController extends Controller
                     if ($request->input('parent_gender') == 1) {
                         $create_father['name'] = $request->input('parent_name');
                         $create_father['phone'] = $request->input('parent_phone');
+                        $create_father['job'] = $request->input('parent_job');
                     } else {
                         $create_mother['name'] = $request->input('parent_name');
                         $create_mother['phone'] = $request->input('parent_phone');
+                        $create_mother['job'] = $request->input('parent_job');
                     }
                 }
 
