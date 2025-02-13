@@ -711,12 +711,12 @@
         const setView = async () => {
             const eventId = document.getElementById('event_id').value;
             await axios.get(`/events/${eventId}/view`)
-            .then((response) => {
-                console.log(response.data.message);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                .then((response) => {
+                    console.log(response.data.message);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
 
         setView();

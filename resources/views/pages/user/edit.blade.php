@@ -342,13 +342,19 @@
     phoneInput.addEventListener('input', function() {
         let phone = phoneInput.value;
 
-        if (phone.startsWith('62')) {
-            // Biarkan jika sudah dimulai dengan '62'
-        } else if (phone.startsWith('0')) {
-            // Ubah '0' menjadi '62' jika dimulai dengan '0'
+        if (phone.length > 14) {
+            phone = phone.substring(0, 14);
+        }
+
+        if (phone.startsWith("62")) {
+            if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
+                phoneInput.value = '62';
+            } else {
+                phoneInput.value = phone;
+            }
+        } else if (phone.startsWith("0")) {
             phoneInput.value = '62' + phone.substring(1);
         } else {
-            // Ubah angka selain '0' dan '62' menjadi '62'
             phoneInput.value = '62';
         }
     });
