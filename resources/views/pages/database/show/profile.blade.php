@@ -682,6 +682,13 @@
                                         <ul class="max-w-md space-y-1 text-sm text-gray-500 list-inside">
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-regular fa-calendar text-gray-400"></i>
+                                                <span class="inline-block mr-2">PMB:
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $status_applicant->pmb }}</span>
+                                                </span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                 <span class="inline-block mr-2">Tanggal:
                                                     <span
                                                         class="underline underline-offset-2 font-medium">{{ $status_applicant->date }}</span>
@@ -708,6 +715,13 @@
                                     <div class="space-y-2">
                                         <h2 class="text-sm font-semibold text-gray-900">Daftar:</h2>
                                         <ul class="max-w-md space-y-1 text-sm text-gray-500 list-inside">
+                                            <li class="flex items-center space-x-2">
+                                                <i class="block fa-regular fa-calendar text-gray-400"></i>
+                                                <span class="inline-block mr-2">PMB:
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $enrollment->pmb }}</span>
+                                                </span>
+                                            </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-solid fa-receipt text-gray-400"></i>
                                                 <span class="inline-block mr-2">No. Kwitansi:
@@ -787,6 +801,13 @@
                                     <div class="space-y-2">
                                         <h2 class="text-sm font-semibold text-gray-900">Registrasi:</h2>
                                         <ul class="max-w-md space-y-1 text-sm text-gray-500 list-inside">
+                                            <li class="flex items-center space-x-2">
+                                                <i class="block fa-regular fa-calendar text-gray-400"></i>
+                                                <span class="inline-block mr-2">PMB:
+                                                    <span
+                                                        class="underline underline-offset-2 font-medium">{{ $registration->pmb }}</span>
+                                                </span>
+                                            </li>
                                             <li class="flex items-center space-x-2">
                                                 <i class="block fa-regular fa-calendar text-gray-400"></i>
                                                 <span class="inline-block mr-2">Tanggal:
