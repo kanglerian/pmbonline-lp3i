@@ -152,6 +152,7 @@ class EventController extends Controller
                 'school' => $school,
                 'phone' => $phone,
                 'major' => $request->input('major'),
+                'year' => $request->input('year'),
                 'identity_user' => $request->input('information'),
                 'source_id' => 1,
                 'source_daftar_id' => 1,
@@ -222,7 +223,6 @@ class EventController extends Controller
                 } else {
                     $data_applicant['identity'] = $check_applicant->identity;
                     $data_applicant['identity_user'] = $check_applicant->identity_user;
-                    $data_applicant['year'] = $check_applicant->year;
 
                     $data_status_applicant['pmb'] = $check_applicant->pmb;
                     $data_status_applicant['identity_user'] = $check_applicant->identity;
@@ -291,8 +291,6 @@ class EventController extends Controller
                     $check_applicant->update($data_applicant);
                 }
             } else {
-                $data_applicant['year'] = $request->input('year');
-
                 if ($event->is_program) {
                     $programtype = ProgramType::where('code', $request->input('code'))->first();
 
