@@ -24,6 +24,8 @@ class Event extends Model
         'is_files',
         'is_employee',
         'is_program',
+        'is_address',
+        'is_parent',
         'program',
         'is_status'
     ];

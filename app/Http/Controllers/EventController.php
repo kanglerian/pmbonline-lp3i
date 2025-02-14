@@ -222,6 +222,7 @@ class EventController extends Controller
                 } else {
                     $data_applicant['identity'] = $check_applicant->identity;
                     $data_applicant['identity_user'] = $check_applicant->identity_user;
+                    $data_applicant['year'] = $check_applicant->year;
 
                     $data_status_applicant['pmb'] = $check_applicant->pmb;
                     $data_status_applicant['identity_user'] = $check_applicant->identity;
@@ -236,7 +237,7 @@ class EventController extends Controller
                         $data_applicant['program_second'] = $programtype ? $request->input('program') : null;
                     }
 
-                    if ($event->is_scholarship) {
+                    if ($event->is_address) {
                         $rt_digit = strlen($request->input('rt')) < 2 ? '0' . $request->input('rt') : $request->input('rt');
                         $rw_digit = strlen($request->input('rw')) < 2 ? '0' . $request->input('rw') : $request->input('rw');
 
@@ -251,7 +252,9 @@ class EventController extends Controller
 
                         $address_applicant = $place . $rt . $rw . $kel . $kec . $reg . $prov . $postal;
                         $data_applicant['address'] = $address_applicant;
+                    }
 
+                    if ($event->is_scholarship) {
                         $data_applicant['email'] = $check_applicant->email ?? $phone . '@lp3i.ac.id';
                         $data_applicant['schoolarship'] = 1;
                         $data_applicant['scholarship_date'] = $check_applicant->scholarship_date ?? Carbon::now()->setTimezone('Asia/Jakarta');
@@ -265,7 +268,9 @@ class EventController extends Controller
 
                         $data_account['identity'] = $check_applicant->identity;
                         $data_account['email'] = $check_applicant->email ?? $check_applicant->phone . '@lp3i.ac.id';
+                    }
 
+                    if ($event->is_parent) {
                         $parent = ApplicantFamily::where([
                             'identity_user' => $check_applicant->identity,
                             'gender' => $request->input('parent_gender')
@@ -279,7 +284,6 @@ class EventController extends Controller
                     }
 
                     if ($event->is_employee) {
-                        $data_applicant['year'] = $request->input('year');
                         $data_applicant['class'] = $request->input('class');
                         $data_applicant['place_of_working'] = $request->input('place_of_working');
                     }
@@ -287,6 +291,8 @@ class EventController extends Controller
                     $check_applicant->update($data_applicant);
                 }
             } else {
+                $data_applicant['year'] = $request->input('year');
+
                 if ($event->is_program) {
                     $programtype = ProgramType::where('code', $request->input('code'))->first();
 
@@ -295,7 +301,7 @@ class EventController extends Controller
                     $data_applicant['program_second'] = $programtype ? $request->input('program') : null;
                 }
 
-                if ($event->is_scholarship) {
+                if ($event->is_address) {
                     $rt_digit = strlen($request->input('rt')) < 2 ? '0' . $request->input('rt') : $request->input('rt');
                     $rw_digit = strlen($request->input('rw')) < 2 ? '0' . $request->input('rw') : $request->input('rw');
 
@@ -310,7 +316,9 @@ class EventController extends Controller
 
                     $address_applicant = $place . $rt . $rw . $kel . $kec . $reg . $prov . $postal;
                     $data_applicant['address'] = $address_applicant;
+                }
 
+                if ($event->is_scholarship) {
                     $data_applicant['email'] = $phone . '@lp3i.ac.id';
                     $data_applicant['schoolarship'] = 1;
                     $data_applicant['scholarship_date'] = Carbon::now()->setTimezone('Asia/Jakarta');
@@ -323,7 +331,9 @@ class EventController extends Controller
                     $data_applicant['status_id'] = 4;
                     $data_applicant['come'] = 0;
                     $data_applicant['isread'] = '0';
+                }
 
+                if ($event->is_parent) {
                     if ($request->input('parent_gender') == 1) {
                         $create_father['name'] = $request->input('parent_name');
                         $create_father['phone'] = $request->input('parent_phone');
@@ -336,7 +346,6 @@ class EventController extends Controller
                 }
 
                 if ($event->is_employee) {
-                    $data_applicant['year'] = $request->input('year');
                     $data_applicant['class'] = $request->input('class');
                     $data_applicant['place_of_working'] = $request->input('place_of_working');
                 }
@@ -365,7 +374,7 @@ class EventController extends Controller
                 }
             }
 
-            if($event->is_scholarship) {
+            if ($event->is_scholarship) {
                 $account = User::where('phone', $phone)->first();
                 if ($account) {
                     $account->update($data_account);
@@ -628,6 +637,28 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event employee updated successfully');
     }
 
+    public function address($id): \Illuminate\Http\RedirectResponse
+    {
+        $event = Event::findOrFail($id);
+        $event->update(
+            [
+                'is_address' => !$event->is_address
+            ]
+        );
+        return redirect()->route('event.index')->with('message', 'Event address updated successfully');
+    }
+
+    public function parent($id): \Illuminate\Http\RedirectResponse
+    {
+        $event = Event::findOrFail($id);
+        $event->update(
+            [
+                'is_parent' => !$event->is_parent
+            ]
+        );
+        return redirect()->route('event.index')->with('message', 'Event parent updated successfully');
+    }
+
     public function program($id): \Illuminate\Http\RedirectResponse
     {
         $event = Event::findOrFail($id);
@@ -661,7 +692,8 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event status updated successfully');
     }
 
-    public function view($id): \Illuminate\Http\JsonResponse {
+    public function view($id): \Illuminate\Http\JsonResponse
+    {
         $event = Event::findOrFail($id);
         $event->update(
             [

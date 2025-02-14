@@ -221,7 +221,9 @@ Route::middleware(['auth', 'status:1', 'role:A'])
         Route::get('event/{id}/status', [EventController::class, 'status'])->name('event.status');
         Route::get('event/{id}/scholarship', [EventController::class, 'scholarship'])->name('event.scholarship');
         Route::get('event/{id}/files', [EventController::class, 'files'])->name('event.files');  
-        Route::get('event/{id}/employee', [EventController::class, 'employee'])->name('event.employee');  
+        Route::get('event/{id}/employee', [EventController::class, 'employee'])->name('event.employee'); 
+        Route::get('event/{id}/address', [EventController::class, 'address'])->name('event.address');
+        Route::get('event/{id}/parent', [EventController::class, 'parent'])->name('event.parent'); 
         Route::get('event/{id}/program', [EventController::class, 'program'])->name('event.program');    
         Route::post('event/{id}/programstatus', [EventController::class, 'programstatus'])->name('event.programstatus');  
     });

@@ -106,44 +106,63 @@
                                 <td class="px-6 py-4">
                                     {{ $event->title }}
                                 </td>
-                                <td class="px-6 py-4 bg-gray-50">
-                                    <form action="{{ route('event.scholarship', $event->id) }}" method="GET"
-                                        class="inline-block">
-                                        @csrf
-                                        <button type="submit"
-                                            class="{{ $event->is_scholarship ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
-                                            {!! $event->is_scholarship
-                                                ? '<i class="fa-solid fa-graduation-cap"></i>'
-                                                : '<i class="fa-solid fa-graduation-cap"></i>' !!}
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('event.files', $event->id) }}" method="GET"
-                                        class="inline-block">
-                                        @csrf
-                                        <button type="submit"
-                                            class="{{ $event->is_files ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
-                                            {!! $event->is_files ? '<i class="fa-solid fa-upload"></i>' : '<i class="fa-solid fa-upload"></i>' !!}
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('event.employee', $event->id) }}" method="GET"
-                                        class="inline-block">
-                                        @csrf
-                                        <button type="submit"
-                                            class="{{ $event->is_employee ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
-                                            {!! $event->is_employee ? '<i class="fa-solid fa-briefcase"></i>' : '<i class="fa-solid fa-briefcase"></i>' !!}
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('event.program', $event->id) }}" method="GET"
-                                        class="inline-block">
-                                        @csrf
-                                        <button type="submit"
-                                            class="{{ $event->is_program ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
-                                            {!! $event->is_program ? '<i class="fa-solid fa-book"></i>' : '<i class="fa-solid fa-book"></i>' !!}
-                                        </button>
-                                    </form>
+                                <td class="px-6 py-4 bg-gray-50 flex flex-col gap-5 items-start">
+                                    <div>
+                                        <form action="{{ route('event.scholarship', $event->id) }}" method="GET"
+                                            class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="{{ $event->is_scholarship ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                                {!! $event->is_scholarship
+                                                    ? '<i class="fa-solid fa-graduation-cap"></i>'
+                                                    : '<i class="fa-solid fa-graduation-cap"></i>' !!}
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('event.files', $event->id) }}" method="GET"
+                                            class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="{{ $event->is_files ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                                {!! $event->is_files ? '<i class="fa-solid fa-upload"></i>' : '<i class="fa-solid fa-upload"></i>' !!}
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('event.employee', $event->id) }}" method="GET"
+                                            class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="{{ $event->is_employee ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                                {!! $event->is_employee ? '<i class="fa-solid fa-briefcase"></i>' : '<i class="fa-solid fa-briefcase"></i>' !!}
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('event.address', $event->id) }}" method="GET"
+                                            class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="{{ $event->is_address ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                                {!! $event->is_address ? '<i class="fa-solid fa-signs-post"></i>' : '<i class="fa-solid fa-signs-post"></i>' !!}
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('event.parent', $event->id) }}" method="GET"
+                                            class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="{{ $event->is_parent ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                                {!! $event->is_parent ? '<i class="fa-solid fa-person-cane"></i>' : '<i class="fa-solid fa-person-cane"></i>' !!}
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('event.program', $event->id) }}" method="GET"
+                                            class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="{{ $event->is_program ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                                {!! $event->is_program ? '<i class="fa-solid fa-book"></i>' : '<i class="fa-solid fa-book"></i>' !!}
+                                            </button>
+                                        </form>
+                                    </div>
                                     @if (count($program_types) > 0 && $event->is_program)
                                         <div
-                                            class="inline-block bg-gray-200 border border-gray-300 rounded-xl px-3 py-2 ml-3">
+                                            class="block bg-gray-200 border border-gray-300 rounded-xl px-3 py-2">
+                                            <h4 class="text-xs font-medium text-gray-800 mb-2">Program Studi:</h4>
                                             @foreach ($program_types as $type)
                                                 <form action="{{ route('event.programstatus', $event->id) }}"
                                                     method="POST" class="inline-block">

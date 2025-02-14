@@ -24,6 +24,8 @@ class CreateEventsTable extends Migration
             $table->boolean('is_files')->default(false);
             $table->boolean('is_employee')->default(false);
             $table->boolean('is_program')->default(false);
+            $table->boolean('is_address')->default(false);
+            $table->boolean('is_parent')->default(false);
             $table->char('program', 3)->default('R');
             $table->boolean('is_status')->default(true);
             $table->timestamps();
