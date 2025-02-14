@@ -362,8 +362,10 @@
     <script src="{{ asset('js/axios.min.js') }}"></script>
     <script src="{{ asset('js/lottie.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
-    @if ($event->is_scholarship)
-        <script src="{{ asset('js/indonesia.js') }}"></script>
+    @if ($event->is_address)
+    <script src="{{ asset('js/indonesia.js') }}"></script>
+    @endif
+    @if ($event->is_parent)
         <script>
             let parentPhoneInput = document.getElementById('parent_phone');
             parentPhoneInput.addEventListener('input', function() {
