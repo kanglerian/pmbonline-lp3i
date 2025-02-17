@@ -66,7 +66,7 @@
         const macro = 'AKfycbx0TyUKAqB7ckgyLX_l-cfXQJD8JhxnopnD3GUjFc8Rp_5SN7N_FRXnyzBTU7uP8mE5';
         await axios.get(`/import/check-spreadsheet/${sheet}/${macro}`)
             .then((response) => {
-                const maxCount = 1000;
+                const maxCount = 300;
                 total = response.data.applicants;
                 standart = total > maxCount ? maxCount : 1;
                 document.getElementById('start').value = total - standart;

@@ -13,7 +13,8 @@
             </div>
             <header class="text-center space-y-1 mb-5">
                 <h2 class="font-bold text-2xl">Form Kuesioner Pengisian Data</h2>
-                <p class="text-gray-700">Silahkan mengisi formulir ini untuk mengetahui persentase tingkat melanjutkan pendidikan tinggi</p>
+                <p class="text-gray-700">Silahkan mengisi formulir ini untuk mengetahui persentase tingkat melanjutkan
+                    pendidikan tinggi</p>
             </header>
             <form method="POST" action="{{ route('recommendation-data.store-kkn') }}"
                 class="w-full mx-auto space-y-5 px-10 md:px-0">
@@ -85,7 +86,8 @@
                         @endif
                     </div>
                     <div>
-                        <label for="plan" class="block mb-2 text-sm font-medium text-gray-900">Rencana Setelah Lulus</label>
+                        <label for="plan" class="block mb-2 text-sm font-medium text-gray-900">Rencana Setelah
+                            Lulus</label>
                         <select id="plan" name="plan"
                             class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-4 py-3"
                             required>
@@ -99,7 +101,8 @@
                         @endif
                     </div>
                     <div>
-                        <label for="parent_phone" class="block mb-2 text-sm font-medium text-gray-900">No. HP Orang Tua</label>
+                        <label for="parent_phone" class="block mb-2 text-sm font-medium text-gray-900">No. HP Orang
+                            Tua</label>
                         <input type="number" id="parent_phone" name="parent_phone"
                             class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-4 py-3"
                             placeholder="No. HP" required />
@@ -108,7 +111,8 @@
                         @endif
                     </div>
                     <div>
-                        <label for="parent_job" class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan Orang Tua</label>
+                        <label for="parent_job" class="block mb-2 text-sm font-medium text-gray-900">Pekerjaan Orang
+                            Tua</label>
                         <input type="text" id="parent_job" name="parent_job"
                             class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-4 py-3"
                             placeholder="Pekerjaan Orang Tua" required />
@@ -117,7 +121,8 @@
                         @endif
                     </div>
                     <div>
-                        <label for="income_parent" class="block mb-2 text-sm font-medium text-gray-900">Pendapatan Orang Tua</label>
+                        <label for="income_parent" class="block mb-2 text-sm font-medium text-gray-900">Pendapatan Orang
+                            Tua</label>
                         <select id="income_parent" name="income_parent"
                             class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-4 py-3"
                             required>
@@ -188,6 +193,11 @@
 
         phoneInput.addEventListener('input', function() {
             let phone = phoneInput.value;
+
+            if (phone.length > 14) {
+                phone = phone.substring(0, 14);
+            }
+
             if (phone.startsWith("62")) {
                 if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
                     phoneInput.value = '62';
@@ -203,6 +213,11 @@
 
         parentPhoneInput.addEventListener('input', function() {
             let phone = parentPhoneInput.value;
+
+            if (phone.length > 14) {
+                phone = phone.substring(0, 14);
+            }
+
             if (phone.startsWith("62")) {
                 if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
                     parentPhoneInput.value = '62';

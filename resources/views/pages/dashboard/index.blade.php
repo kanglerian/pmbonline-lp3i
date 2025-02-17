@@ -1,16 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <div
-            class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-5">
-            @if (!$account)
-                @if (Auth::user()->role == 'S')
-                    <h2 class="font-bold text-xl text-gray-800 leading-tight">Registrasi Pembayaran</h2>
-                @else
-                    <h2 class="font-bold text-xl text-gray-800 leading-tight">Dashboard</h2>
-                @endif
-            @else
-                <h2 class="text-sm">Halo, <span class="font-medium">{{ Auth::user()->name }}</span> 👋</h2>
-            @endif
+        <div class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-5">
+            <h2 class="text-base">Halo, <span class="font-medium">{{ Auth::user()->name }}</span> 👋</h2>
             <div class="flex flex-wrap justify-center items-center gap-3 px-2 text-gray-600">
                 @if (Auth::user()->status != 1)
                     <div class="px-6 py-2 rounded-lg bg-red-500 text-white text-sm">
@@ -23,106 +14,169 @@
 
     <section class="space-y-5">
         @if (Auth::user()->role == 'S')
-            <div class="py-10">
-                <div>
-                    @if (session('error'))
-                        <div id="alert"
-                            class="mb-3 flex items-center px-5 py-4 bg-red-500 text-white rounded-2xl"
+
+            @if ($event)
+                <div class="max-w-lg">
+                    @if (session('message'))
+                        <div id="alert" class="flex items-center p-4 mb-4 bg-emerald-500 text-emerald-50 rounded-2xl"
                             role="alert">
-                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <i class="fa-solid fa-circle-check"></i>
                             <div class="ml-3 text-sm font-reguler">
-                                {{ session('error') }}
+                                {{ session('message') }}
                             </div>
                         </div>
                     @endif
-
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-5 px-5 md:px-0">
-                        <div class="w-full md:w-6/12 space-y-5 order-2 md:order-none">
-                            @if ($account)
-                                <div class="space-y-3">
-                                    <h3 class="text-3xl font-bold text-gray-800">Selamat Datang di LP3I</h3>
-                                    <p class="text-gray-700">Selamat datang di LP3I! Mulai hari ini, perjalanan
-                                        pendidikan Anda telah dimulai. Ini adalah awal dari perjalanan yang menarik dan
-                                        penuh tantangan. Tetaplah semangat dan berikan yang terbaik dalam setiap langkah
-                                        Anda. Setiap harinya adalah kesempatan baru untuk belajar, tumbuh, dan
-                                        berkembang. Bersama-sama, kita akan menjelajahi dunia pengetahuan, memperluas
-                                        wawasan, dan mencapai impian kita. Mari kita tunjukkan dedikasi, kerja keras,
-                                        dan ketekunan dalam mengejar tujuan kita. Selamat belajar, selamat berkarya, dan
-                                        jadilah yang terbaik dari yang terbaik!</p>
-                                    <a href="https://wa.me/{{ $applicant->identity_user }}" target="_blank"
-                                        class="inline-block bg-emerald-500 hover:bg-emerald-600 px-5 py-2 rounded-xl text-sm text-white">
-                                        <i class="fa-brands fa-whatsapp"></i>
-                                        <span>Ada pertanyaan?</span>
-                                    </a>
-
-                                </div>
-                            @else
-                                <div class="space-y-3">
-                                    <h3 class="text-2xl font-bold text-gray-800">Silahkan untuk lakukan Transfer!</h3>
-                                    <p class="text-gray-700">Isi formulir pendaftaran dan raih kesempatan yang luar
-                                        biasa di
-                                        depan mata.</p>
-                                </div>
-                            @endif
-                            @if (!$account)
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-end">
-                                    <div class="space-y-3">
-                                        <img src="{{ asset('logo/btn.png') }}" alt="Logo BTN" width="150px">
-                                        <div onclick="copyRecord('0003401300001406')"
-                                            class="bg-gray-50 cursor-pointer flex justify-between items-center border px-5 py-2 rounded-xl">
-                                            <div class="space-y-1">
-                                                <h1 class="font-bold text-sm text-gray-800">BANK BTN LP3I Tasikmalaya
-                                                </h1>
-                                                <p class="text-sm text-gray-700">0003401300001406</p>
-                                            </div>
-                                            <button onclick="copyRecord('0003401300001406')"><i
-                                                    class="fa-solid fa-clipboard text-gray-500 hover:text-blue-500"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-3">
-                                        <img src="{{ asset('logo/bsi.png') }}" alt="Logo BSI" width="150px">
-                                        <div onclick="copyRecord('1025845605')"
-                                            class="bg-gray-50 cursor-pointer flex justify-between items-center border px-5 py-2 rounded-xl">
-                                            <div class="space-y-1">
-                                                <h1 class="font-bold text-sm text-gray-800">BANK BSI (LPPPI TASIKMALAYA)
-                                                </h1>
-                                                <p class="text-sm text-gray-700">1025845605</p>
-                                            </div>
-                                            <button onclick="copyRecord('1025845605')"><i
-                                                    class="fa-solid fa-clipboard text-gray-500 hover:text-blue-500"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-3">
-                                        <img src="{{ asset('logo/bni.png') }}" alt="Logo BNI" width="100px">
-                                        <div onclick="copyRecord('4549998888')"
-                                            class="bg-gray-50 cursor-pointer flex justify-between items-center border px-5 py-2 rounded-xl">
-                                            <div class="space-y-1">
-                                                <h1 class="font-bold text-sm text-gray-800">BANK BNI (LP3I Tasikmalaya)
-                                                </h1>
-                                                <p class="text-sm text-gray-700">4549998888</p>
-                                            </div>
-                                            <button onclick="copyRecord('4549998888')"><i
-                                                    class="fa-solid fa-clipboard text-gray-500 hover:text-blue-500"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="w-full md:w-5/12 order-1 md:order-none">
-                            <div class="flex items-center justify-center">
-                                @if ($account)
-                                    <lottie-player src="{{ asset('animations/laptop.json') }}" background="Transparent"
-                                        speed="1" style="width: 400px; height: 400px" direction="1" mode="normal"
-                                        loop autoplay></lottie-player>
-                                @else
-                                    <lottie-player src="{{ asset('animations/transfer.json') }}"
-                                        background="Transparent" speed="1" style="width: 400px; height: 400px"
-                                        direction="1" mode="normal" loop autoplay></lottie-player>
-                                @endif
+                    @if ($errors->any())
+                        <div id="alert" class="flex items-center p-4 mb-4 bg-red-500 text-red-50 rounded-2xl"
+                            role="alert">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <div class="ml-3 text-sm font-reguler">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
+                <form action="{{ route('events.rating', $event->id) }}" method="POST"
+                    class="relative max-w-lg bg-gray-50 p-5 border-l-8 border-lp3i-100 drop-shadow-lg"
+                    id="rating-container">
+                    @csrf
+                    @method('PATCH')
+                    <button type="button" onclick="hiddenRating()" class="absolute right-[-5px] top-[-10px]">
+                        <i class="fa-solid fa-circle-xmark text-lg text-red-500"></i>
+                    </button>
+                    <div class="space-y-3">
+                        <div class="space-y-1">
+                            <h2 class="font-bold text-gray-800">{{ $event->event->title }} ({{ $event->event->code }})
+                            </h2>
+                            <p class="text-sm text-gray-600">{{ $event->event->description }}</p>
+                        </div>
+                        <input type="hidden" id="rating" value="0" name="rating" required>
+                        <div class="relative z-0 w-full group me-auto">
+                            <ul class="flex items-center gap-1 text-amber-400">
+                                <li onclick="ratingButton(1)" id="rating-1">
+                                    <i class="fa-regular fa-star"></i>
+                                </li>
+                                <li onclick="ratingButton(2)" id="rating-2">
+                                    <i class="fa-regular fa-star"></i>
+                                </li>
+                                <li onclick="ratingButton(3)" id="rating-3">
+                                    <i class="fa-regular fa-star"></i>
+                                </li>
+                                <li onclick="ratingButton(4)" id="rating-4">
+                                    <i class="fa-regular fa-star"></i>
+                                </li>
+                                <li onclick="ratingButton(5)" id="rating-5">
+                                    <i class="fa-regular fa-star"></i>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="relative z-0 w-full group">
+                            <textarea name="comment" id="comment" value="{{ old('comment') }}"
+                                class="block mt-2 px-4 py-3 w-full text-sm rounded-xl border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                placeholder="Berikan rating dan ulasan Anda..." required>{{ old('comment') }}</textarea>
+                            <p class="mt-2 text-xs text-gray-500">
+                                <span class="text-red-500 text-xs">{{ $errors->first('comment') }}</span>
+                            </p>
+                            <button type="submit"
+                                class="text-white bg-lp3i-100 hover:bg-lp3i-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-xs w-full sm:w-auto px-5 py-2.5 text-center"><i
+                                    class="fa-regular fa-comments mr-1"></i> Beri rating</button>
+                        </div>
+                    </div>
+                </form>
+                <script>
+                    function hiddenRating() {
+                        document.getElementById('rating-container').hidden = true;
+                    }
+
+                    function ratingButton(rating) {
+                        document.getElementById('rating').value = rating;
+                        switch (rating) {
+                            case 1:
+                                document.getElementById('rating-1').classList.add('text-amber-500');
+                                document.getElementById('rating-2').classList.remove('text-amber-500');
+                                document.getElementById('rating-3').classList.remove('text-amber-500');
+                                document.getElementById('rating-4').classList.remove('text-amber-500');
+                                document.getElementById('rating-5').classList.remove('text-amber-500');
+                                document.getElementById('rating-1').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-2').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                document.getElementById('rating-3').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                document.getElementById('rating-4').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                document.getElementById('rating-5').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                break;
+                            case 2:
+                                document.getElementById('rating-1').classList.add('text-amber-500');
+                                document.getElementById('rating-2').classList.add('text-amber-500');
+                                document.getElementById('rating-3').classList.remove('text-amber-500');
+                                document.getElementById('rating-4').classList.remove('text-amber-500');
+                                document.getElementById('rating-5').classList.remove('text-amber-500');
+                                document.getElementById('rating-1').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-2').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-3').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                document.getElementById('rating-4').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                document.getElementById('rating-5').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                break;
+                            case 3:
+                                document.getElementById('rating-1').classList.add('text-amber-500');
+                                document.getElementById('rating-2').classList.add('text-amber-500');
+                                document.getElementById('rating-3').classList.add('text-amber-500');
+                                document.getElementById('rating-4').classList.remove('text-amber-500');
+                                document.getElementById('rating-5').classList.remove('text-amber-500');
+                                document.getElementById('rating-1').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-2').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-3').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-4').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                document.getElementById('rating-5').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                break;
+                            case 4:
+                                document.getElementById('rating-1').classList.add('text-amber-500');
+                                document.getElementById('rating-2').classList.add('text-amber-500');
+                                document.getElementById('rating-3').classList.add('text-amber-500');
+                                document.getElementById('rating-4').classList.add('text-amber-500');
+                                document.getElementById('rating-5').classList.remove('text-amber-500');
+                                document.getElementById('rating-1').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-2').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-3').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-4').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-5').innerHTML = '<i class="fa-regular fa-star"></i>';
+                                break;
+                            case 5:
+                                document.getElementById('rating-1').classList.add('text-amber-500');
+                                document.getElementById('rating-2').classList.add('text-amber-500');
+                                document.getElementById('rating-3').classList.add('text-amber-500');
+                                document.getElementById('rating-4').classList.add('text-amber-500');
+                                document.getElementById('rating-5').classList.add('text-amber-500');
+                                document.getElementById('rating-1').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-2').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-3').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-4').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                document.getElementById('rating-5').innerHTML = '<i class="fa-solid fa-star"></i>';
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                </script>
+            @endif
+
+            <div class="max-w-5xl mx-auto">
+                <section class=" flex flex-col items-center gap-5">
+                    <div class="w-full flex flex-col items-center justify-center">
+                        <lottie-player src="{{ asset('animations/underconstruct.json') }}" background="Transparent"
+                            speed="1" style="width: 250px; height: 250px" direction="1" mode="normal" loop
+                            autoplay></lottie-player>
+                    </div>
+                    <div class="text-center space-y-1 px-5">
+                        <h2 class="font-bold text-xl">Sedang Melakukan Pengembangan 🚧</h2>
+                        <p class="text-gray-700">Kami sedang melakukan pengembangan pada halaman ini untuk meningkatkan
+                            kualitas dan
+                            menambahkan fitur baru. Silakan kembali lagi di lain waktu untuk melihat pembaruan terbaru.
+                            Terima kasih atas pengertiannya!</p>
+                    </div>
+                </section>
             </div>
         @endif
 
@@ -269,8 +323,8 @@
             @include('pages.dashboard.utilities.pmb')
 
             @if (Auth::user()->role != 'P')
-                    @include('pages.dashboard.dashboard.dashboard-sales')
-                    @include('pages.dashboard.approval-enrollment.enrollment')
+                @include('pages.dashboard.dashboard.dashboard-sales')
+                @include('pages.dashboard.approval-enrollment.enrollment')
             @endif
 
             @include('pages.dashboard.target.target')

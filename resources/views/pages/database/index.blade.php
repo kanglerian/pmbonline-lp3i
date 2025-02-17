@@ -402,7 +402,15 @@
                                         {{ $applicant->phone ?? 'Tidak diketahui' }}
                                     </td>
                                     <td class="px-6 py-4 bg-gray-50 text-center">
-                                        {{ $applicant->identity_user ? $applicant->presenter->name : 'Tidak diketahui' }}
+                                        @if ($applicant->identity_user)
+                                            @if ($applicant->presenter)
+                                                {{ $applicant->presenter->name }}
+                                            @else
+                                                <span class="text-red-500">Presenter tidak ditemukan</span>
+                                            @endif
+                                        @else
+                                            Tidak diketahui
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 bg-white text-center">
                                         {{ $applicant->school ? $applicant->schoolapplicant->name : 'Tidak diketahui' }}
@@ -429,9 +437,9 @@
         </section>
     </main>
 
-    {{-- @if (Auth::user()->role == 'P' && Auth::user()->sheet) --}}
+    @if (Auth::user()->sheet)
         @include('pages.database.modal.sync')
-    {{-- @endif --}}
+    @endif
 
     @push('scripts')
         <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>

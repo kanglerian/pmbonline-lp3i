@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\ApplicantUpdateImport;
+use App\Models\EventDetail;
 use App\Models\StatusApplicantsEnrollment;
 use App\Models\StatusApplicantsRegistration;
 use Illuminate\Validation\Rule;
@@ -114,7 +115,7 @@ class ApplicantController extends Controller
                     $applicantsQuery->where('schoolarship', 1);
                     break;
             }
-            $appends['statusApplicant'] = $statusApplicant;
+            $appends['applicantstatus'] = $statusApplicant;
         }
 
         if ($dateStart !== 'all' && $dateEnd !== 'all') {
@@ -125,7 +126,7 @@ class ApplicantController extends Controller
 
         if ($yearGrad !== 'all') {
             $applicantsQuery->where('year', $yearGrad);
-            $appends['yearrad'] = $yearGrad;
+            $appends['year'] = $yearGrad;
         }
 
         if ($presenterVal !== 'all') {
@@ -665,7 +666,30 @@ class ApplicantController extends Controller
         } else {
             return back()->with('error', 'Tidak diizinkan.');
         }
-        return view('pages.database.show.chat');
+    }
+
+    public function events($identity)
+    {
+        $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
+            ->where('identity', $identity)
+            ->firstOrFail();
+
+        if (Auth::user()->identity == $user->identity_user || Auth::user()->role == 'A') {
+            if (Auth::user()->role == 'P') {
+                $user = Applicant::where(['identity' => $identity, 'identity_user' => Auth::user()->identity])->firstOrFail();
+                $events = EventDetail::with('event')->where('identity_user', $user->identity)->get();
+            } elseif (Auth::user()->role == 'A') {
+                $user = Applicant::where(['identity' => $identity])->firstOrFail();
+                $events = EventDetail::with('event')->where('identity_user', $user->identity)->get();
+            }
+
+            return view('pages.database.show.events')->with([
+                'user' => $user,
+                'events' => $events
+            ]);
+        } else {
+            return back()->with('error', 'Tidak diizinkan.');
+        }
     }
 
     /**
@@ -1063,11 +1087,14 @@ class ApplicantController extends Controller
         if (Auth::user()->identity == $applicant->identity_user || Auth::user()->role == 'A') {
             $family = ApplicantFamily::where('identity_user', $applicant->identity);
             $status_applicant_applicant = StatusApplicantsApplicant::where('identity_user', $applicant->identity);
+            $status_applicant_enrollment = StatusApplicantsEnrollment::where('identity_user', $applicant->identity);
+            $status_applicant_registration = StatusApplicantsRegistration::where('identity_user', $applicant->identity);
             $user_upload = UserUpload::where('identity_user', $applicant->identity);
             $organization = Organization::where('identity_user', $applicant->identity);
             $achievement = Achievement::where('identity_user', $applicant->identity);
             $integration = Integration::where('identity_user', $applicant->identity);
             $recommendation = Recommendation::where('identity_user', $applicant->identity);
+            $event_detail = EventDetail::where('identity_user', $applicant->identity);
             $user = User::where('identity', $applicant->identity);
             $user->delete();
             $family->delete();
@@ -1077,7 +1104,10 @@ class ApplicantController extends Controller
             $achievement->delete();
             $integration->delete();
             $recommendation->delete();
+            $event_detail->delete();
             $status_applicant_applicant->delete();
+            $status_applicant_enrollment->delete();
+            $status_applicant_registration->delete();
             return redirect()->route('database.index')->with('message', 'Data aplikan berhasil dihapus!');
         } else {
             return back()->with('error', 'Tidak diizinkan.');
@@ -1153,12 +1183,11 @@ class ApplicantController extends Controller
             'other_campus' => !empty($applicants[$i][31]) ? $applicants[$i][31] : null,
             'income_parent' => !empty($applicants[$i][26]) ? $applicants[$i][26] : null,
             'social_media' => !empty($applicants[$i][32]) ? $applicants[$i][32] : null,
-            'note' => 'Data berhasil diimport dari file spreadsheet',
 
             /* Scholarship */
             'schoolarship' => $scholarship,
             'is_applicant' => $scholarship,
-            'scholarship_date' => $scholarship ?: Carbon::now()->setTimezone('Asia/Jakarta'),
+            'scholarship_date' => $student->scholarship_date ?? Carbon::now()->setTimezone('Asia/Jakarta'),
         ];
 
         $data_father = [
@@ -1236,10 +1265,10 @@ class ApplicantController extends Controller
         }
     }
 
-    public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother)
+    public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother, $identity_val)
     {
         $data_applicant = [
-            'identity' => $applicants[$i][1],
+            'identity' => $identity_val,
             'pmb' => $applicants[$i][2],
             'name' => !empty($applicants[$i][3]) ? ucwords(strtolower($applicants[$i][3])) : null,
             'phone' => $phone,
@@ -1270,7 +1299,7 @@ class ApplicantController extends Controller
             /* Scholarship */
             'schoolarship' => $scholarship,
             'is_applicant' => $scholarship,
-            'scholarship_date' => $scholarship ?: Carbon::now()->setTimezone('Asia/Jakarta'),
+            'scholarship_date' => $scholarship ? Carbon::now()->setTimezone('Asia/Jakarta') : null,
         ];
 
         $currentDate = Carbon::now()->setTimezone('Asia/Jakarta');
@@ -1436,15 +1465,17 @@ class ApplicantController extends Controller
                 }
             }
 
+            $identity_val = Str::uuid();
+
             $create_father = [
-                'identity_user' => $applicants[$i][1],
+                'identity_user' => $identity_val,
                 'name' => $applicants[$i][21] ?? null,
                 'phone' => strval($applicants[$i][23] ?? ''),
                 'gender' => 1,
                 'job' => $applicants[$i][24] ?? null,
             ];
             $create_mother = [
-                'identity_user' => $applicants[$i][1],
+                'identity_user' => $identity_val,
                 'name' => $applicants[$i][22] ?? null,
                 'gender' => 0,
                 'job' => $applicants[$i][25] ?? null,
@@ -1458,7 +1489,7 @@ class ApplicantController extends Controller
                             $this->update_data($studentDataPhone, $applicants, $i, $phone, $school, $gender, $come, $kip, $scholarship, $known, $followup, $program);
                         }
                     } else {
-                        $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother);
+                        $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother, $identity_val);
                     }
                 }
                 /* data berdasarkan identity kalau tidak ada phone
@@ -1563,6 +1594,8 @@ class ApplicantController extends Controller
         $data = [
             'schoolarship' => $applicant->schoolarship == 1 ? 0 : 1,
             'scholarship_date' => $applicant->schoolarship == 1 ? null : Carbon::now()->setTimezone('Asia/Jakarta'),
+            'scholarship_type' => $applicant->schoolarship == 1 ? null : $request->input('scholarship_type'),
+            'achievement' => $applicant->schoolarship == 1 ? null : $request->input('achievement'),
         ];
         $applicant->update($data);
         return back()->with('message', 'Data aplikan berhasil diupdate');

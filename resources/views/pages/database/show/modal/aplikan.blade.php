@@ -21,7 +21,20 @@
                         method="POST">
                         @csrf
                         @method('PATCH')
-                        <div class="grid grid-cols-1 md:grid-cols-2 md:gap-3">
+                        <div class="grid grid-cols-1 md:grid-cols-3 md:gap-3">
+                            <div>
+                                <label for="is_applicant_pmb"
+                                    class="block mb-2 text-sm font-medium text-gray-900">PMB</label>
+                                <input type="year" name="is_applicant_pmb" id="is_applicant_pmb"
+                                    value="{{ $status_applicant->pmb }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Tanggal Daftar" required>
+                                @if ($errors->has('is_applicant_pmb'))
+                                    <span class="text-red-500 text-xs">{{ $errors->first('is_applicant_pmb') }}</span>
+                                @else
+                                    <span class="text-red-500 text-xs">*Wajib diisi.</span>
+                                @endif
+                            </div>
                             <div>
                                 <label for="is_applicant_date"
                                     class="block mb-2 text-sm font-medium text-gray-900">Tanggal Aplikan</label>

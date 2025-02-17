@@ -38,8 +38,10 @@ class Applicant extends Model
         'achievement',
         'kip',
         'nisn',
+
         'schoolarship',
         'scholarship_date',
+        'scholarship_type',
 
         'note',
         'relation',
@@ -58,6 +60,8 @@ class Applicant extends Model
         'planning',
         'other_campus',
         'income_parent',
+
+        'place_of_working',
 
         'followup_id',
         'programtype_id',
@@ -144,6 +148,11 @@ class Applicant extends Model
     public function integration()
     {
         return $this->hasOne(Integration::class, 'identity_user', 'identity');
+    }
+
+    public function event()
+    {
+        return $this->hasOne(EventDetail::class, 'identity_user', 'identity');
     }
 
 }

@@ -71,7 +71,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'identity' => 6281947776090,
-                'code' => 'PR001',
+                'code' => 'PR010',
                 'name' => 'Sindiana, A.Md.M',
                 'email' => 'sindiana.lp3i@gmail.com',
                 'password' => Hash::make('sindiana123'),

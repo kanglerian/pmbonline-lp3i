@@ -15,7 +15,7 @@ class FollowUpController extends Controller
     public function index()
     {
         $followups = FollowUp::paginate(5);
-        return view('pages.setting.followup.index')->with([
+        return view('pages.menu.followup.index')->with([
             'followups' => $followups
         ]);
     }
@@ -27,7 +27,7 @@ class FollowUpController extends Controller
      */
     public function create()
     {
-        return view('pages.setting.followup.create');
+        return view('pages.menu.followup.create');
     }
 
     /**
@@ -70,7 +70,7 @@ class FollowUpController extends Controller
     public function edit($id)
     {
         $followup = FollowUp::findOrFail($id);
-        return view('pages.setting.followup.edit')->with([
+        return view('pages.menu.followup.edit')->with([
             'followup' => $followup
         ]);
     }

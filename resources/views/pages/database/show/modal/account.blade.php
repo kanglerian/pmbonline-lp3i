@@ -28,25 +28,29 @@
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
                                     <i class="fa-solid fa-envelope text-gray-500"></i>
                                 </div>
-                                <input type="email" name="email" maxlength="50"  id="email" value="{{ $user->email }}"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Alamat Email"
-                                    required>
+                                <input type="email" name="email" maxlength="50" id="email"
+                                    value="{{ $user->email }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                                    placeholder="Alamat Email" required>
                             </div>
                         </div>
                         <div>
-                            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">No. Whatsapp</label>
+                            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">No.
+                                Whatsapp</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
                                     <i class="fa-brands fa-whatsapp text-gray-500"></i>
                                 </div>
-                                <input type="number" name="phone" maxlength="14" id="phone" value="{{ $user->phone }}"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="No. Whatsapp"
-                                    required>
+                                <input type="number" name="phone" maxlength="14" id="phone"
+                                    value="{{ $user->phone }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                                    placeholder="No. Whatsapp" required>
                             </div>
                         </div>
                     </div>
                     <button type="submit"
-                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Buat Akun Sekarang!</button>
+                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Buat
+                        Akun Sekarang!</button>
                     <p class="text-xs text-gray-600 text-center">Periksa terlebih dahulu apakah sudah benar?</p>
                 </form>
             </div>
@@ -58,6 +62,11 @@
     let phoneInput = document.getElementById('phone');
     phoneInput.addEventListener('input', function() {
         let phone = phoneInput.value;
+
+        if (phone.length > 14) {
+            phone = phone.substring(0, 14);
+        }
+
         if (phone.startsWith("62")) {
             if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
                 phoneInput.value = '62';

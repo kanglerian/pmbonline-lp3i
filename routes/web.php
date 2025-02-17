@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Applicant\Status\StatusBeasiswaController;
 use App\Http\Controllers\Applicant\Status\StatusDaftarController;
 use App\Http\Controllers\Applicant\Status\StatusRegistrasiController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Question\HomeController;
 use App\Http\Controllers\Question\Scholarship\QuestionController;
 use App\Http\Controllers\Question\Scholarship\ResultController;
@@ -54,6 +56,11 @@ Route::get('/link', function () {
     return view('link');
 })->name('link');
 
+Route::get('/events/{code}', [EventController::class, 'participant'])->name('events.index');
+Route::get('/events/{id}/view', [EventController::class, 'view'])->name('events.view');
+Route::post('/eventstore', [EventController::class, 'store_event'])->name('events.store_event');
+Route::patch('/eventrating/{id}', [EventController::class, 'update_event'])->name('events.rating');
+
 Route::prefix('recommendation-data')->group(function () {
     Route::get('/kkn', [DataController::class, 'kkn'])->name('recommendation-data.input-kkn');
     Route::post('/kkn', [DataController::class, 'kkn_store'])->name('recommendation-data.store-kkn');
@@ -102,8 +109,11 @@ Route::middleware(['auth', 'status:1', 'role:A'])->group(function () {
 Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
     Route::resource('database', ApplicantController::class);
     /* Status Database */
+    Route::patch('status/database/beasiswa/{id}', [StatusBeasiswaController::class, 'update'])->name('statusdatabasebeasiswa.update');
+
     Route::patch('status/database/aplikan/{id}', [StatusApplicantController::class, 'update'])->name('statusdatabaseaplikan.update');
     Route::delete('status/database/aplikan/{id}', [StatusApplicantController::class, 'destroy'])->name('statusdatabaseaplikan.destroy');
+
     Route::delete('status/database/daftar/{id}', [StatusDaftarController::class, 'destroy'])->name('statusdatabasedaftar.destroy');
     Route::delete('status/database/registrasi/{id}', [StatusRegistrasiController::class, 'destroy'])->name('statusdatabaseregistrasi.destroy');
     /* Import from Spreadsheet */
@@ -118,6 +128,7 @@ Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
     Route::delete('isapplicant/{identity?}', [ApplicantController::class, 'delete_is_applicant'])->name('database.delete_is_applicant');
     Route::get('isschoolarship/{identity?}', [ApplicantController::class, 'is_schoolarship'])->name('database.is_schoolarship');
     Route::get('chat/{identity?}', [ApplicantController::class, 'chats'])->name('database.chat');
+    Route::get('eventdetail/{identity?}', [ApplicantController::class, 'events'])->name('database.events');
     Route::get('file/{identity?}', [ApplicantController::class, 'files'])->name('database.file');
     Route::get('achievement/{identity?}', [ApplicantController::class, 'achievements'])->name('database.achievement');
     Route::get('organization/{identity?}', [ApplicantController::class, 'organizations'])->name('database.organization');
@@ -137,6 +148,7 @@ Route::middleware(['auth', 'status:1', 'role:A'])->group(function () {
     Route::get('get/users/{role?}/{status?}', [UserController::class, 'get_all'])->name('user.get');
     Route::patch('user/update_account/{id}', [UserController::class, 'update_account'])->name('user.update_account');
     Route::patch('user/change_password/{id}', [UserController::class, 'change_password'])->name('user.change_password');
+    Route::get('user/reset_password_default/{id}', [UserController::class, 'reset_password_default'])->name('user.reset_password_default');
     Route::get('user/status/{id}', [UserController::class, 'status'])->name('user.status');
     Route::get('presenter/status/{id}', [PresenterController::class, 'status'])->name('presenters.status');
     Route::patch('presenter/change_password/{id}', [PresenterController::class, 'change_password'])->name('presenters.password');
@@ -153,8 +165,9 @@ Route::middleware(['auth', 'status:1'])->group(function () {
 });
 
 /* Route Student */
+Route::post('/useruploadevent', [UserUploadController::class, 'store_event'])->name('useruploadevent.store');
 Route::middleware(['auth', 'status:1'])->group(function () {
-    Route::resource('userupload', UserUploadController::class);
+    Route::resource('userupload', UserUploadController::class)->except(['store'])->middleware(['auth', 'status:1']);
     Route::resource('recommendation', RecommendationController::class);
     Route::patch('recommendation/admin/{id}', [RecommendationController::class, 'update_admin'])->name('recommendation.update_admin');
     Route::patch('recommendation/change/{id}', [RecommendationController::class, 'change_status'])->name('recommendation.change');
@@ -194,14 +207,25 @@ Route::middleware(['auth', 'status:1', 'role:P'])->group(function () {
 
 /* Route Setting */
 Route::middleware(['auth', 'status:1', 'role:A'])
-    ->prefix('setting')
+    ->prefix('others')
     ->group(function () {
-        Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+        Route::get('/menu', [SettingController::class, 'index'])->name('menu.index');
         Route::resource('programtype', ProgramTypeController::class);
+        Route::get('programtype/{id}/status', [ProgramTypeController::class, 'status'])->name('programtype.status');
         Route::resource('source', SourceController::class);
         Route::resource('fileupload', FileUploadController::class);
         Route::resource('applicantstatus', ApplicantStatusController::class);
         Route::resource('followup', FollowUpController::class);
+        Route::resource('event', EventController::class);
+
+        Route::get('event/{id}/status', [EventController::class, 'status'])->name('event.status');
+        Route::get('event/{id}/scholarship', [EventController::class, 'scholarship'])->name('event.scholarship');
+        Route::get('event/{id}/files', [EventController::class, 'files'])->name('event.files');  
+        Route::get('event/{id}/employee', [EventController::class, 'employee'])->name('event.employee'); 
+        Route::get('event/{id}/address', [EventController::class, 'address'])->name('event.address');
+        Route::get('event/{id}/parent', [EventController::class, 'parent'])->name('event.parent'); 
+        Route::get('event/{id}/program', [EventController::class, 'program'])->name('event.program');    
+        Route::post('event/{id}/programstatus', [EventController::class, 'programstatus'])->name('event.programstatus');  
     });
 
 /* Route Scholarship */

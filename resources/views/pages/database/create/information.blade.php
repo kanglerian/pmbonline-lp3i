@@ -156,7 +156,7 @@
                 <div class="grid md:grid-cols-1 md:gap-6">
                     <div class="relative z-0 w-full group">
                         <x-label for="note" :value="__('Catatan')" />
-                        <x-textarea id="note" type="note" name="note" value="{{ old('note') }}"
+                        <x-textarea id="note" name="note" value="{{ old('note') }}"
                             placeholder="Catatan">
                         </x-textarea>
                         <p class="mt-2 text-xs text-gray-500">

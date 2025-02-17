@@ -38,8 +38,11 @@ class CreateApplicantsTable extends Migration
             $table->text('achievement')->nullable();
             $table->text('kip')->nullable();
             $table->string('nisn')->nullable();
+
+
             $table->boolean('schoolarship')->default(false);
-            $table->timestamp('scholarship_date')->nullable();
+            $table->dateTime('scholarship_date')->nullable();
+            $table->text('scholarship_type')->nullable();
 
             $table->text('note')->nullable();
             $table->text('relation')->nullable();
@@ -58,6 +61,8 @@ class CreateApplicantsTable extends Migration
             $table->text('planning')->nullable();
             $table->text('other_campus')->nullable();
             $table->string('income_parent')->nullable();
+
+            $table->text('place_of_working')->nullable();
 
             $table->unsignedBigInteger('source_daftar_id')->nullable();
             $table->unsignedBigInteger('school')->nullable();

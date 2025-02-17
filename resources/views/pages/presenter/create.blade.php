@@ -104,7 +104,17 @@
     phoneInput.addEventListener('input', function() {
         let phone = phoneInput.value;
 
-        if (phone.startsWith('62')) {} else if (phone.startsWith('0')) {
+        if (phone.length > 14) {
+            phone = phone.substring(0, 14);
+        }
+
+        if (phone.startsWith("62")) {
+            if (phone.length === 3 && (phone[2] === "0" || phone[2] !== "8")) {
+                phoneInput.value = '62';
+            } else {
+                phoneInput.value = phone;
+            }
+        } else if (phone.startsWith("0")) {
             phoneInput.value = '62' + phone.substring(1);
         } else {
             phoneInput.value = '62';

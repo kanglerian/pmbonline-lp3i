@@ -12,10 +12,10 @@ class ProgramTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View
     {
         $programtypes = ProgramType::paginate(5);
-        return view('pages.setting.programtype.index')->with([
+        return view('pages.menu.programtype.index')->with([
             'programtypes' => $programtypes
         ]);
     }
@@ -25,9 +25,9 @@ class ProgramTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View
     {
-        return view('pages.setting.programtype.create');
+        return view('pages.menu.programtype.create');
     }
 
     /**
@@ -36,19 +36,21 @@ class ProgramTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string'],
+            'code' => ['required', 'string', 'unique:program_types'],
         ]);
 
         $data = [
             'name' => ucwords(strtolower($request->input('name'))),
+            'code' => strtoupper($request->input('code')),
             'status' => 1,
         ];
 
         ProgramType::create($data);
-        return back()->with('message', 'Data tipe program berhasil ditambahkan!');
+        return redirect()->route( 'programtype.index' )->with( 'message', 'Program type status add successfully' );
     }
 
     /**
@@ -71,7 +73,7 @@ class ProgramTypeController extends Controller
     public function edit($id)
     {
         $programtype = ProgramType::findOrFail($id);
-        return view('pages.setting.programtype.edit')->with([
+        return view('pages.menu.programtype.edit')->with([
             'programtype' => $programtype
         ]);
     }
@@ -83,21 +85,23 @@ class ProgramTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         $programtype = ProgramType::findOrFail($id);
 
         $request->validate([
             'name' => ['required', 'string'],
+            'code' => ['required', 'string', 'unique:program_types,code,' . $id],
         ]);
 
         $data = [
             'name' => ucwords(strtolower($request->input('name'))),
+            'code' => strtoupper($request->input('code')),
             'status' => 1,
         ];
 
         $programtype->update($data);
-        return back()->with('message', 'Data tipe program berhasil diubah!');
+        return redirect()->route( 'programtype.index' )->with( 'message', 'Program type status updated successfully' );
     }
 
     /**
@@ -106,10 +110,20 @@ class ProgramTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
         $programtype = ProgramType::findOrFail($id);
         $programtype->delete();
-        return back()->with('message', 'Data tipe program berhasil dihapus!');
+        return redirect()->route( 'programtype.index' )->with( 'message', 'Program type status deleted successfully' );
+    }
+
+    public function status( $id ): \Illuminate\Http\RedirectResponse {
+        $programtype = ProgramType::findOrFail( $id );
+        $programtype->update(
+            [
+                'status' => !$programtype->status
+            ]
+        );
+        return redirect()->route( 'programtype.index' )->with( 'message', 'Program type status updated successfully' );
     }
 }

@@ -10,105 +10,185 @@ use App\Models\User;
 use App\Models\UserUpload;
 use App\Models\FileUpload;
 
-class UserUploadController extends Controller
-{
+class UserUploadController extends Controller {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+    * Display a listing of the resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
+
+    public function index() {
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    * Show the form for creating a new resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
+
+    public function create() {
         //
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
+
+    public function store( Request $request ) {
 
         $berkas = $request->all();
 
-        if (Auth::user()->role == 'S') {
+        if ( Auth::user()->role == 'S' ) {
             $data = [
                 'identity_user' => Auth::user()->identity,
-                'fileupload_id' => $berkas['data']['fileupload_id'],
-                'typefile' => $berkas['data']['typefile'],
+                'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
+                'typefile' => $berkas[ 'data' ][ 'typefile' ],
             ];
         } else {
             $data = [
-                'identity_user' => $berkas['data']['identity'],
-                'fileupload_id' => $berkas['data']['fileupload_id'],
-                'typefile' => $berkas['data']['typefile'],
+                'identity_user' => $berkas[ 'data' ][ 'identity' ],
+                'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
+                'typefile' => $berkas[ 'data' ][ 'typefile' ],
             ];
         }
 
-        if ($data['fileupload_id'] == 1) {
-            $file = FileUpload::findOrFail($data['fileupload_id']);
-            $dataku = [
-                'avatar' => $file->namefile . '.' . $data['typefile'],
-            ];
-            if(Auth::user()->role == 'S'){
-                $user = User::findOrFail(Auth::user()->id);
-            } else {
-                $user = User::where('identity', $data['identity_user']);
+        $userupload = UserUpload::where( [
+            'identity_user' => $berkas[ 'data' ][ 'identity' ],
+            'fileupload_id' => $berkas[ 'data' ][ 'fileupload_id' ],
+            'typefile' => $berkas[ 'data' ][ 'typefile' ],
+        ] )->first();
+
+        if ( $userupload ) {
+            if ( $data[ 'fileupload_id' ] == 1 ) {
+                $file = FileUpload::findOrFail( $data[ 'fileupload_id' ] );
+                $dataku = [
+                    'avatar' => $file->namefile . '.' . $data[ 'typefile' ],
+                ];
+                if ( Auth::user()->role == 'S' ) {
+                    $user = User::findOrFail( Auth::user()->id );
+                } else {
+                    $user = User::where( 'identity', $data[ 'identity_user' ] );
+                }
+                $user->update( $dataku );
             }
-            $user->update($dataku);
+            $userupload->update( $data );
+
+            return response()->json( [
+                'status' => 'success',
+                'message' => 'Data berhasil diupdate',
+            ] );
+        } else {
+            if ( $data[ 'fileupload_id' ] == 1 ) {
+                $file = FileUpload::findOrFail( $data[ 'fileupload_id' ] );
+                $dataku = [
+                    'avatar' => $file->namefile . '.' . $data[ 'typefile' ],
+                ];
+                if ( Auth::user()->role == 'S' ) {
+                    $user = User::findOrFail( Auth::user()->id );
+                } else {
+                    $user = User::where( 'identity', $data[ 'identity_user' ] );
+                }
+                $user->update( $dataku );
+            }
+
+            UserUpload::create( $data );
+            return response()->json( [
+                'status' => 'success',
+                'message' => 'Data berhasil disimpan',
+            ] );
         }
 
-        UserUpload::create($data);
-        return response()->json(['status' => 'success', 'data' => $user]);
+    }
 
+    public function store_event( Request $request ) {
+
+        $berkas = $request->all();
+        
+        $data = [
+            'identity_user' => $berkas[ 'identity' ],
+            'fileupload_id' => $berkas[ 'fileupload_id' ],
+            'typefile' => $berkas[ 'typefile' ],
+        ];
+
+        $userupload = UserUpload::where( [
+            'identity_user' => $berkas[ 'identity' ],
+            'fileupload_id' => $berkas[ 'fileupload_id' ],
+            'typefile' => $berkas[ 'typefile' ],
+        ] )->first();
+
+        if ( $userupload ) {
+            if ( $data[ 'fileupload_id' ] == 1 ) {
+                $file = FileUpload::findOrFail( $data[ 'fileupload_id' ] );
+                $dataku = [
+                    'avatar' => $file->namefile . '.' . $data[ 'typefile' ],
+                ];
+
+                $user = User::where( 'identity', $data[ 'identity_user' ] );
+                $user->update( $dataku );
+            }
+            $userupload->update( $data );
+
+            return response()->json( [
+                'status' => 'success',
+                'message' => 'Data berhasil diupdate',
+            ] );
+        } else {
+            if ( $data[ 'fileupload_id' ] == 1 ) {
+                $file = FileUpload::findOrFail( $data[ 'fileupload_id' ] );
+                $dataku = [
+                    'avatar' => $file->namefile . '.' . $data[ 'typefile' ],
+                ];
+                
+                $user = User::where( 'identity', $data[ 'identity_user' ] );
+                $user->update( $dataku );
+            }
+
+            UserUpload::create( $data );
+            return response()->json( [
+                'status' => 'success',
+                'message' => 'Data berhasil disimpan',
+            ] );
+        }
 
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
+    * Display the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+
+    public function show( $id ) {
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($identity)
-    {
-        $userupload = UserUpload::with('fileupload')->where('identity_user', $identity)->get();
-        if (Auth::user()->identity == $identity) {
+    * Show the form for editing the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+
+    public function edit( $identity ) {
+        $userupload = UserUpload::with( 'fileupload' )->where( 'identity_user', $identity )->get();
+        if ( Auth::user()->identity == $identity ) {
             $data = [];
-            foreach ($userupload as $upload) {
+            foreach ( $userupload as $upload ) {
                 $data[] = $upload->fileupload_id;
             }
-            $applicant = Applicant::where('identity', $identity)->first();
-            $success = FileUpload::whereIn('id', $data)->get();
-            $fileupload = FileUpload::whereNotIn('id', $data)->get();
-            return view('pages.userupload.index')->with([
+            $applicant = Applicant::where( 'identity', $identity )->first();
+            $success = FileUpload::whereIn( 'id', $data )->get();
+            $fileupload = FileUpload::whereNotIn( 'id', $data )->get();
+            return view( 'pages.userupload.index' )->with( [
                 'identity' => $identity,
                 'userupload' => $userupload,
                 'fileupload' => $fileupload,
                 'success' => $success,
                 'applicant' => $applicant,
-            ]);
+            ] );
         } else {
             return back();
         }
@@ -116,47 +196,47 @@ class UserUploadController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
+    * Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+
+    public function update( Request $request, $id ) {
         //
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $user_upload = UserUpload::with('fileupload')->findOrFail($id);
+    * Remove the specified resource from storage.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
 
-        if ($user_upload->fileupload->namefile == 'foto') {
+    public function destroy( $id ) {
+        $user_upload = UserUpload::with( 'fileupload' )->findOrFail( $id );
+
+        if ( $user_upload->fileupload->namefile == 'foto' ) {
             $dataku = [
                 'avatar' => null,
             ];
-            $user = User::where('identity', $user_upload->identity_user);
-            $user->update($dataku);
+            $user = User::where( 'identity', $user_upload->identity_user );
+            $user->update( $dataku );
         }
 
         $user_upload->delete();
-        return response()->json(['status' => 'success']);
+        return response()->json( [ 'status' => 'success' ] );
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function upload_pembayaran(Request $request)
-    {
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
+
+    public function upload_pembayaran( Request $request ) {
 
     }
 }

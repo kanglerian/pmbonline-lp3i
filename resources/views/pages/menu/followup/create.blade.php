@@ -3,7 +3,7 @@
         <nav class="flex">
             <ol class="inline-flex items-center space-x-2 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="{{ route('setting.index') }}"
+                    <a href="{{ route('menu.index') }}"
                         class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                         <i class="fa-solid fa-gears me-1"></i>
                         Setting
@@ -12,9 +12,9 @@
                 <li>
                     <div class="flex items-center">
                         <i class="fa-solid fa-angle-right text-gray-300 me-2"></i>
-                        <a href="{{ route('source.index') }}"
+                        <a href="{{ route('followup.index') }}"
                             class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
-                            Master Sumber Data
+                            Master Follow Up
                         </a>
                     </div>
                 </li>
@@ -47,7 +47,7 @@
             </div>
         @endif
         <section>
-            <form action="{{ route('source.store') }}" method="POST" class="max-w-sm">
+            <form action="{{ route('followup.store') }}" method="POST" class="max-w-sm">
                 @csrf
                 <div class="mb-5">
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nama</label>

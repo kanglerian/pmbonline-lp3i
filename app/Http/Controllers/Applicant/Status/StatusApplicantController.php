@@ -20,11 +20,15 @@ class StatusApplicantController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'is_applicant_session' => ['required'],
+            'is_applicant_pmb' => ['required','length:4','year'],
             'is_applicant_date' => ['required'],
+            'is_applicant_session' => ['required'],
         ], [
             'is_applicant_session.required' => 'Kolom Gelombang tidak boleh kosong, harap isi dengan angka.',
             'is_applicant_date.required' => 'Kolom Tanggal tidak boleh kosong, harap isi dengan tanggal.',
+            'is_applicant_pmb.required' => 'Kolom Tahun PMB tidak boleh kosong, harap isi dengan tahun.',
+            'is_applicant_pmb.length' => 'Kolom Tahun PMB harus berisi 4 digit angka.',
+            'is_applicant_pmb.year' => 'Kolom Tahun PMB harus berisi angka tahun.',
         ]);
 
 
@@ -35,6 +39,7 @@ class StatusApplicantController extends Controller
         $data = [
             'session' => $request->input('is_applicant_session'),
             'date' => $request->input('is_applicant_date'),
+            'pmb' => $request->input('is_applicant_pmb'),
         ];
 
         $status_applicant->update($data);

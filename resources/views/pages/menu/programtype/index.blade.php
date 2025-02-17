@@ -3,7 +3,7 @@
         <nav class="flex">
             <ol class="inline-flex items-center space-x-2 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="{{ route('setting.index') }}"
+                    <a href="{{ route('menu.index') }}"
                         class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                         <i class="fa-solid fa-gears me-1"></i>
                         Setting
@@ -64,6 +64,14 @@
                                     {{ $programtype->name }}
                                 </td>
                                 <td class="px-6 py-4 bg-gray-50">
+                                    <form action="{{ route('programtype.status', $programtype->id) }}" method="GET"
+                                        class="inline-block">
+                                        @csrf
+                                        <button type="submit"
+                                            class="{{ $programtype->status ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                            {!! $programtype->status ? '<i class="fa-solid fa-toggle-on"></i>' : '<i class="fa-solid fa-toggle-off"></i>' !!}
+                                        </button>
+                                    </form>
                                     <a href="{{ route('programtype.edit', $programtype->id) }}"
                                         class="inline-block bg-amber-500 hover:bg-amber-600 px-3 py-2 rounded-xl text-white transition-all ease-in-out">
                                         <i class="fa-regular fa-pen-to-square"></i>

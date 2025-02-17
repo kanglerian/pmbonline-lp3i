@@ -15,7 +15,7 @@ class FileUploadController extends Controller
     public function index()
     {
         $files = FileUpload::paginate(5);
-        return view('pages.setting.file.index')->with([
+        return view('pages.menu.file.index')->with([
             'files' => $files
         ]);
     }
@@ -27,7 +27,7 @@ class FileUploadController extends Controller
      */
     public function create()
     {
-        return view('pages.setting.file.create');
+        return view('pages.menu.file.create');
     }
 
     /**
@@ -73,7 +73,7 @@ class FileUploadController extends Controller
     public function edit($id)
     {
         $file = FileUpload::findOrFail($id);
-        return view('pages.setting.file.edit')->with([
+        return view('pages.menu.file.edit')->with([
             'file' => $file
         ]);
     }
