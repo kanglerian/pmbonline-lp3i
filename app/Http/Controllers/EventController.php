@@ -477,7 +477,8 @@ class EventController extends Controller
             ->paginate(5);
 
         $total = EventDetail::where('event_id', $id)->count();
-        return view('pages.menu.event.show', compact('event', 'applicants', 'total'));
+        $rating = EventDetail::where('event_id', $id)->avg('rating');
+        return view('pages.menu.event.show', compact('event', 'applicants', 'total', 'rating'));
     }
 
     public function participant($code): \Illuminate\Contracts\View\View

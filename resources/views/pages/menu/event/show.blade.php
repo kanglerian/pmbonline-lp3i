@@ -30,6 +30,10 @@
                     <i class="fa-solid fa-users"></i>
                     <h2>{{ $total }}</h2>
                 </div>
+                <div class="flex bg-gray-200 px-4 py-2 text-sm rounded-xl items-center gap-2">
+                    <i class="fa-solid fa-star"></i>
+                    <h2>{{ $rating }}</h2>
+                </div>
             </div>
         </div>
     </x-slot>
