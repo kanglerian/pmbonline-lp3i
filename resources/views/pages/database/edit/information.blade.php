@@ -213,8 +213,6 @@
                             @if ($applicant->followup_id)
                                 <option value="{{ $applicant->followup_id }}">{{ $applicant->FollowUp->name }}
                                 </option>
-                            @else
-                                <option value="null">Pilih keterangan</option>
                             @endif
                             @foreach ($follows as $follow)
                                 <option value="{{ $follow->id }}">{{ $follow->name }}</option>
