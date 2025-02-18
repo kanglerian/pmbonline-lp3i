@@ -464,7 +464,7 @@ class ApplicantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(): RedirectResponse
+    public function create(): RedirectResponse|View
     {
         try {
             $users = User::where(['status' => '1', 'role' => 'P'])->get();
@@ -605,7 +605,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($identity): RedirectResponse
+    public function show($identity): RedirectResponse|View
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceSetting', 'sourceDaftarSetting'])
             ->where('identity', $identity)
@@ -651,7 +651,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function chats($identity): RedirectResponse
+    public function chats($identity): RedirectResponse|View
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -672,7 +672,7 @@ class ApplicantController extends Controller
         }
     }
 
-    public function events($identity): RedirectResponse
+    public function events($identity): RedirectResponse|View
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -702,7 +702,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function achievements($identity): RedirectResponse
+    public function achievements($identity): RedirectResponse|View
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -729,7 +729,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function organizations($identity): RedirectResponse
+    public function organizations($identity): RedirectResponse|View
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -756,7 +756,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function scholarships($identity): RedirectResponse
+    public function scholarships($identity): RedirectResponse|View
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -783,7 +783,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function files($identity): RedirectResponse
+    public function files($identity): RedirectResponse|View
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -821,7 +821,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id): RedirectResponse
+    public function edit($id): RedirectResponse|View
     {
         $applicant = Applicant::findOrFail($id);
         if (Auth::user()->identity == $applicant->identity_user || Auth::user()->role == 'A') {
