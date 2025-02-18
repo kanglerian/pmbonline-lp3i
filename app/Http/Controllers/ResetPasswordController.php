@@ -6,6 +6,7 @@ use App\Models\Applicant;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
 
 class ResetPasswordController extends Controller
 {
@@ -15,7 +16,7 @@ class ResetPasswordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function reset(Request $request)
+    public function reset(Request $request): JsonResponse
     {
         $applicants = Applicant::where('is_register', '1')->get();
         $data = [];

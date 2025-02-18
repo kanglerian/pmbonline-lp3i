@@ -4,15 +4,13 @@ namespace App\Http\Controllers\API\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dashboard\Database;
-use App\Models\Dashboard\Sales;
 use App\Models\Dashboard\SalesRevenue;
 use App\Models\Dashboard\SalesVolume;
-use App\Models\Report\TargetDatabase;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class SalesController extends Controller
 {
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $sales_volume_query = SalesVolume::query();
         $sales_revenue_query = SalesRevenue::query();

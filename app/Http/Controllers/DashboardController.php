@@ -12,13 +12,15 @@ use App\Models\Report\RegisterBySchoolYear;
 use App\Models\Report\RegisterBySource;
 use App\Models\StatusApplicantsEnrollment;
 use App\Models\StatusApplicantsRegistration;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\UserUpload;
 use App\Models\FileUpload;
 use App\Models\School;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class DashboardController extends Controller
 {
@@ -27,7 +29,7 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $userupload = UserUpload::where(['identity_user' => Auth::user()->identity, 'fileupload_id' => 11])->get();
         $fileupload = FileUpload::where('namefile', 'bukti-pembayaran')->get();
@@ -131,7 +133,7 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         try {
             $databasePhone = Applicant::query();
@@ -170,7 +172,6 @@ class DashboardController extends Controller
             $registrationCount = $registrasiQuery->where('is_register', 1)->count();
 
             return response()->json([
-                // 'database_phone' => $databasePhone,
                 'database_count' => $databaseCount,
                 'schoolarship_count' => $schoolarshipCount,
                 'applicant_count' => $applicantCount,
@@ -188,7 +189,7 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function get_presenter()
+    public function get_presenter(): JsonResponse
     {
         $presenters = [];
         if (Auth::user()->role == 'A') {
@@ -210,7 +211,7 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function get_sources($pmb = null)
+    public function get_sources($pmb = null): JsonResponse
     {
 
         $sourcesIdQuery = ApplicantBySourceId::query();
@@ -219,7 +220,7 @@ class DashboardController extends Controller
         return response()->json(['sources' => $sourcesIdCount]);
     }
 
-    public function get_sources_daftar($pmb = null)
+    public function get_sources_daftar($pmb = null): JsonResponse
     {
 
         $sourcesIdEnrollmentQuery = ApplicantBySourceDaftarId::query();
@@ -229,7 +230,7 @@ class DashboardController extends Controller
         return response()->json(['sources' => $sourcesIdenrollmentCount]);
     }
 
-    public function get_presenters($pmb = null)
+    public function get_presenters($pmb = null): JsonResponse
     {
         $presentersQuery = User::select('users.identity', 'users.name', DB::raw('COUNT(applicants.identity_user) as count'))
             ->leftJoin('applicants', 'users.identity', '=', 'applicants.identity_user')
@@ -246,13 +247,13 @@ class DashboardController extends Controller
         return response()->json(['presenters' => $presenters]);
     }
 
-    public function quick_search($name = null)
+    public function quick_search($name = null): JsonResponse
     {
         $applicants = Applicant::with(['SourceSetting', 'SourceDaftarSetting', 'ApplicantStatus', 'ProgramType', 'SchoolApplicant', 'FollowUp', 'father', 'mother', 'presenter'])->where('name', 'like', '%' . $name . '%')->get();
         return response()->json(['applicants' => $applicants]);
     }
 
-    public function quick_search_status()
+    public function quick_search_status(): JsonResponse
     {
         $applicantsQuery = Applicant::query();
 
@@ -288,7 +289,7 @@ class DashboardController extends Controller
 
         return response()->json(['applicants' => $applicants]);
     }
-    public function quick_search_source()
+    public function quick_search_source(): JsonResponse
     {
         $applicantsQuery = Applicant::query();
 
@@ -312,19 +313,18 @@ class DashboardController extends Controller
         return response()->json(['applicants' => $applicants]);
     }
 
-    public function history_page()
+    public function history_page(): Factory|View
     {
-        /* Status: OK */
         return view('pages.dashboard.reports.rekapitulasi-history');
     }
 
-    public function rekapitulasi_database()
+    public function rekapitulasi_database(): Factory|View
     {
         /* Status: OK */
         return view('pages.dashboard.reports.rekapitulasi-database');
     }
 
-    public function rekapitulasi_perolehan_pmb()
+    public function rekapitulasi_perolehan_pmb(): View
     {
         /* Status: OK */
         $program_types = ProgramType::all();
@@ -333,7 +333,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function rekapitulasi_register_program()
+    public function rekapitulasi_register_program(): View
     {
         /* Status: OK */
         $registers = RegisterBySchool::all();
@@ -342,25 +342,25 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function rekapitulasi_aplikan()
+    public function rekapitulasi_aplikan(): Factory|View
     {
         /* Status: OK */
         return view('pages.dashboard.reports.rekapitulasi-aplikan');
     }
 
-    public function rekapitulasi_persyaratan()
+    public function rekapitulasi_persyaratan(): Factory|View
     {
         /* Status: OK */
         return view('pages.dashboard.reports.rekapitulasi-persyaratan');
     }
 
-    public function rekapitulasi_history()
+    public function rekapitulasi_history(): Factory|View
     {
         /* Status: OK */
         return view('pages.dashboard.reports.rekapitulasi-history');
     }
 
-    public function rekapitulasi_register_school()
+    public function rekapitulasi_register_school(): View
     {
         /* Status: OK */
         $registers = RegisterBySchool::all();
@@ -368,7 +368,7 @@ class DashboardController extends Controller
             'registers' => $registers,
         ]);
     }
-    public function rekapitulasi_register_school_year()
+    public function rekapitulasi_register_school_year(): View
     {
         /* Status: OK */
         $registers = RegisterBySchoolYear::all();
@@ -377,7 +377,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function rekapitulasi_register_source()
+    public function rekapitulasi_register_source(): View
     {
         /* Status: OK */
         $registers = RegisterBySource::all();
@@ -386,13 +386,13 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function rekapitulasi_pencapaian_pmb()
+    public function rekapitulasi_pencapaian_pmb(): Factory|View
     {
         return view('pages.dashboard.reports.rekapitulasi-pencapaian-pmb');
     }
 
 
-    public function rekapitulasi_perolehan_pmb_page()
+    public function rekapitulasi_perolehan_pmb_page(): Factory|View
     {
         return view('pages.dashboard.reports.rekapitulasi-perolehan-pmb-page');
     }

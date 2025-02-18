@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ApplicantStatus;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ApplicantStatusController extends Controller
 {
@@ -12,7 +14,7 @@ class ApplicantStatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $applicant_statuses = ApplicantStatus::paginate(5);
         return view('pages.menu.applicantstatus.index')->with([
@@ -25,7 +27,7 @@ class ApplicantStatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         return view('pages.menu.applicantstatus.create');
     }
@@ -36,7 +38,7 @@ class ApplicantStatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string'],
@@ -56,7 +58,7 @@ class ApplicantStatusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): void
     {
 
     }
@@ -67,7 +69,7 @@ class ApplicantStatusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $applicant_status = ApplicantStatus::findOrFail($id);
         return view('pages.menu.applicantstatus.edit')->with([
@@ -82,7 +84,7 @@ class ApplicantStatusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $status = ApplicantStatus::findOrFail($id);
 
@@ -104,7 +106,7 @@ class ApplicantStatusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $status = ApplicantStatus::findOrFail($id);
         $status->delete();

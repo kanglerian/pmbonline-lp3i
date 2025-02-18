@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class RecommendationController extends Controller
 {
@@ -23,7 +25,7 @@ class RecommendationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $identity = request('identity', 'all');
         $school = request('school', 'all');
@@ -79,7 +81,7 @@ class RecommendationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $schools = School::all();
         return view('pages.recommendation.create')->with([
@@ -93,7 +95,7 @@ class RecommendationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'name.*' => 'required|string|max:255',
@@ -148,7 +150,7 @@ class RecommendationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): View
     {
         $user = User::where('identity', $id)->first();
         $applicant = Applicant::where('identity', $id)->first();
@@ -176,7 +178,7 @@ class RecommendationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $data = Recommendation::where('id', $id)->first();
         $schools = School::all();
@@ -193,7 +195,7 @@ class RecommendationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'name.*' => 'required|string|max:255',
@@ -245,7 +247,7 @@ class RecommendationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update_admin(Request $request, $id)
+    public function update_admin(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -297,7 +299,7 @@ class RecommendationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $recommendation = Recommendation::findOrFail($id);
         $recommendation->delete();
@@ -312,7 +314,7 @@ class RecommendationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function change_status(Request $request, $id)
+    public function change_status(Request $request, $id): RedirectResponse
     {
         $recommendation = Recommendation::findOrFail($id);
         $data = [

@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use App\Models\UserUpload;
 use App\Models\FileUpload;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class UserUploadController extends Controller {
     /**
@@ -17,7 +20,7 @@ class UserUploadController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function index() {
+    public function index(): void {
     }
 
     /**
@@ -26,7 +29,7 @@ class UserUploadController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function create() {
+    public function create(): void {
         //
     }
 
@@ -37,7 +40,7 @@ class UserUploadController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function store( Request $request ) {
+    public function store( Request $request ): JsonResponse {
 
         $berkas = $request->all();
 
@@ -103,7 +106,7 @@ class UserUploadController extends Controller {
 
     }
 
-    public function store_event( Request $request ) {
+    public function store_event( Request $request ): JsonResponse {
 
         $berkas = $request->all();
         
@@ -162,7 +165,7 @@ class UserUploadController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function show( $id ) {
+    public function show( $id ): void {
     }
 
     /**
@@ -172,7 +175,7 @@ class UserUploadController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function edit( $identity ) {
+    public function edit( $identity ): RedirectResponse|View {
         $userupload = UserUpload::with( 'fileupload' )->where( 'identity_user', $identity )->get();
         if ( Auth::user()->identity == $identity ) {
             $data = [];
@@ -203,7 +206,7 @@ class UserUploadController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function update( Request $request, $id ) {
+    public function update( Request $request, $id ): void {
         //
     }
 
@@ -214,7 +217,7 @@ class UserUploadController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function destroy( $id ) {
+    public function destroy( $id ): JsonResponse {
         $user_upload = UserUpload::with( 'fileupload' )->findOrFail( $id );
 
         if ( $user_upload->fileupload->namefile == 'foto' ) {
@@ -235,8 +238,4 @@ class UserUploadController extends Controller {
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-
-    public function upload_pembayaran( Request $request ) {
-
-    }
 }

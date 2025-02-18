@@ -7,6 +7,7 @@ use App\Models\ApplicantStatus;
 use App\Models\ProgramType;
 use App\Models\School;
 use App\Models\SourceSetting;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\ApplicantFamily;
@@ -15,6 +16,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class RegisteredUserController extends Controller {
     /**
@@ -23,23 +25,15 @@ class RegisteredUserController extends Controller {
     * @return \Illuminate\View\View
     */
 
-    public function create() {
+    public function create(): RedirectResponse|View {
         try {
-            //            $response = Http::get( 'https://dashboard.politekniklp3i-tasikmalaya.ac.id/api/programs' );
             $users = User::where( [ 'status' => '1', 'role' => 'P' ] )->get();
             $sources = SourceSetting::all();
             $statuses = ApplicantStatus::all();
             $programtypes = ProgramType::where( 'status', 1 )->get();
             $schools = School::all();
 
-            //            if ( $response->successful() ) {
-            //                $programs = $response->json();
-            //            } else {
-            //                $programs = null;
-            //            }
-
             return view( 'auth.register' )->with( [
-                //                'programs' => $programs,
                 'statuses' => $statuses,
                 'programtypes' => $programtypes,
                 'sources' => $sources,

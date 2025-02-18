@@ -6,13 +6,15 @@ use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
 use App\Models\ApplicantFamily;
 use App\Models\Applicant;
 use App\Models\User;
 use App\Models\UserUpload;
-use App\Models\FileUpload;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
@@ -21,7 +23,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $nameVal = request('name');
         $accountQuery = User::query();
@@ -40,7 +42,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function get_all($role = null, $status = null)
+    public function get_all($role = null, $status = null): JsonResponse
     {
         $usersQuery = User::query();
 
@@ -70,7 +72,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): Factory|View
     {
         return view('pages.user.create');
     }
@@ -81,7 +83,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -113,7 +115,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): void
     {
 
     }
@@ -124,10 +126,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $user = User::findOrFail($id);
-//        $response = Http::get('https://dashboard.politekniklp3i-tasikmalaya.ac.id/api/programs');
         $applicant = Applicant::where('identity', $user->identity)->first();
         $schools = School::all();
 
@@ -138,17 +139,10 @@ class UserController extends Controller
 
         $presenters = User::where(['status' => '1', 'role' => 'P'])->get();
 
-//        if ($response->successful()) {
-//            $programs = $response->json();
-//        } else {
-//            $programs = null;
-//        }
-
         if ($user->role == 'S') {
             $data = [
                 'user' => $user,
                 'applicant' => $applicant,
-//                'programs' => $programs,
                 'presenters' => $presenters,
                 'father' => $father,
                 'mother' => $mother,
@@ -177,7 +171,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $user = User::findOrFail($id);
         $user_detail = Applicant::where('identity', $user->identity)->first();
@@ -289,7 +283,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             $account = User::findOrFail($id);
@@ -312,7 +306,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update_account(Request $request, $id)
+    public function update_account(Request $request, $id): RedirectResponse
     {
         $user = User::findOrFail($id);
         $user_detail = Applicant::where('identity', $user->identity)->first();
@@ -345,7 +339,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function change_password(Request $request, $id)
+    public function change_password(Request $request, $id): RedirectResponse
     {
         $account = User::findOrFail($id);
         $request->validate([
@@ -359,23 +353,12 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function print($id)
-    {
-
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function status($id)
+    public function status($id): RedirectResponse
     {
         $user = User::findOrFail($id);
         $data = [
@@ -385,7 +368,7 @@ class UserController extends Controller
         return back()->with('message', 'Status berhasil diubah!');
     }
 
-    public function reset_password_default($id)
+    public function reset_password_default($id): RedirectResponse
     {
         $user = User::findOrFail($id);
         $user->update([

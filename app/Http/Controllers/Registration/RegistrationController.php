@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Registration;
 
 use DateTime;
 use App\Http\Controllers\Controller;
-use App\Mail\RegistrationConfirmationMail;
 use App\Models\Applicant;
 use App\Models\StatusApplicantsRegistration;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\View\View;
 
 class RegistrationController extends Controller
 {
@@ -19,7 +20,7 @@ class RegistrationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         function getYearPMB()
         {
@@ -73,12 +74,12 @@ class RegistrationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): void
     {
         //
     }
 
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $registrationQuery = StatusApplicantsRegistration::query();
         $registrationQuery->with("applicant");
@@ -114,7 +115,7 @@ class RegistrationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate(
             [
@@ -186,7 +187,7 @@ class RegistrationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): void
     {
         //
     }
@@ -197,7 +198,7 @@ class RegistrationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): void
     {
         //
     }
@@ -209,7 +210,7 @@ class RegistrationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate(
             [
@@ -258,7 +259,7 @@ class RegistrationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $applicant = Applicant::findOrFail($id);
         $registration = StatusApplicantsRegistration::where('identity_user', $applicant->identity)->firstOrFail();

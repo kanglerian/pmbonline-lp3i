@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class SettingController extends Controller
 {
@@ -9,7 +11,7 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): Factory|View
     {
         return view('pages.menu.index');
     }

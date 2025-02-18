@@ -5,11 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Report\SchoolBySourceAll;
 use App\Models\School;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class SchoolController extends Controller
 {
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $schools = School::all();
         return response()->json(['schools' => $schools]);

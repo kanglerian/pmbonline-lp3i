@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dashboard\RegisterByProgram;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class RegisterProgramController extends Controller
 {
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $databaseQuery = RegisterByProgram::query();
 

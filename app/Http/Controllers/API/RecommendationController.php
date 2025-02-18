@@ -4,12 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Recommendation;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 class RecommendationController extends Controller
 {
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $identityVal = request('identityVal', 'all');
         $roleVal = request('roleVal', 'all');

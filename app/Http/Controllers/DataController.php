@@ -6,10 +6,11 @@ use App\Models\Recommendation;
 use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class DataController extends Controller
 {
-    public function kkn()
+    public function kkn(): View
     {
         $schools = School::all();
         return view("data.kkn.index")->with([
@@ -17,7 +18,7 @@ class DataController extends Controller
         ]);
     }
 
-    public function kkn_store(Request $request)
+    public function kkn_store(Request $request): RedirectResponse
     {
         $request->validate(
             [

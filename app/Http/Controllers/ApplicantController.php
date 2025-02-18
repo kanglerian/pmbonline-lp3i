@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\ApplicantUpdateImport;
 use App\Models\EventDetail;
 use App\Models\StatusApplicantsEnrollment;
 use App\Models\StatusApplicantsRegistration;
@@ -11,6 +10,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 use App\Models\FollowUp;
 use App\Models\School;
@@ -33,6 +34,8 @@ use App\Models\Recommendation;
 use App\Models\StatusApplicantsApplicant;
 use App\Models\Organization;
 use App\Models\Achievement;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class ApplicantController extends Controller
 {
@@ -41,7 +44,7 @@ class ApplicantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $users = User::where(['status' => '1', 'role' => 'P'])->get();
         $sources = SourceSetting::all();
@@ -265,7 +268,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function get_all()
+    public function get_all(): JsonResponse|RedirectResponse
     {
         try {
             $applicantsQuery = Applicant::query();
@@ -426,7 +429,7 @@ class ApplicantController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function get_beasiswa(Request $request)
+    public function get_beasiswa(Request $request): JsonResponse
     {
         $applicantsQuery = Applicant::query();
         $statusApplicant = $request->input('status');
@@ -451,16 +454,17 @@ class ApplicantController extends Controller
                     $applicantsQuery->where('schoolarship', 1);
                     break;
             }
-            $applicants = $applicantsQuery->orderByDesc('created_at')->get();
-            return response()->json(['applicants' => $applicants]);
         }
+
+        $applicants = $applicantsQuery->orderByDesc('created_at')->get();
+        return response()->json(['applicants' => $applicants]);
     }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): RedirectResponse
     {
         try {
             $users = User::where(['status' => '1', 'role' => 'P'])->get();
@@ -489,7 +493,7 @@ class ApplicantController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         try {
             $request->validate(
@@ -601,7 +605,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($identity)
+    public function show($identity): RedirectResponse
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceSetting', 'sourceDaftarSetting'])
             ->where('identity', $identity)
@@ -647,7 +651,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function chats($identity)
+    public function chats($identity): RedirectResponse
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -668,7 +672,7 @@ class ApplicantController extends Controller
         }
     }
 
-    public function events($identity)
+    public function events($identity): RedirectResponse
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -698,7 +702,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function achievements($identity)
+    public function achievements($identity): RedirectResponse
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -717,7 +721,6 @@ class ApplicantController extends Controller
         } else {
             return back()->with('error', 'Tidak diizinkan.');
         }
-        return view('pages.database.show.achievement');
     }
 
     /**
@@ -726,7 +729,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function organizations($identity)
+    public function organizations($identity): RedirectResponse
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -745,7 +748,6 @@ class ApplicantController extends Controller
         } else {
             return back()->with('error', 'Tidak diizinkan.');
         }
-        return view('pages.database.show.organization');
     }
 
     /**
@@ -754,7 +756,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function scholarships($identity)
+    public function scholarships($identity): RedirectResponse
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -773,7 +775,6 @@ class ApplicantController extends Controller
         } else {
             return back()->with('error', 'Tidak diizinkan.');
         }
-        return view('pages.database.show.scholarship');
     }
 
     /**
@@ -782,7 +783,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function files($identity)
+    public function files($identity): RedirectResponse
     {
         $user = Applicant::with(['SchoolApplicant', 'SourceDaftarSetting'])
             ->where('identity', $identity)
@@ -820,11 +821,10 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): RedirectResponse
     {
         $applicant = Applicant::findOrFail($id);
         if (Auth::user()->identity == $applicant->identity_user || Auth::user()->role == 'A') {
-            //            $response = Http::get('https://dashboard.politekniklp3i-tasikmalaya.ac.id/api/programs');
 
             $presenters = User::where(['status' => '1', 'role' => 'P'])->get();
             $sources = SourceSetting::all();
@@ -836,16 +836,9 @@ class ApplicantController extends Controller
             $father = ApplicantFamily::where(['identity_user' => $applicant->identity, 'gender' => 1])->first();
             $mother = ApplicantFamily::where(['identity_user' => $applicant->identity, 'gender' => 0])->first();
 
-            //            if ($response->successful()) {
-            //                $programs = $response->json();
-            //            } else {
-            //                $programs = null;
-            //            }
-
             $applicant = Applicant::with(['SchoolApplicant', 'SourceSetting', 'sourceDaftarSetting'])->findOrFail($id);
             return view('pages.database.edit')->with([
                 'applicant' => $applicant,
-                //                'programs' => $programs,
                 'presenters' => $presenters,
                 'programtypes' => $programtypes,
                 'account' => $account,
@@ -868,7 +861,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate(
             [
@@ -1081,7 +1074,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $applicant = Applicant::findOrFail($id);
         if (Auth::user()->identity == $applicant->identity_user || Auth::user()->role == 'A') {
@@ -1120,7 +1113,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function print($id)
+    public function print($id): RedirectResponse
     {
         $applicant = Applicant::with(['SourceSetting', 'SourceDaftarSetting', 'ApplicantStatus', 'ProgramType', 'SchoolApplicant', 'FollowUp', 'father', 'mother', 'presenter'])
             ->where('identity', $id)
@@ -1155,7 +1148,7 @@ class ApplicantController extends Controller
         return (new ApplicantsExport($dateStart, $dateEnd, $yearGrad, $schoolVal, $birthdayVal, $pmbVal, $sourceVal, $statusVal))->download('applicants.xlsx');
     }
 
-    public function update_data($student, $applicants, $i, $phone, $school, $gender, $come, $kip, $scholarship, $known, $followup, $program)
+    public function update_data($student, $applicants, $i, $phone, $school, $gender, $come, $kip, $scholarship, $known, $followup, $program): void
     {
         $data_applicant = [
             'pmb' => $applicants[$i][2],
@@ -1265,7 +1258,7 @@ class ApplicantController extends Controller
         }
     }
 
-    public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother, $identity_val)
+    public function create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother, $identity_val): void
     {
         $data_applicant = [
             'identity' => $identity_val,
@@ -1359,7 +1352,7 @@ class ApplicantController extends Controller
         }
     }
 
-    public function studentsHandle($person, $identityUser, $start, $end, $macro)
+    public function studentsHandle($person, $identityUser, $start, $end, $macro): void
     {
         $response = Http::get('https://script.google.com/macros/s/' . $macro . '/exec?person=' . $person);
 
@@ -1492,23 +1485,11 @@ class ApplicantController extends Controller
                         $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $scholarship, $known, $followup, $program, $create_father, $create_mother, $identity_val);
                     }
                 }
-                /* data berdasarkan identity kalau tidak ada phone
-                else {
-                    $studentData = Applicant::where('identity', $applicants[$i][1])->first();
-                    if ($studentData) {
-                        $samePhone = true;
-                        $this->update_data($studentData, $applicants, $i, $phone, $school, $gender, $come, $kip, $known, $program, $samePhone);
-                    } else {
-                        $samePhone = true;
-                        $this->create_data($applicants, $i, $phone, $school, $gender, $identityUser, $come, $kip, $known, $program, $create_father, $create_mother, $samePhone);
-                    }
-                }
-                */
             }
         }
     }
 
-    public function check_spreadsheet($sheet, $macro)
+    public function check_spreadsheet($sheet, $macro): JsonResponse
     {
         try {
         $response = Http::get('https://script.google.com/macros/s/' . $macro . '/exec?person=' . $sheet);
@@ -1519,13 +1500,13 @@ class ApplicantController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Terjadi error saat sinkronisasi',
-                'error' => $th->getMessage(), // Ini akan memberikan pesan error yang lebih deskriptif
-                'trace' => $th->getTraceAsString(), // Ini akan menampilkan jejak stack trace dari error
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
             ]);
         }
     }
 
-    public function import($start, $end, $macro)
+    public function import($start, $end, $macro): RedirectResponse
     {
         try {
             if (Auth::user()->role == 'P' && Auth::user()->sheet) {
@@ -1546,7 +1527,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function is_applicant(Request $request, $id)
+    public function is_applicant(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'change_pmb' => ['required'],
@@ -1569,7 +1550,7 @@ class ApplicantController extends Controller
         return back()->with('message', 'Data aplikan berhasil diupdate');
     }
 
-    public function delete_is_applicant($id)
+    public function delete_is_applicant($id): RedirectResponse
     {
         $applicant = Applicant::findOrFail($id);
         $data_applicant = [
@@ -1588,7 +1569,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function is_schoolarship(Request $request, $id)
+    public function is_schoolarship(Request $request, $id): RedirectResponse
     {
         $applicant = Applicant::findOrFail($id);
         $data = [

@@ -5,11 +5,11 @@ namespace App\Http\Controllers\API\Report;
 use App\Http\Controllers\Controller;
 use App\Models\Report\RegisterByProgram;
 use App\Models\Report\RegisterByProgramAdmin;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class RegisterByProgramController extends Controller
 {
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $pmbVal = request('pmbVal', 'all');
         $identityVal = request('identityVal', 'all');

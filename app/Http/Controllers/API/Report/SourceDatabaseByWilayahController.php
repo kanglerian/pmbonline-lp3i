@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API\Report;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report\SourceDatabaseByWilayah;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class SourceDatabaseByWilayahController extends Controller
 {
-    public function get_all() {
+    public function get_all(): JsonResponse {
         $databaseQuery = SourceDatabaseByWilayah::query();
 
         $pmbVal = request('pmbVal', 'all');

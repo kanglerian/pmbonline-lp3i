@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\ProgramType;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class ProgramTypeController extends Controller
 {
@@ -12,7 +16,7 @@ class ProgramTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): \Illuminate\Contracts\View\View
+    public function index(): View
     {
         $programtypes = ProgramType::paginate(5);
         return view('pages.menu.programtype.index')->with([
@@ -25,7 +29,7 @@ class ProgramTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(): \Illuminate\Contracts\View\View
+    public function create(): View
     {
         return view('pages.menu.programtype.create');
     }
@@ -36,7 +40,7 @@ class ProgramTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string'],
@@ -59,7 +63,7 @@ class ProgramTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): void
     {
         //
     }
@@ -70,7 +74,7 @@ class ProgramTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $programtype = ProgramType::findOrFail($id);
         return view('pages.menu.programtype.edit')->with([
@@ -85,7 +89,7 @@ class ProgramTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, $id): RedirectResponse
     {
         $programtype = ProgramType::findOrFail($id);
 
@@ -110,14 +114,14 @@ class ProgramTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id): \Illuminate\Http\RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         $programtype = ProgramType::findOrFail($id);
         $programtype->delete();
         return redirect()->route( 'programtype.index' )->with( 'message', 'Program type status deleted successfully' );
     }
 
-    public function status( $id ): \Illuminate\Http\RedirectResponse {
+    public function status( $id ): RedirectResponse {
         $programtype = ProgramType::findOrFail( $id );
         $programtype->update(
             [

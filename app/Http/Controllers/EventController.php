@@ -15,6 +15,10 @@ use App\Models\EventDetail;
 use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class EventController extends Controller
 {
@@ -24,7 +28,7 @@ class EventController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
 
-    public function index(): \Illuminate\Contracts\View\View
+    public function index(): View
     {
         $event_query = Event::query();
 
@@ -62,7 +66,7 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function create()
+    public function create(): Factory|View
     {
         return view('pages.menu.event.create');
     }
@@ -74,7 +78,7 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store_event(Request $request): \Illuminate\Http\JsonResponse
+    public function store_event(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -409,7 +413,7 @@ class EventController extends Controller
         }
     }
 
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'pmb' => ['required', 'integer'],
@@ -452,7 +456,7 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show($id): \Illuminate\Contracts\View\View
+    public function show($id): View
     {
         $event = Event::findOrFail($id);
 
@@ -481,7 +485,7 @@ class EventController extends Controller
         return view('pages.menu.event.show', compact('event', 'applicants', 'total', 'rating'));
     }
 
-    public function participant($code): \Illuminate\Contracts\View\View
+    public function participant($code): View
     {
         $event = Event::where([
             'code' => $code,
@@ -502,7 +506,7 @@ class EventController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
 
-    public function edit($id): \Illuminate\Contracts\View\View
+    public function edit($id): View
     {
         $event = Event::findOrFail($id);
         return view('pages.menu.event.edit', compact('event'));
@@ -516,7 +520,7 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, $id): RedirectResponse
     {
 
         $request->validate([
@@ -554,7 +558,7 @@ class EventController extends Controller
         }
     }
 
-    public function update_event(Request $request, $id): \Illuminate\Http\RedirectResponse
+    public function update_event(Request $request, $id): RedirectResponse
     {
 
         $request->validate([
@@ -590,7 +594,7 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy($id): \Illuminate\Http\RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         try {
             $event = Event::findOrFail($id);
@@ -603,7 +607,7 @@ class EventController extends Controller
         }
     }
 
-    public function scholarship($id): \Illuminate\Http\RedirectResponse
+    public function scholarship($id): RedirectResponse
     {
         $event = Event::findOrFail($id);
         $event->update(
@@ -614,7 +618,7 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event scholarship updated successfully');
     }
 
-    public function files($id): \Illuminate\Http\RedirectResponse
+    public function files($id): RedirectResponse
     {
         $event = Event::findOrFail($id);
         $event->update(
@@ -625,7 +629,7 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event files updated successfully');
     }
 
-    public function employee($id): \Illuminate\Http\RedirectResponse
+    public function employee($id): RedirectResponse
     {
         $event = Event::findOrFail($id);
         $event->update(
@@ -636,7 +640,7 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event employee updated successfully');
     }
 
-    public function address($id): \Illuminate\Http\RedirectResponse
+    public function address($id): RedirectResponse
     {
         $event = Event::findOrFail($id);
         $event->update(
@@ -647,7 +651,7 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event address updated successfully');
     }
 
-    public function parent($id): \Illuminate\Http\RedirectResponse
+    public function parent($id): RedirectResponse
     {
         $event = Event::findOrFail($id);
         $event->update(
@@ -658,7 +662,7 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event parent updated successfully');
     }
 
-    public function program($id): \Illuminate\Http\RedirectResponse
+    public function program($id): RedirectResponse
     {
         $event = Event::findOrFail($id);
         $event->update(
@@ -669,7 +673,7 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event program updated successfully');
     }
 
-    public function programstatus(Request $request, $id): \Illuminate\Http\RedirectResponse
+    public function programstatus(Request $request, $id): RedirectResponse
     {
         $event = Event::findOrFail($id);
         $event->update(
@@ -680,7 +684,7 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event program status updated successfully');
     }
 
-    public function status($id): \Illuminate\Http\RedirectResponse
+    public function status($id): RedirectResponse
     {
         $event = Event::findOrFail($id);
         $event->update(
@@ -691,7 +695,7 @@ class EventController extends Controller
         return redirect()->route('event.index')->with('message', 'Event status updated successfully');
     }
 
-    public function view($id): \Illuminate\Http\JsonResponse
+    public function view($id): JsonResponse
     {
         $event = Event::findOrFail($id);
         $event->update(

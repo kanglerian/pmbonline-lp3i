@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Applicant\Status;
 
 use App\Http\Controllers\Controller;
 use App\Models\Applicant;
-use Illuminate\Support\Facades\Date;
-use App\Models\StatusApplicantsApplicant;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class StatusBeasiswaController extends Controller
@@ -17,7 +16,7 @@ class StatusBeasiswaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'scholarship_date' => ['required'],

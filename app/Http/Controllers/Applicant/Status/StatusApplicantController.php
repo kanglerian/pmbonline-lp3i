@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Applicant\Status;
 
 use App\Http\Controllers\Controller;
 use App\Models\Applicant;
-use Illuminate\Support\Facades\Date;
 use App\Models\StatusApplicantsApplicant;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class StatusApplicantController extends Controller
@@ -17,7 +17,7 @@ class StatusApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'is_applicant_pmb' => ['required','length:4','year'],
@@ -53,7 +53,7 @@ class StatusApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $applicant = Applicant::findOrFail($id);
         $status_applicant = StatusApplicantsApplicant::where('identity_user', $applicant->identity)->first();

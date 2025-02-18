@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Enrollment;
 
 use DateTime;
 use App\Http\Controllers\Controller;
-use App\Mail\EnrollmentConfirmationMail;
 use App\Models\Applicant;
 use App\Models\StatusApplicantsEnrollment;
 use App\Models\StatusApplicantsRegistration;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
+use Illuminate\Contracts\View\View;
 
 class EnrollmentController extends Controller {
     /**
@@ -20,7 +20,7 @@ class EnrollmentController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function index() {
+    public function index(): View {
         function getYearPMB() {
             $currentDate = new DateTime();
             $currentYear = $currentDate->format( 'Y' );
@@ -80,7 +80,7 @@ class EnrollmentController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function create() {
+    public function create(): void {
         //
     }
 
@@ -122,7 +122,7 @@ class EnrollmentController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function store( Request $request ) {
+    public function store( Request $request ): RedirectResponse {
         $request->validate(
             [
                 'pmb' => [ 'required' ],
@@ -171,6 +171,7 @@ class EnrollmentController extends Controller {
             'repayment' => $request->input( 'repayment' ),
             'debit' => ( int ) str_replace( '.', '', $request->input( 'debit' ) ),
             'session' => $request->input( 'session' ),
+            'note' => $request->input( 'note' ),
         ];
 
         $applicant = Applicant::where(
@@ -198,7 +199,7 @@ class EnrollmentController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function show( $id ) {
+    public function show( $id ): void {
         //
     }
 
@@ -209,7 +210,7 @@ class EnrollmentController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function edit( $id ) {
+    public function edit( $id ): void {
         //
     }
 
@@ -221,7 +222,7 @@ class EnrollmentController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function update( Request $request, $id ) {
+    public function update( Request $request, $id ): RedirectResponse {
         $request->validate(
             [
                 'pmb' => [ 'required' ],
@@ -275,6 +276,7 @@ class EnrollmentController extends Controller {
             'repayment' => $request->input( 'repayment' ),
             'debit' => ( int ) str_replace( '.', '', $request->input( 'debit' ) ),
             'session' => $request->input( 'session' ),
+            'note' => $request->input( 'note' ),
         ];
 
         $enrollment->update( $data_enrollment );
@@ -289,7 +291,7 @@ class EnrollmentController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function destroy( $id ) {
+    public function destroy( $id ): RedirectResponse {
         $applicant = Applicant::findOrFail( $id );
         $enrollment = StatusApplicantsEnrollment::where(
             'identity_user',
@@ -328,7 +330,7 @@ class EnrollmentController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function approve( $id ) {
+    public function approve( $id ): RedirectResponse {
         $enrollment = StatusApplicantsEnrollment::findOrFail( $id );
         $data = [
             'approve' => 1,

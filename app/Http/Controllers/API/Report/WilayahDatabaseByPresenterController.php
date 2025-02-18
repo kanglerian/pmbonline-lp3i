@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API\Report;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report\WilayahDatabaseByPresenter;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class WilayahDatabaseByPresenterController extends Controller
 {
-    public function get_all() {
+    public function get_all(): JsonResponse {
         $databaseQuery = WilayahDatabaseByPresenter::query();
 
         $pmbVal = request('pmbVal', 'all');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Target;
 
 use App\Http\Controllers\Controller;
 use App\Models\TargetRevenue;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TargetRevenueController extends Controller
@@ -13,7 +14,7 @@ class TargetRevenueController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): void
     {
 
     }
@@ -23,7 +24,7 @@ class TargetRevenueController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -34,7 +35,7 @@ class TargetRevenueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'pmb' => ['required'],
@@ -62,7 +63,7 @@ class TargetRevenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): void
     {
         //
     }
@@ -73,7 +74,7 @@ class TargetRevenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): void
     {
         //
     }
@@ -85,7 +86,7 @@ class TargetRevenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'edit_date' => ['required'],
@@ -111,15 +112,17 @@ class TargetRevenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+
+    public function destroy($id): RedirectResponse
     {
         try {
             $target = TargetRevenue::findOrFail($id);
             $target->delete();
-            return session()->flash('message', 'Data target revenue berhasil dihapus!');
+    
+            return redirect()->back()->with('message', 'Data target revenue berhasil dihapus!');
         } catch (\Throwable $th) {
-            $errorMessage = 'Terjadi sebuah kesalahan. Perika koneksi anda.';
-            return back()->with('error', $errorMessage);
+            return redirect()->back()->with('error', 'Terjadi sebuah kesalahan. Periksa koneksi Anda.');
         }
     }
+    
 }

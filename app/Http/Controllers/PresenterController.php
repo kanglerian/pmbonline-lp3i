@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Applicant;
 use App\Models\StatusApplicantsRegistration;
 use App\Models\TargetDatabase;
 use App\Models\TargetRevenue;
@@ -11,6 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class PresenterController extends Controller
 {
@@ -19,7 +22,7 @@ class PresenterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $nameVal = request('name');
         $presenterQuery = User::query();
@@ -34,7 +37,7 @@ class PresenterController extends Controller
         ]);
     }
 
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $presenters = User::where(['role' => 'P', 'status' => '1'])->get();
         return response()
@@ -44,7 +47,7 @@ class PresenterController extends Controller
             ->header('Content-Type', 'application/json');
     }
 
-    public function get_target()
+    public function get_target(): JsonResponse
     {
         $registrationQuery = StatusApplicantsRegistration::query();
         $registrationQuery->with('applicant');
@@ -87,7 +90,7 @@ class PresenterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): Factory|View
     {
         return view('pages.presenter.create');
     }
@@ -98,7 +101,7 @@ class PresenterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -134,7 +137,7 @@ class PresenterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): View
     {
         $presenter = User::findOrFail($id);
         $targets = TargetVolume::where(['identity_user' => $presenter->identity])->get();
@@ -150,7 +153,7 @@ class PresenterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $presenter = User::findOrFail($id);
         return view('pages.presenter.edit')->with([
@@ -165,7 +168,7 @@ class PresenterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $presenter = User::findOrFail($id);
         $request->validate([
@@ -196,7 +199,7 @@ class PresenterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             $presenter = User::findOrFail($id);
@@ -217,7 +220,7 @@ class PresenterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function status($id)
+    public function status($id): RedirectResponse
     {
         $presenter = User::findOrFail($id);
         $data = [
@@ -234,7 +237,7 @@ class PresenterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function change_password(Request $request, $id)
+    public function change_password(Request $request, $id): RedirectResponse
     {
         $presenter = User::findOrFail($id);
         $request->validate([
@@ -247,7 +250,7 @@ class PresenterController extends Controller
         return back()->with('message', 'Password berhasil diubah!');
     }
 
-    public function sales_volume($id)
+    public function sales_volume($id): View
     {
         $presenter = User::findOrFail($id);
         $targets = TargetVolume::where(['identity_user' => $presenter->identity])->get();
@@ -257,7 +260,7 @@ class PresenterController extends Controller
         ]);
     }
 
-    public function sales_revenue($id)
+    public function sales_revenue($id): View
     {
         $presenter = User::findOrFail($id);
         $targets = TargetRevenue::where(['identity_user' => $presenter->identity])->get();
@@ -268,7 +271,7 @@ class PresenterController extends Controller
     }
 
 
-    public function sales_database($id)
+    public function sales_database($id): View
     {
         $presenter = User::findOrFail($id);
         $targets = TargetDatabase::where(['identity_user' => $presenter->identity])->get();

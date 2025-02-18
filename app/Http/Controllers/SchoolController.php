@@ -6,11 +6,13 @@ use DateTime;
 use App\Imports\SchoolsImport;
 use App\Models\Applicant;
 use App\Models\Report\SchoolBySourceAll;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use App\Models\School;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class SchoolController extends Controller
 {
@@ -19,7 +21,7 @@ class SchoolController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         function getYearPMB()
         {
@@ -81,7 +83,7 @@ class SchoolController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -92,7 +94,7 @@ class SchoolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             "name" => ["required", "string"],
@@ -114,7 +116,7 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): View
     {
         $school = School::findOrFail($id);
         return view("pages.schools.show")->with([
@@ -128,7 +130,7 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $school = School::findOrFail($id);
         return view("pages.schools.edit")->with([
@@ -143,7 +145,7 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate(
             [
@@ -193,7 +195,7 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $school = School::findOrFail($id);
         $applicants = Applicant::where("school", $id)->count();
@@ -216,14 +218,14 @@ class SchoolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function import(Request $request)
+    public function import(Request $request): RedirectResponse
     {
         Excel::import(new SchoolsImport(), $request->file("berkas"));
 
         return back()->with("message", "Data sekolah berhasil diimport");
     }
 
-    public function setting()
+    public function setting(): View
     {
         $schools = SchoolBySourceAll::all();
         return view("pages.schools.setting")->with([
@@ -237,7 +239,7 @@ class SchoolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function migration(Request $request)
+    public function migration(Request $request): RedirectResponse
     {
         $request->validate([
             "school_from" => ["required"],
@@ -254,7 +256,7 @@ class SchoolController extends Controller
         );
     }
 
-    public function clear()
+    public function clear(): RedirectResponse
     {
         $school_all = SchoolBySourceAll::where("jumlah", 0)->get();
         foreach ($school_all as $school) {
@@ -267,7 +269,7 @@ class SchoolController extends Controller
         );
     }
 
-    public function make_null(Request $request, $id)
+    public function make_null(Request $request, $id): JsonResponse
     {
         if ($request->input("allow") == "Kosongkan"){
             Applicant::where('school', $id)->update([
@@ -279,7 +281,7 @@ class SchoolController extends Controller
         } else {
             return response()->json([
                 "message" => "Tidak diizinkan!",
-            ], JsonResponse::HTTP_BAD_REQUEST);
+            ], 401);
         }
     }
 }

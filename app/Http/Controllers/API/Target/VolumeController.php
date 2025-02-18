@@ -8,11 +8,11 @@ use App\Models\StatusApplicantsRegistration;
 use App\Models\TargetDatabase;
 use App\Models\TargetRevenue;
 use App\Models\TargetVolume;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class VolumeController extends Controller
 {
-    public function get_volumes()
+    public function get_volumes(): JsonResponse
     {
         $registrationQuery = StatusApplicantsRegistration::query();
         $registrationQuery->with('applicant');

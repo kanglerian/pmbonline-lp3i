@@ -4,12 +4,11 @@ namespace App\Http\Controllers\API\Report;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report\SourceDatabaseByPresenter;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 class SourceDatabaseByPresenterController extends Controller
 {
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $databaseQuery = SourceDatabaseByPresenter::query();
 

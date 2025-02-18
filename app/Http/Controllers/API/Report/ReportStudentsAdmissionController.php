@@ -4,12 +4,11 @@ namespace App\Http\Controllers\API\Report;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report\ReportStudentsAdmission;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 class ReportStudentsAdmissionController extends Controller
 {
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $databaseQuery = ReportStudentsAdmission::query();
 

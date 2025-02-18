@@ -8,11 +8,11 @@ use App\Models\StatusApplicantsApplicant;
 use App\Models\StatusApplicantsEnrollment;
 use App\Models\StatusApplicantsRegistration;
 use App\Models\UserUpload;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ReportAplikanController extends Controller
 {
-    public function aplikan()
+    public function aplikan(): JsonResponse
     {
         $databaseQuery = StatusApplicantsApplicant::query();
 

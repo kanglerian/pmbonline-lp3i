@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FollowUp;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class FollowUpController extends Controller
 {
@@ -12,7 +15,7 @@ class FollowUpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $followups = FollowUp::paginate(5);
         return view('pages.menu.followup.index')->with([
@@ -25,7 +28,7 @@ class FollowUpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): Factory|View
     {
         return view('pages.menu.followup.create');
     }
@@ -36,7 +39,7 @@ class FollowUpController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string'],
@@ -56,7 +59,7 @@ class FollowUpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): void
     {
         //
     }
@@ -67,7 +70,7 @@ class FollowUpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $followup = FollowUp::findOrFail($id);
         return view('pages.menu.followup.edit')->with([
@@ -82,7 +85,7 @@ class FollowUpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $followup = FollowUp::findOrFail($id);
 
@@ -104,7 +107,7 @@ class FollowUpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $followup = FollowUp::findOrFail($id);
         $followup->delete();

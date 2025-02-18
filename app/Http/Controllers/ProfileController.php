@@ -6,11 +6,12 @@ use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
 use App\Models\ApplicantFamily;
 use App\Models\Applicant;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ProfileController extends Controller
 {
@@ -19,7 +20,7 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function index()
+    public function index(): void
     {
         //
     }
@@ -29,7 +30,7 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -40,7 +41,7 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         try {
             $request->validate([
@@ -83,7 +84,7 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): void
     {
         //
     }
@@ -94,12 +95,11 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): RedirectResponse|View
     {
         $user = User::findOrFail($id);
 
         if ($user->id == Auth::user()->id || Auth::user()->role == 'A') {
-            //            $response = Http::get('https://dashboard.politekniklp3i-tasikmalaya.ac.id/api/programs');
             $applicant = Applicant::where('identity', $user->identity)->first();
 
             if ($user->role == 'S') {
@@ -110,18 +110,11 @@ class ProfileController extends Controller
             $presenters = User::where(['status' => '1', 'role' => 'P'])->get();
             $schools = School::all();
 
-            //            if ($response->successful()) {
-            //                $programs = $response->json();
-            //            } else {
-            //                $programs = null;
-            //            }
-
             if ($user->role == 'S') {
                 $data = [
                     'user' => $user,
                     'applicant' => $applicant,
                     'presenters' => $presenters,
-                    //                    'programs' => $programs,
                     'father' => $father,
                     'mother' => $mother,
                     'schools' => $schools,
@@ -144,7 +137,7 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $user = User::findOrFail($id);
         $user_detail = Applicant::where('identity', $user->identity)->first();
@@ -299,7 +292,7 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): void
     {
         //
     }
@@ -311,7 +304,7 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update_account(Request $request, $id)
+    public function update_account(Request $request, $id): RedirectResponse
     {
         $user = User::findOrFail($id);
         $user_detail = Applicant::where('identity', $user->identity)->first();
@@ -345,7 +338,7 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function change_password(Request $request, $id)
+    public function change_password(Request $request, $id): RedirectResponse
     {
         $account = User::findOrFail($id);
         $request->validate([

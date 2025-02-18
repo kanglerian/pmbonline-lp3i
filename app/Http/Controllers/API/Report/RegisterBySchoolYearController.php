@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API\Report;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report\RegisterBySchoolYear;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class RegisterBySchoolYearController extends Controller
 {
-    public function get_all()
+    public function get_all(): JsonResponse
     {
         $databaseQuery = RegisterBySchoolYear::query();
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Applicant\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Applicant;
 use App\Models\StatusApplicantsEnrollment;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class StatusDaftarController extends Controller
 {
@@ -15,7 +15,7 @@ class StatusDaftarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $applicant = Applicant::findOrFail($id);
         $status_daftar = StatusApplicantsEnrollment::where('identity_user', $applicant->identity)->first();
