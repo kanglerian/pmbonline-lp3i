@@ -158,6 +158,14 @@
                                                 {!! $event->is_program ? '<i class="fa-solid fa-book"></i>' : '<i class="fa-solid fa-book"></i>' !!}
                                             </button>
                                         </form>
+                                        <form action="{{ route('event.invite', $event->id) }}" method="GET"
+                                            class="inline-block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="{{ $event->is_invite ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600' }} px-3 py-2 rounded-xl text-white transition-all ease-in-out">
+                                                {!! $event->is_invite ? '<i class="fa-solid fa-people-arrows"></i>' : '<i class="fa-solid fa-people-arrows"></i>' !!}
+                                            </button>
+                                        </form>
                                     </div>
                                     @if (count($program_types) > 0 && $event->is_program)
                                         <div
@@ -216,7 +224,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-4 text-center">Data tidak ditemukan</td>
+                                <td colspan="7" class="px-6 py-4 text-center">Data tidak ditemukan</td>
                             </tr>
                         @endforelse
                     </tbody>

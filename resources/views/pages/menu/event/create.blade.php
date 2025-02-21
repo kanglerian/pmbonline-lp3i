@@ -62,7 +62,7 @@
                     </div>
                     <div class="relative z-0 w-full group">
                         <x-label for="code" :value="__('Kode Kegiatan')" />
-                        <input id="code" type="text" name="code" maxlength="10" value="{{ old('code') }}"
+                        <input id="code" oninput="this.value = this.value.replace(/[^a-zA-Z0-9_\-@]/g, '').replace(/\s/g, '')" type="text" name="code" value="{{ old('code') }}"
                             placeholder="Kode Kegiatan" required
                             class="block mt-2 px-4 py-3 w-full text-sm rounded-xl border-gray-200 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         <p class="mt-2 text-xs text-gray-500">

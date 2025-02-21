@@ -211,6 +211,31 @@
                     </div>
                 </div>
             @endif
+            @if ($event->is_invite)
+                <div id="invite" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
+                    <div class="grid grid-cols-1 gap-1">
+                        <label class="block mb-2 text-sm font-medium text-gray-900">Ajak Siapa? <span class="text-red-500">*</span></label>
+                        <div class="col-span-2 space-y-2">
+                            <div class="flex items-center">
+                                <input checked id="invite-sendiri" name="invite-sendiri" type="checkbox" value="Sendiri" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-md focus:ring-blue-500 focus:ring-2">
+                                <label for="invite-sendiri" class="ms-2 text-sm font-medium text-gray-900">Sendiri</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="invite-teman" name="invite-teman" type="checkbox" value="Teman" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-md focus:ring-blue-500 focus:ring-2">
+                                <label for="invite-teman" class="ms-2 text-sm font-medium text-gray-900">Teman</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="invite-saudara" name="invite-saudara" type="checkbox" value="Saudara" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-md focus:ring-blue-500 focus:ring-2">
+                                <label for="invite-saudara" class="ms-2 text-sm font-medium text-gray-900">Saudara</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="invite-ot" name="invite-ot" type="checkbox" value="Orang tua" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-md focus:ring-blue-500 focus:ring-2">
+                                <label for="invite-ot" class="ms-2 text-sm font-medium text-gray-900">Orang tua</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
             @if ($event->is_scholarship)
                 <div id="scholarship" class="bg-white border-l-4 border-lp3i-100 shadow-lg px-5 py-8">
                     <div class="grid grid-cols-2 gap-4">
@@ -329,6 +354,7 @@
                     <select name="information" id="information"
                         class="bg-gray-50 border-2 border-lp3i-100 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full px-3 py-2.5"
                         required>
+                        <option value="">Pilih Sumber Informasi</option>
                         <option value="6281313608558">Sosial Media</option>
                         @foreach ($informations as $information)
                             <option value="{{ $information->identity }}">{{ $information->name }}</option>
@@ -703,10 +729,17 @@
             y: 100,
             ease: "elastic.out(1,0.2)"
         });
-        gsap.from("#event-submit", {
+        gsap.from("#invite", {
             duration: 3.5,
             opacity: 0,
             delay: 1.6,
+            y: 100,
+            ease: "elastic.out(1,0.2)"
+        });
+        gsap.from("#event-submit", {
+            duration: 3.5,
+            opacity: 0,
+            delay: 1.7,
             y: 100,
             ease: "elastic.out(1,0.2)"
         });

@@ -102,9 +102,12 @@
                                     Tahun lulus
                                 </th>
                                 <th scope="col" class="px-6 py-3 bg-gray-100 text-center">
-                                    Rating
+                                    Ajak
                                 </th>
                                 <th scope="col" class="px-6 py-3 bg-white text-center">
+                                    Rating
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-gray-100 text-center">
                                     Komentar
                                 </th>
                             </tr>
@@ -174,15 +177,18 @@
                                         {{ $applicant->applicant->year ?? 'Tidak diketahui' }}
                                     </td>
                                     <td class="px-6 py-4 bg-gray-50 text-center">
-                                        {{ $applicant->rating }}
+                                        {{ $applicant->note }}
                                     </td>
                                     <td class="px-6 py-4 bg-white text-center">
+                                        {{ $applicant->rating }}
+                                    </td>
+                                    <td class="px-6 py-4 bg-gray-50 text-center">
                                         {{ $applicant->comment ?? 'Tidak ada komentar' }}
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="px-6 py-4 text-center">Data tidak ditemukan.</td>
+                                    <td colspan="11" class="px-6 py-4 text-center">Data tidak ditemukan.</td>
                                 </tr>
                             @endforelse
                         </tbody>

@@ -26,6 +26,7 @@ class Event extends Model
         'is_program',
         'is_address',
         'is_parent',
+        'is_invite',
         'program',
         'is_status'
     ];

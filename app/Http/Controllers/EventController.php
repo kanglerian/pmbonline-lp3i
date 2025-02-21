@@ -83,7 +83,7 @@ class EventController extends Controller
         try {
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'phone' => ['required', 'string', 'min:10', 'max:13'],
+                'phone' => ['required', 'string', 'min:10', 'max:14'],
                 'school' => ['required', 'max:100', 'not_in:Pilih Sekolah'],
                 'major' => ['required'],
                 'information' => ['required'],
@@ -385,6 +385,25 @@ class EventController extends Controller
                 }
             }
 
+            if($event->is_invite){
+                $notes = [];
+
+                if($request->input('invite-sendiri')){
+                    $notes[] = 'Sendiri';
+                }
+                if($request->input('invite-teman')){
+                    $notes[] = 'Teman';
+                }
+                if($request->input('invite-saudara')){
+                    $notes[] = 'Saudara';
+                }
+                if($request->input('invite-ot')){
+                    $notes[] = 'Orang tua';
+                }
+
+                $data_event_detail['note'] = implode(', ', $notes);
+            }
+
             $event_applicant = EventDetail::where([
                 'event_id' => $data_event_detail['event_id'],
                 'identity_user' => $data_event_detail['identity_user']
@@ -417,7 +436,7 @@ class EventController extends Controller
     {
         $request->validate([
             'pmb' => ['required', 'integer'],
-            'code' => ['required', 'max:10', 'min:3', 'unique:events'],
+            'code' => ['required', 'max:255', 'min:3', 'unique:events'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
         ], [
@@ -682,6 +701,17 @@ class EventController extends Controller
             ]
         );
         return redirect()->route('event.index')->with('message', 'Event program status updated successfully');
+    }
+
+    public function invite($id): RedirectResponse
+    {
+        $event = Event::findOrFail($id);
+        $event->update(
+            [
+                'is_invite' => !$event->is_invite
+            ]
+        );
+        return redirect()->route('event.index')->with('message', 'Event invite updated successfully');
     }
 
     public function status($id): RedirectResponse

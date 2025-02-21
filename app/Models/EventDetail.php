@@ -18,7 +18,8 @@ class EventDetail extends Model
         'event_id',
         'identity_user',
         'rating',
-        'comment'
+        'comment',
+        'note',
     ];
 
     protected $table = 'event_details';

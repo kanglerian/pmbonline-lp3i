@@ -225,6 +225,7 @@ Route::middleware(['auth', 'status:1', 'role:A'])
         Route::get('event/{id}/address', [EventController::class, 'address'])->name('event.address');
         Route::get('event/{id}/parent', [EventController::class, 'parent'])->name('event.parent'); 
         Route::get('event/{id}/program', [EventController::class, 'program'])->name('event.program');    
+        Route::get('event/{id}/invite', [EventController::class, 'invite'])->name('event.invite');  
         Route::post('event/{id}/programstatus', [EventController::class, 'programstatus'])->name('event.programstatus');  
     });
 

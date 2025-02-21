@@ -19,6 +19,7 @@ class CreateEventDetailsTable extends Migration
             $table->string('identity_user', 50);
             $table->integer('rating')->default(0);
             $table->text('comment')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
