@@ -1113,7 +1113,7 @@ class ApplicantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function print($id): RedirectResponse
+    public function print($id): RedirectResponse|View
     {
         $applicant = Applicant::with(['SourceSetting', 'SourceDaftarSetting', 'ApplicantStatus', 'ProgramType', 'SchoolApplicant', 'FollowUp', 'father', 'mother', 'presenter'])
             ->where('identity', $id)
