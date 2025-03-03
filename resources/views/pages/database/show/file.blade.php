@@ -205,6 +205,8 @@
                                 },
                                 error: function(xhr, status, error) {
                                     location.reload();
+                                    console.log(error);
+                                    
                                 }
                             })
                             console.log(res.data);
