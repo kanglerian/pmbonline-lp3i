@@ -159,6 +159,7 @@
 
                     let status = {
                         fileupload_id: id,
+                        identity: identity,
                         typefile: berkas.name.split('.').pop(),
                     }
 
@@ -187,6 +188,8 @@
                                 },
                                 error: function(xhr, status, error) {
                                     location.reload();
+                                    console.log(error);
+                                    
                                 }
                             })
                             console.log(res.data);
@@ -194,9 +197,9 @@
                         .catch((err) => {
                             let bucket =
                                 `<i class="fa-solid fa-circle-exclamation"></i>
-                    <div class="ml-3 text-sm font-medium">
-                        Maaf, server sedang tidak berfungsi saat ini. Harap hubungi administrator untuk informasi lebih lanjut.
-                    </div>`
+                        <div class="ml-3 text-sm font-medium">
+                            Maaf, server sedang tidak berfungsi saat ini. Harap hubungi administrator untuk informasi lebih lanjut.
+                        </div>`
                             let info = document.getElementById('info');
                             info.classList.remove('hidden');
                             info.innerHTML = bucket;
