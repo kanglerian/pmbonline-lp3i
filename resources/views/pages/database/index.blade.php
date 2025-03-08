@@ -307,7 +307,7 @@
                             class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                             <i class="fa-solid fa-search text-gray-400"></i>
                         </div>
-                        <input type="hidden" name="pmbVal" id="change_pmb_quick">
+                        <input type="hidden" name="pmb" id="change_pmb_quick">
                         <input type="text" name="name"
                             class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-xl w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Cari nama disini..." autofocus required>
@@ -456,7 +456,7 @@
             }
 
             getYearPMB();
-            
+
             const changePMBQuick = () => {
                 const data = document.getElementById('change_pmb').value;
                 document.getElementById('change_pmb_quick').value = data;
