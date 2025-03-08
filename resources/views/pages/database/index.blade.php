@@ -454,17 +454,13 @@
                 document.getElementById('change_pmb').value = startYear;
                 document.getElementById('change_pmb_quick').value = startYear;
             }
-            
-            const changePMBQuick = () => {
-                const currentDate = new Date();
-                const currentYear = currentDate.getFullYear();
-                const currentMonth = currentDate.getMonth() + 1;
-                const startYear = currentMonth >= 10 ? currentYear + 1 : currentYear;
-                document.getElementById('change_pmb').value = startYear;
-                document.getElementById('change_pmb_quick').value = startYear;
-            }
 
             getYearPMB();
+            
+            const changePMBQuick = () => {
+                const data = document.getElementById('change_pmb').value;
+                document.getElementById('change_pmb_quick').value = data;
+            }
 
             const changeFilter = () => {
                 let queryParams = [];
