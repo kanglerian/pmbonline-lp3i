@@ -384,10 +384,21 @@
             <header style="display: flex; justify-content: start; align-items: start">
                 <div>
                     <img src="{{ asset('img/lp3i.png') }}" alt="" width="30%" style="text-align: center">
-                    <h2>FORMULIR PENDAFTARAN MAHASISWA BARU T.A {{ $applicant->pmb }}/{{ $applicant->pmb + 1 }}</h2>
+                    <h2>FORMULIR PENDAFTARAN<br/>MAHASISWA BARU T.A {{ $applicant->pmb }}/{{ $applicant->pmb + 1 }}</h2>
                     <p>Mahasiswa Politeknik LP3I Kampus Tasikmalaya</p>
                 </div>
+
+                @if ($user->avatar)
+                    <img src="https://uploadhub.politekniklp3i-tasikmalaya.ac.id/download?identity={{ $user->identity }}&filename={{ $user->identity }}-{{ $user->avatar }}"
+                        alt="Avatar" width="110px">
+                @else
+                    <div
+                        style="border: 1px dotted black; height: 180px; width: 420px;display: flex;justify-content: center;align-items:center">
+                        <p>Pas foto 4x3</p>
+                    </div>
+                @endif
             </header>
+        
             <hr style="margin-top: 10px;">
             <table style="margin-top: 10px">
                 <tr>
@@ -438,18 +449,24 @@
                     <td>:</td>
                     <td>
                         <span>{{ $applicant->name == null ? '_______________' : $applicant->name }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 200px;">Jenis kelamin</td>
+                    <td>:</td>
+                    <td>
                         <span>
                             @switch($applicant->gender)
                                 @case(1)
-                                    <span>(Laki-laki)</span>
+                                    <span>Laki-laki</span>
                                 @break
 
                                 @case(0)
-                                    <span>(Perempuan)</span>
+                                    <span>Perempuan</span>
                                 @break
 
                                 @default
-                                    <span>(___)</span>
+                                    <span>___</span>
                             @endswitch
                         </span>
                     </td>
